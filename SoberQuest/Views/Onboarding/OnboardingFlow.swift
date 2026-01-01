@@ -20,8 +20,8 @@ struct OnboardingFlow: View {
             case .badgePreview:
                 BadgePreviewView(
                     currentStep: $currentStep,
-                    addictionName: $selectedAddictionName,
-                    lastUsedDate: $lastUsedDate
+                    addictionName: selectedAddictionName,
+                    lastUsedDate: lastUsedDate
                 )
             case .paywall:
                 PaywallView(currentStep: $currentStep)

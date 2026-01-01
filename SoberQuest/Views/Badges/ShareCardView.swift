@@ -27,14 +27,14 @@ struct ShareCardView: View {
                         .fill(Color.white.opacity(0.3))
                         .frame(width: 150, height: 150)
                         .overlay(
-                            Text("\(badge.milestoneDays)")
+                            Text(badge.milestoneDays == 0 ? "🔥" : "\(badge.milestoneDays)")
                                 .font(.system(size: 48, weight: .bold))
                                 .foregroundColor(.white)
                         )
                 }
                 
                 // Main text
-                Text("\(daysSober) Days Sober")
+                Text(daysSober == 0 ? "Beginning My Journey" : "\(daysSober) Days Sober")
                     .font(.system(size: 36, weight: .bold))
                     .foregroundColor(.white)
                 

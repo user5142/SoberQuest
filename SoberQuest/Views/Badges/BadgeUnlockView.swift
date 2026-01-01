@@ -29,7 +29,7 @@ struct BadgeUnlockView: View {
                     }
                 
                 VStack(spacing: 8) {
-                    Text("\(badge.milestoneDays) Days Sober")
+                    Text(badge.milestoneDays == 0 ? "Beginning My Journey" : "\(badge.milestoneDays) Days Sober")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)

@@ -65,7 +65,7 @@ struct BadgeCell: View {
                 .foregroundColor(isUnlocked ? .primary : .secondary)
                 .multilineTextAlignment(.center)
             
-            Text("Day \(badge.milestoneDays)")
+            Text(badge.milestoneDisplayText)
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }

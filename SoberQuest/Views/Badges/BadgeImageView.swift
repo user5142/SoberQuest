@@ -22,13 +22,15 @@ struct BadgeImageView: View {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(
                         LinearGradient(
-                            colors: [Color.blue.opacity(0.6), Color.purple.opacity(0.6)],
+                            colors: milestoneDays == 0 
+                                ? [Color.orange.opacity(0.7), Color.red.opacity(0.7)]
+                                : [Color.blue.opacity(0.6), Color.purple.opacity(0.6)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                     .overlay(
-                        Text("\(milestoneDays)")
+                        Text(milestoneDays == 0 ? "🔥" : "\(milestoneDays)")
                             .font(.system(size: size * 0.4, weight: .bold))
                             .foregroundColor(.white)
                     )

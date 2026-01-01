@@ -59,5 +59,10 @@ class BadgeService: ObservableObject {
     func isBadgeUnlocked(badgeId: String, for addictionId: UUID, unlockedBadges: [UnlockedBadge]) -> Bool {
         return unlockedBadges.contains { $0.badgeId == badgeId && $0.addictionId == addictionId }
     }
+    
+    /// Returns the Phoenix Rising (day 0) starter badge
+    func getPhoenixRisingBadge() -> BadgeDefinition? {
+        return BadgeDefinition.defaultBadges.first { $0.id == "day0" }
+    }
 }
 

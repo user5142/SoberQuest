@@ -30,7 +30,7 @@ struct BadgePreviewView: View {
                     VStack(spacing: 8) {
                         BadgeImageView(imageAssetName: badge.imageAssetName, milestoneDays: badge.milestoneDays, size: 80)
                         
-                        Text("Day \(badge.milestoneDays)")
+                        Text(badge.milestoneDisplayText)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -56,6 +56,12 @@ struct BadgePreviewView: View {
                 )
                 DataManager.shared.saveAddiction(addiction)
                 appState.setCurrentAddiction(addiction)
+                
+                // Grant Phoenix Rising badge immediately
+                if let phoenixBadge = BadgeService.shared.getPhoenixRisingBadge() {
+                    let unlockedBadge = UnlockedBadge(badgeId: phoenixBadge.id, addictionId: addiction.id)
+                    DataManager.shared.saveUnlockedBadge(unlockedBadge)
+                }
                 
                 // Present Superwall paywall directly
                 isLoading = true

@@ -31,6 +31,7 @@ struct HomeView: View {
         .onAppear {
             updateTimer()
             appState.refreshAddiction()
+            checkForPhoenixRisingBadge()
         }
         .onReceive(timer) { _ in
             updateTimer()
@@ -108,7 +109,7 @@ struct HomeView: View {
                         Text(highestBadge.name)
                             .font(.headline)
                         
-                        Text("\(highestBadge.milestoneDays) Days")
+                        Text(highestBadge.milestoneDisplayText)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -257,6 +258,24 @@ struct HomeView: View {
             let shareCard = ShareCardView(badge: highestBadge, addiction: addiction, daysSober: addiction.daysSober)
             shareImage = shareCard.asUIImage()
             showShareSheet = true
+        }
+    }
+    
+    private func checkForPhoenixRisingBadge() {
+        // Show Phoenix Rising badge unlock if it hasn't been shown yet
+        guard !dataManager.isPhoenixRisingBadgeShown(),
+              let addiction = appState.currentAddiction,
+              let phoenixBadge = badgeService.getPhoenixRisingBadge() else {
+            return
+        }
+        
+        // Verify the badge is unlocked
+        let unlockedBadges = dataManager.loadUnlockedBadges(for: addiction.id)
+        if badgeService.isBadgeUnlocked(badgeId: phoenixBadge.id, for: addiction.id, unlockedBadges: unlockedBadges) {
+            // Mark as shown and display the unlock view
+            dataManager.setPhoenixRisingBadgeShown(true)
+            self.unlockedBadge = phoenixBadge
+            showBadgeUnlock = true
         }
     }
 }

@@ -16,21 +16,8 @@ class SuperwallService: ObservableObject {
     }
     
     private func configureSuperwall() {
-        // Enable debug logging to see what's happening
-        #if DEBUG
-        let options = SuperwallOptions()
-        options.logging.level = .debug
-        Superwall.configure(apiKey: apiKey, options: options)
-        #else
         Superwall.configure(apiKey: apiKey)
-        #endif
-        
-        print("🔧 [Superwall] Configured with API key: \(apiKey.prefix(10))...")
-        
-        // Mark as configured
         isConfigured = true
-        
-        // Check initial entitlement status
         checkEntitlement()
     }
     
@@ -50,79 +37,43 @@ class SuperwallService: ObservableObject {
     /// Presents the onboarding paywall using the configured placement
     /// - Parameter completion: Called when the paywall is dismissed with the result
     func presentOnboardingPaywall(completion: @escaping (PaywallResult) -> Void) {
-        let placementName = "onboarding_paywall_1"
-        
-        print("🚀 [Superwall] Attempting to register placement: '\(placementName)'")
-        print("🔧 [Superwall] SDK configured: \(isConfigured)")
-        
-        // Create a presentation handler to track paywall events
         let handler = PaywallPresentationHandler()
         
-        handler.onPresent { info in
-            print("✅ [Superwall] Paywall presented: \(info)")
-        }
-        
-        handler.onDismiss { info, result in
-            print("📤 [Superwall] Paywall dismissed with result: \(result)")
+        handler.onDismiss { [weak self] _, result in
             DispatchQueue.main.async {
-                // Handle the paywall dismissal result
                 switch result {
                 case .purchased:
-                    self.hasActiveSubscription = true
+                    self?.hasActiveSubscription = true
                     completion(.purchased)
                 case .declined:
                     completion(.declined)
                 case .restored:
-                    self.hasActiveSubscription = true
+                    self?.hasActiveSubscription = true
                     completion(.restored)
                 }
             }
         }
         
-        handler.onSkip { reason in
-            print("⏭️ [Superwall] Paywall skipped - Reason: \(reason)")
-            // Log the skip reason - the exact enum cases vary by SuperwallKit version
-            // Common reasons: holdout, eventNotFound, noRuleMatch
-            if case .eventNotFound = reason {
-                print("   ↳ Event/placement '\(placementName)' not found in any campaign!")
-                print("   ⚠️ Please verify:")
-                print("      1. The API key is correct and for the right environment")
-                print("      2. The placement '\(placementName)' exists in your Superwall dashboard")
-                print("      3. The campaign is published and active")
-            } else {
-                print("   ↳ Skip reason: \(reason)")
-            }
-            
+        handler.onSkip { _ in
             DispatchQueue.main.async {
                 completion(.skipped)
             }
         }
         
-        handler.onError { error in
-            print("❌ [Superwall] Error presenting paywall: \(error)")
-        }
-        
-        // Register the placement to trigger the Superwall paywall
-        // Campaign: onboarding_paywall, Placement: onboarding_paywall_1
-        Superwall.shared.register(placement: placementName, handler: handler)
+        Superwall.shared.register(placement: "onboarding_paywall_1", handler: handler)
     }
     
     /// Presents the paywall for general use (e.g., from settings or locked features)
     func presentPaywall() {
         let handler = PaywallPresentationHandler()
         
-        handler.onDismiss { info, result in
+        handler.onDismiss { [weak self] _, result in
             DispatchQueue.main.async {
-                switch result {
-                case .purchased, .restored:
-                    self.hasActiveSubscription = true
-                case .declined:
-                    break
-                }
+                if case .purchased = result { self?.hasActiveSubscription = true }
+                if case .restored = result { self?.hasActiveSubscription = true }
             }
         }
         
-        // Use the same placement for consistency
         Superwall.shared.register(placement: "onboarding_paywall_1", handler: handler)
     }
     

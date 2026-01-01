@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CBB20F482F06C22400F4C7BB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F472F06C22400F4C7BB /* README.md */; };
+		CBB20F4A2F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */; };
+		CBB20F512F06C2F900F4C7BB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F472F06C22400F4C7BB /* README.md */; };
+		CBB20F522F06C2F900F4C7BB /* IMPLEMENTATION_CHECKLIST.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */; };
+		CBB20F5A2F06C4A200F4C7BB /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBB20F592F06C4A200F4C7BB /* SuperwallKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		CBB20ECD2F06C07F00F4C7BB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,14 +32,51 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CBB20EBF2F06C07900F4C7BB /* SoberQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoberQuest.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CBB20ECC2F06C07F00F4C7BB /* SoberQuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoberQuestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CBB20ED62F06C07F00F4C7BB /* SoberQuestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoberQuestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBB20ECC2F06C07F00F4C7BB /* SoberQuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SoberQuestTests.xctest; path = "/Users/m.j/Projects/SoberQuest/build/Debug-iphoneos/SoberQuest.app/PlugIns/SoberQuestTests.xctest"; sourceTree = "<absolute>"; };
+		CBB20ED62F06C07F00F4C7BB /* SoberQuestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SoberQuestUITests.xctest; path = "/Users/m.j/Projects/SoberQuest/build/Debug-iphoneos/SoberQuestUITests-Runner.app/PlugIns/SoberQuestUITests.xctest"; sourceTree = "<absolute>"; };
+		CBB20F462F06C20800F4C7BB /* SoberQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = SoberQuest.app; path = "/Users/m.j/Projects/SoberQuest/build/Debug-iphoneos/SoberQuest.app"; sourceTree = "<absolute>"; };
+		CBB20F472F06C22400F4C7BB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = IMPLEMENTATION_CHECKLIST.md; sourceTree = "<group>"; };
+		CBB20F562F06C2F900F4C7BB /* SoberQuest Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "SoberQuest Dev.app"; path = "/Users/m.j/Projects/SoberQuest/build/Debug-iphoneos/SoberQuest Dev.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CBB20F572F06C2F900F4C7BB /* Exceptions for "SoberQuest" folder in "SoberQuest Dev" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				App/AppState.swift,
+				App/SoberQuestApp.swift,
+				Assets.xcassets,
+				ContentView.swift,
+				Models/Addiction.swift,
+				Models/BadgeDefinition.swift,
+				Models/UnlockedBadge.swift,
+				Services/BadgeService.swift,
+				Services/DataManager.swift,
+				Services/SuperwallService.swift,
+				SoberQuestApp.swift,
+				Views/Badges/BadgeCollectionView.swift,
+				Views/Badges/BadgeImageView.swift,
+				Views/Badges/BadgeUnlockView.swift,
+				Views/Badges/ShareCardView.swift,
+				Views/Home/AddictionSelectorView.swift,
+				Views/Home/HomeView.swift,
+				Views/Onboarding/AddictionSetupView.swift,
+				Views/Onboarding/BadgePreviewView.swift,
+				Views/Onboarding/OnboardingFlow.swift,
+				Views/Onboarding/WelcomeView.swift,
+				Views/Settings/RelapseView.swift,
+			);
+			target = CBB20F4D2F06C2F900F4C7BB /* SoberQuest Dev */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CBB20EC12F06C07900F4C7BB /* SoberQuest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CBB20F572F06C2F900F4C7BB /* Exceptions for "SoberQuest" folder in "SoberQuest Dev" target */,
+			);
 			path = SoberQuest;
 			sourceTree = "<group>";
 		};
@@ -52,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBB20F5A2F06C4A200F4C7BB /* SuperwallKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +115,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CBB20F4F2F06C2F900F4C7BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -78,18 +131,9 @@
 				CBB20EC12F06C07900F4C7BB /* SoberQuest */,
 				CBB20ECF2F06C07F00F4C7BB /* SoberQuestTests */,
 				CBB20ED92F06C07F00F4C7BB /* SoberQuestUITests */,
-				CBB20EC02F06C07900F4C7BB /* Products */,
+				CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */,
+				CBB20F472F06C22400F4C7BB /* README.md */,
 			);
-			sourceTree = "<group>";
-		};
-		CBB20EC02F06C07900F4C7BB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CBB20EBF2F06C07900F4C7BB /* SoberQuest.app */,
-				CBB20ECC2F06C07F00F4C7BB /* SoberQuestTests.xctest */,
-				CBB20ED62F06C07F00F4C7BB /* SoberQuestUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,9 +156,10 @@
 			);
 			name = SoberQuest;
 			packageProductDependencies = (
+				CBB20F592F06C4A200F4C7BB /* SuperwallKit */,
 			);
 			productName = SoberQuest;
-			productReference = CBB20EBF2F06C07900F4C7BB /* SoberQuest.app */;
+			productReference = CBB20F462F06C20800F4C7BB /* SoberQuest.app */;
 			productType = "com.apple.product-type.application";
 		};
 		CBB20ECB2F06C07F00F4C7BB /* SoberQuestTests */ = {
@@ -163,6 +208,28 @@
 			productReference = CBB20ED62F06C07F00F4C7BB /* SoberQuestUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		CBB20F4D2F06C2F900F4C7BB /* SoberQuest Dev */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBB20F532F06C2F900F4C7BB /* Build configuration list for PBXNativeTarget "SoberQuest Dev" */;
+			buildPhases = (
+				CBB20F4E2F06C2F900F4C7BB /* Sources */,
+				CBB20F4F2F06C2F900F4C7BB /* Frameworks */,
+				CBB20F502F06C2F900F4C7BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CBB20EC12F06C07900F4C7BB /* SoberQuest */,
+			);
+			name = "SoberQuest Dev";
+			packageProductDependencies = (
+			);
+			productName = SoberQuest;
+			productReference = CBB20F562F06C2F900F4C7BB /* SoberQuest Dev.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -195,14 +262,18 @@
 			);
 			mainGroup = CBB20EB62F06C07900F4C7BB;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CBB20F582F06C4A100F4C7BB /* XCRemoteSwiftPackageReference "Superwall-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = CBB20EC02F06C07900F4C7BB /* Products */;
+			productRefGroup = CBB20EB62F06C07900F4C7BB;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				CBB20EBE2F06C07900F4C7BB /* SoberQuest */,
 				CBB20ECB2F06C07F00F4C7BB /* SoberQuestTests */,
 				CBB20ED52F06C07F00F4C7BB /* SoberQuestUITests */,
+				CBB20F4D2F06C2F900F4C7BB /* SoberQuest Dev */,
 			);
 		};
 /* End PBXProject section */
@@ -212,6 +283,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBB20F482F06C22400F4C7BB /* README.md in Resources */,
+				CBB20F4A2F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +299,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBB20F502F06C2F900F4C7BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CBB20F512F06C2F900F4C7BB /* README.md in Resources */,
+				CBB20F522F06C2F900F4C7BB /* IMPLEMENTATION_CHECKLIST.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +329,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CBB20ED22F06C07F00F4C7BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBB20F4E2F06C2F900F4C7BB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -405,6 +494,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -413,12 +503,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.studionoo.SoberQuest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -437,6 +531,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -445,12 +540,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.studionoo.SoberQuest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -538,6 +637,80 @@
 			};
 			name = Release;
 		};
+		CBB20F542F06C2F900F4C7BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GT3BY74WS;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = "1.0-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = com.studionoo.SoberQuest.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		CBB20F552F06C2F900F4C7BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GT3BY74WS;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = "1.0-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = com.studionoo.SoberQuest.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -577,7 +750,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		CBB20F532F06C2F900F4C7BB /* Build configuration list for PBXNativeTarget "SoberQuest Dev" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBB20F542F06C2F900F4C7BB /* Debug */,
+				CBB20F552F06C2F900F4C7BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CBB20F582F06C4A100F4C7BB /* XCRemoteSwiftPackageReference "Superwall-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/superwall/Superwall-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.11.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CBB20F592F06C4A200F4C7BB /* SuperwallKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBB20F582F06C4A100F4C7BB /* XCRemoteSwiftPackageReference "Superwall-iOS" */;
+			productName = SuperwallKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CBB20EB72F06C07900F4C7BB /* Project object */;
 }

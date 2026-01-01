@@ -45,7 +45,7 @@ class SuperwallService: ObservableObject {
         print("Presenting Superwall paywall...")
     }
     
-    func hasProAccess() -> Bool {
+    var hasProAccess: Bool {
         return hasActiveSubscription
     }
     

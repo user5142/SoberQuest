@@ -19,7 +19,7 @@ class AppState: ObservableObject {
     
     private func loadInitialState() {
         isOnboardingCompleted = dataManager.isOnboardingCompleted()
-        hasProAccess = superwallService.hasProAccess()
+        hasProAccess = superwallService.hasProAccess
         
         if isOnboardingCompleted {
             currentAddiction = dataManager.getActiveAddiction()

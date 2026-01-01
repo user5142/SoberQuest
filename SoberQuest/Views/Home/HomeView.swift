@@ -164,9 +164,8 @@ struct HomeView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 
-                                let daysRemaining = nextBadge.milestoneDays - addiction.daysSober
-                                if daysRemaining > 0 {
-                                    Text("\(daysRemaining) days to go")
+                                if nextBadge.milestoneDays > addiction.daysSober {
+                                    Text("\(nextBadge.milestoneDays - addiction.daysSober) days to go")
                                         .font(.caption)
                                         .foregroundColor(.blue)
                                 }

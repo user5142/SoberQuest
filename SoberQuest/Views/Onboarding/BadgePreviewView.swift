@@ -3,8 +3,11 @@ import SwiftUI
 struct BadgePreviewView: View {
     @Binding var currentStep: OnboardingStep
     @StateObject private var appState = AppState.shared
+    @StateObject private var superwallService = SuperwallService.shared
     let addictionName: String
     let lastUsedDate: Date
+    
+    @State private var isLoading = false
     
     let badges = BadgeDefinition.defaultBadges.prefix(3) // Show first 3 badges as preview
     
@@ -44,7 +47,7 @@ struct BadgePreviewView: View {
             Spacer()
             
             Button(action: {
-                // Save addiction and proceed to paywall
+                // Save addiction data
                 let addiction = Addiction(
                     name: addictionName,
                     startDate: lastUsedDate,
@@ -54,18 +57,45 @@ struct BadgePreviewView: View {
                 DataManager.shared.saveAddiction(addiction)
                 appState.setCurrentAddiction(addiction)
                 
-                withAnimation {
-                    currentStep = .paywall
+                // Present Superwall paywall directly
+                isLoading = true
+                superwallService.presentOnboardingPaywall { result in
+                    isLoading = false
+                    
+                    switch result {
+                    case .purchased, .restored:
+                        // User subscribed - grant pro access and complete onboarding
+                        appState.hasProAccess = true
+                        appState.completeOnboarding()
+                    case .declined:
+                        // User declined the paywall - still complete onboarding
+                        // They can access the app without pro features or subscribe later
+                        appState.completeOnboarding()
+                    case .skipped:
+                        // Paywall was skipped (already subscribed or no paywall configured)
+                        appState.hasProAccess = superwallService.hasActiveSubscription
+                        appState.completeOnboarding()
+                    }
                 }
             }) {
-                Text("Continue")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(12)
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(12)
+                } else {
+                    Text("Continue")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(12)
+                }
             }
+            .disabled(isLoading)
             .padding(.horizontal, 40)
             .padding(.bottom, 40)
         }

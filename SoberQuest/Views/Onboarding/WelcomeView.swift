@@ -56,6 +56,5 @@ enum OnboardingStep {
     case welcome
     case addictionSetup
     case badgePreview
-    case paywall
 }
 

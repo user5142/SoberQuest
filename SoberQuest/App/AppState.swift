@@ -47,5 +47,18 @@ class AppState: ObservableObject {
         isOnboardingCompleted = true
         dataManager.setOnboardingCompleted(true)
     }
+    
+    func resetToOnboarding() {
+        // Clear all stored data
+        dataManager.clearAllData()
+        
+        // Reset app state
+        currentAddiction = nil
+        isOnboardingCompleted = false
+        hasProAccess = false
+        
+        // Reset Superwall subscription status
+        superwallService.setSubscriptionActive(false)
+    }
 }
 

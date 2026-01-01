@@ -101,5 +101,13 @@ class DataManager: ObservableObject {
     func isOnboardingCompleted() -> Bool {
         return UserDefaults.standard.bool(forKey: onboardingCompletedKey)
     }
+    
+    // MARK: - Clear All Data
+    
+    func clearAllData() {
+        UserDefaults.standard.removeObject(forKey: addictionsKey)
+        UserDefaults.standard.removeObject(forKey: unlockedBadgesKey)
+        UserDefaults.standard.removeObject(forKey: onboardingCompletedKey)
+    }
 }
 

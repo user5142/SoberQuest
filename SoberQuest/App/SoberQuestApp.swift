@@ -60,6 +60,7 @@ struct SettingsView: View {
     @Binding var isPresented: Bool
     @Binding var showRelapseView: Bool
     @StateObject private var appState = AppState.shared
+    @State private var showClearSessionConfirmation = false
     
     var body: some View {
         NavigationView {
@@ -79,6 +80,24 @@ struct SettingsView: View {
                 } header: {
                     Text("Progress")
                 }
+                
+                #if DEBUG
+                Section {
+                    Button(action: {
+                        showClearSessionConfirmation = true
+                    }) {
+                        HStack {
+                            Text("Clear Session & Restart Onboarding")
+                                .foregroundColor(.red)
+                            Spacer()
+                        }
+                    }
+                } header: {
+                    Text("Development")
+                } footer: {
+                    Text("This will clear all data and return you to the onboarding flow.")
+                }
+                #endif
                 
                 Section {
                     HStack {
@@ -100,6 +119,17 @@ struct SettingsView: View {
                     }
                 }
             }
+            #if DEBUG
+            .alert("Clear Session?", isPresented: $showClearSessionConfirmation) {
+                Button("Cancel", role: .cancel) {}
+                Button("Clear", role: .destructive) {
+                    appState.resetToOnboarding()
+                    isPresented = false
+                }
+            } message: {
+                Text("This will delete all your data (addictions, badges, progress) and return you to the onboarding screen. This action cannot be undone.")
+            }
+            #endif
         }
     }
 }

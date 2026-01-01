@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import SuperwallKit
 
 class SuperwallService: ObservableObject {

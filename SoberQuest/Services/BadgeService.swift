@@ -1,6 +1,7 @@
 import Foundation
+import Combine
 
-class BadgeService {
+class BadgeService: ObservableObject {
     static let shared = BadgeService()
     
     private init() {}

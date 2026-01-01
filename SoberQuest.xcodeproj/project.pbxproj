@@ -54,7 +54,6 @@
 				Services/BadgeService.swift,
 				Services/DataManager.swift,
 				Services/SuperwallService.swift,
-				SoberQuestApp.swift,
 				Views/Badges/BadgeCollectionView.swift,
 				Views/Badges/BadgeImageView.swift,
 				Views/Badges/BadgeUnlockView.swift,

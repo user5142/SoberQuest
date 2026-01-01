@@ -14,6 +14,8 @@ struct HomeView: View {
     @State private var showBadgeCollection = false
     @State private var showShareSheet = false
     @State private var shareImage: UIImage?
+    @State private var showLogUrge = false
+    @State private var showResetConfirmation = false
     
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -25,9 +27,10 @@ struct HomeView: View {
                 mainContentView(addiction: addiction)
             } else {
                 Text("No addiction selected")
-                    .foregroundColor(.secondary)
+                    .foregroundColor(AppTheme.textSecondary)
             }
         }
+        .background(AppTheme.background)
         .onAppear {
             updateTimer()
             appState.refreshAddiction()
@@ -66,142 +69,215 @@ struct HomeView: View {
     
     @ViewBuilder
     private func mainContentView(addiction: Addiction) -> some View {
-        ScrollView {
-            VStack(spacing: 30) {
-                // Header with addiction name and share button
-                HStack {
-                    Button(action: {
-                        showAddictionSelector = true
-                    }) {
-                        HStack {
-                            Text(addiction.name)
-                                .font(.title2)
-                                .fontWeight(.bold)
-                            Image(systemName: "chevron.down")
-                                .font(.caption)
-                        }
-                        .foregroundColor(.primary)
-                    }
+        ZStack {
+            AppTheme.background.ignoresSafeArea()
+            
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    // Hero Section with Character
+                    heroSection(addiction: addiction)
                     
-                    Spacer()
-                    
-                    Button(action: {
-                        // Share current progress
-                        generateShareCard(for: addiction)
-                    }) {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.title3)
-                            .foregroundColor(.blue)
-                    }
+                    // "Why I'm doing this" Section
+                    motivationSection(addiction: addiction)
+                        .padding(.top, 16)
                 }
-                .padding(.horizontal)
-                .padding(.top)
-                
-                // Highest unlocked badge (most prominent)
-                if let highestBadge = getHighestUnlockedBadge(for: addiction) {
-                    VStack(spacing: 8) {
-                        Text("Latest Achievement")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        
-                        BadgeImageView(imageAssetName: highestBadge.imageAssetName, milestoneDays: highestBadge.milestoneDays, size: 120)
-                        
-                        Text(highestBadge.name)
-                            .font(.headline)
-                        
-                        Text(highestBadge.milestoneDisplayText)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(16)
-                    .padding(.horizontal)
-                }
-                
-                // Sobriety timer
-                VStack(spacing: 12) {
-                    Text(formatTimeComponents())
-                        .font(.system(size: 32, weight: .bold))
-                        .multilineTextAlignment(.center)
-                    
-                    Text("sober from \(addiction.name)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.vertical, 20)
-                
-                // Daily check-in button
-                Button(action: {
-                    handleDailyCheckIn(for: addiction)
-                }) {
-                    Text("I stayed sober today")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(Color.blue)
-                        .cornerRadius(12)
-                }
-                .padding(.horizontal, 40)
-                
-                // Next milestone preview
-                if let nextBadge = getNextMilestoneBadge(for: addiction) {
-                    VStack(spacing: 12) {
-                        Text("Next Milestone")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        HStack(spacing: 16) {
-                            BadgeImageView(imageAssetName: nextBadge.imageAssetName, milestoneDays: nextBadge.milestoneDays, size: 60)
-                                .opacity(0.5)
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(nextBadge.name)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                
-                                Text("\(nextBadge.milestoneDays) days")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                
-                                if nextBadge.milestoneDays > addiction.daysSober {
-                                    Text("\(nextBadge.milestoneDays - addiction.daysSober) days to go")
-                                        .font(.caption)
-                                        .foregroundColor(.blue)
-                                }
-                            }
-                            
-                            Spacer()
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.05))
-                        .cornerRadius(12)
-                    }
-                    .padding(.horizontal, 40)
-                }
-                
-                // Badge collection button
-                Button(action: {
-                    showBadgeCollection = true
-                }) {
-                    HStack {
-                        Image(systemName: "trophy.fill")
-                        Text("View All Badges")
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(.blue)
-                }
-                .padding(.top, 10)
             }
-            .padding(.vertical)
         }
     }
+    
+    // MARK: - Hero Section
+    @ViewBuilder
+    private func heroSection(addiction: Addiction) -> some View {
+        ZStack {
+            // Subtle gradient background for hero area
+            LinearGradient(
+                colors: [
+                    AppTheme.backgroundSecondary,
+                    AppTheme.background
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            
+            VStack(spacing: 20) {
+                // Badge collection button (top right)
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        showBadgeCollection = true
+                    }) {
+                        DiamondIcon(size: 24, color: AppTheme.gold.opacity(0.7))
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+                
+                // Character/Badge Image
+                if let highestBadge = getHighestUnlockedBadge(for: addiction) {
+                    BadgeImageView(
+                        imageAssetName: highestBadge.imageAssetName,
+                        milestoneDays: highestBadge.milestoneDays,
+                        size: 160
+                    )
+                    .shadow(color: AppTheme.gold.opacity(0.3), radius: 20, x: 0, y: 10)
+                } else {
+                    // Default character placeholder
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(AppTheme.cardBackgroundDark)
+                        .frame(width: 160, height: 160)
+                        .overlay(
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 60))
+                                .foregroundColor(AppTheme.textMuted)
+                        )
+                }
+                
+                // "You've been X-free for:" text
+                Text("You've been \(addiction.name.lowercased())-free for:")
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundColor(AppTheme.textSecondary)
+                    .padding(.top, 8)
+                
+                // Large Days Counter
+                Text(formatDaysDisplay())
+                    .font(.system(size: 72, weight: .bold, design: .rounded))
+                    .foregroundColor(AppTheme.textPrimary)
+                    .tracking(-2)
+                
+                // Timer Pill
+                timerPill
+                    .padding(.top, -8)
+                
+                // Action Buttons Row
+                actionButtonsRow(addiction: addiction)
+                    .padding(.top, 24)
+                    .padding(.bottom, 24)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
+    }
+    
+    // MARK: - Timer Pill
+    private var timerPill: some View {
+        Text(formatTimerDisplay())
+            .font(.system(size: 16, weight: .medium, design: .monospaced))
+            .foregroundColor(AppTheme.textPrimary)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .background(AppTheme.timerPillBackground)
+            .cornerRadius(24)
+    }
+    
+    // MARK: - Action Buttons Row
+    @ViewBuilder
+    private func actionButtonsRow(addiction: Addiction) -> some View {
+        HStack(spacing: 40) {
+            // Share Button
+            actionButton(
+                icon: "square.and.arrow.up",
+                label: "Share"
+            ) {
+                generateShareCard(for: addiction)
+            }
+            
+            // Log Urge Button
+            actionButton(
+                icon: "clock.arrow.circlepath",
+                label: "Log Urge"
+            ) {
+                handleDailyCheckIn(for: addiction)
+            }
+            
+            // Reset Button
+            actionButton(
+                icon: "arrow.counterclockwise",
+                label: "Reset"
+            ) {
+                showResetConfirmation = true
+            }
+        }
+        .alert("Reset Progress?", isPresented: $showResetConfirmation) {
+            Button("Cancel", role: .cancel) {}
+            Button("Reset", role: .destructive) {
+                resetProgress(for: addiction)
+            }
+        } message: {
+            Text("Your streak will be reset to 0 and the start date will be updated to today. Your unlocked badges will be preserved.")
+        }
+    }
+    
+    @ViewBuilder
+    private func actionButton(icon: String, label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 22, weight: .medium))
+                    .foregroundColor(AppTheme.textPrimary)
+                    .frame(width: 48, height: 48)
+                    .background(AppTheme.cardBackgroundDark)
+                    .clipShape(Circle())
+                
+                Text(label)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(AppTheme.textSecondary)
+            }
+        }
+    }
+    
+    // MARK: - Motivation Section
+    @ViewBuilder
+    private func motivationSection(addiction: Addiction) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // Section Header
+            HStack(spacing: 8) {
+                Text("Why I'm doing this")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.textSecondary)
+                
+                Circle()
+                    .fill(AppTheme.textMuted)
+                    .frame(width: 6, height: 6)
+            }
+            .padding(.horizontal, 20)
+            
+            // Motivation Card
+            VStack(spacing: 0) {
+                Text(getMotivationQuote())
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(AppTheme.textPrimary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 28)
+            }
+            .frame(maxWidth: .infinity)
+            .background(AppTheme.backgroundSecondary)
+            .cornerRadius(16)
+            .padding(.horizontal, 16)
+        }
+        .padding(.bottom, 100) // Space for tab bar
+    }
+    
+    // MARK: - Helper Functions
     
     private func updateTimer() {
         if let addiction = appState.currentAddiction {
             timeComponents = addiction.timeComponents
         }
+    }
+    
+    private func formatDaysDisplay() -> String {
+        let totalDays = timeComponents.years * 365 + timeComponents.months * 30 + timeComponents.days
+        if totalDays == 1 {
+            return "1 day"
+        } else {
+            return "\(totalDays) days"
+        }
+    }
+    
+    private func formatTimerDisplay() -> String {
+        return String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
     }
     
     private func formatTimeComponents() -> String {
@@ -217,7 +293,6 @@ struct HomeView: View {
             parts.append("\(timeComponents.days) day\(timeComponents.days > 1 ? "s" : "")")
         }
         
-        // Always show hours:minutes:seconds as a ticking clock
         let timeString = String(format: "%02d:%02d:%02d", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
         
         if parts.isEmpty {
@@ -247,6 +322,15 @@ struct HomeView: View {
         appState.refreshAddiction()
     }
     
+    private func resetProgress(for addiction: Addiction) {
+        var updatedAddiction = addiction
+        updatedAddiction.startDate = Date()
+        updatedAddiction.currentStreak = 0
+        
+        dataManager.saveAddiction(updatedAddiction)
+        appState.setCurrentAddiction(updatedAddiction)
+    }
+    
     private func getHighestUnlockedBadge(for addiction: Addiction) -> BadgeDefinition? {
         let unlockedBadges = dataManager.loadUnlockedBadges(for: addiction.id)
         return badgeService.getHighestUnlockedBadge(for: addiction.id, unlockedBadges: unlockedBadges)
@@ -266,21 +350,23 @@ struct HomeView: View {
     }
     
     private func checkForPhoenixRisingBadge() {
-        // Show Phoenix Rising badge unlock if it hasn't been shown yet
         guard !dataManager.isPhoenixRisingBadgeShown(),
               let addiction = appState.currentAddiction,
               let phoenixBadge = badgeService.getPhoenixRisingBadge() else {
             return
         }
         
-        // Verify the badge is unlocked
         let unlockedBadges = dataManager.loadUnlockedBadges(for: addiction.id)
         if badgeService.isBadgeUnlocked(badgeId: phoenixBadge.id, for: addiction.id, unlockedBadges: unlockedBadges) {
-            // Mark as shown and display the unlock view
             dataManager.setPhoenixRisingBadgeShown(true)
             self.unlockedBadge = phoenixBadge
             showBadgeUnlock = true
         }
+    }
+    
+    private func getMotivationQuote() -> String {
+        // TODO: Allow user to set custom motivation
+        return "To be the best man I can be for\nmy family and friends, and live\nto my fullest potential"
     }
 }
 
@@ -288,27 +374,35 @@ struct PaywallRequiredView: View {
     @EnvironmentObject private var superwallService: SuperwallService
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Pro Access Required")
-                .font(.title)
-                .fontWeight(.bold)
+        ZStack {
+            AppTheme.background.ignoresSafeArea()
             
-            Text("Subscribe to unlock all features")
-                .foregroundColor(.secondary)
-            
-            Button(action: {
-                superwallService.presentPaywall()
-            }) {
-                Text("Subscribe")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(12)
+            VStack(spacing: 24) {
+                Image(systemName: "crown.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(AppTheme.gold)
+                
+                Text("Pro Access Required")
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(AppTheme.textPrimary)
+                
+                Text("Subscribe to unlock all features")
+                    .font(.system(size: 16))
+                    .foregroundColor(AppTheme.textSecondary)
+                
+                Button(action: {
+                    superwallService.presentPaywall()
+                }) {
+                    Text("Subscribe")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(AppTheme.background)
+                        .padding(.horizontal, 48)
+                        .padding(.vertical, 16)
+                        .background(AppTheme.gold)
+                        .cornerRadius(12)
+                }
+                .padding(.top, 8)
             }
-            .padding(.horizontal, 40)
         }
     }
 }
-

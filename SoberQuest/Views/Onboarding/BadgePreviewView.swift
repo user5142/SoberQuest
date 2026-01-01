@@ -8,104 +8,149 @@ struct BadgePreviewView: View {
     let lastUsedDate: Date
     
     @State private var isLoading = false
+    @State private var animatedBadges: [Bool] = [false, false, false]
     
-    let badges = BadgeDefinition.defaultBadges.prefix(3) // Show first 3 badges as preview
+    let badges = Array(BadgeDefinition.defaultBadges.prefix(3))
     
     var body: some View {
-        VStack(spacing: 30) {
-            Text("Unlock Milestone Badges")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.top, 40)
+        ZStack {
+            AppTheme.background.ignoresSafeArea()
             
-            Text("Earn collectible badges as you reach milestones")
-                .font(.body)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-            
-            // Badge preview grid
-            HStack(spacing: 20) {
-                ForEach(Array(badges), id: \.id) { badge in
-                    VStack(spacing: 8) {
-                        BadgeImageView(imageAssetName: badge.imageAssetName, milestoneDays: badge.milestoneDays, size: 80)
-                        
-                        Text(badge.milestoneDisplayText)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+            VStack(spacing: 32) {
+                Spacer()
+                
+                // Header
+                VStack(spacing: 12) {
+                    Text("Unlock Milestone Badges")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(AppTheme.textPrimary)
+                        .multilineTextAlignment(.center)
+                    
+                    Text("Earn collectible badges as you reach milestones")
+                        .font(.system(size: 15))
+                        .foregroundColor(AppTheme.textSecondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
+                }
+                .padding(.top, 32)
+                
+                // Badge preview grid
+                HStack(spacing: 24) {
+                    ForEach(Array(badges.enumerated()), id: \.element.id) { index, badge in
+                        VStack(spacing: 12) {
+                            BadgeImageView(
+                                imageAssetName: badge.imageAssetName,
+                                milestoneDays: badge.milestoneDays,
+                                size: 90
+                            )
+                            .scaleEffect(animatedBadges[index] ? 1.0 : 0.5)
+                            .opacity(animatedBadges[index] ? 1.0 : 0.0)
+                            .shadow(color: AppTheme.gold.opacity(0.3), radius: 10, x: 0, y: 5)
+                            .onAppear {
+                                withAnimation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.15)) {
+                                    animatedBadges[index] = true
+                                }
+                            }
+                            
+                            Text(badge.milestoneDisplayText)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(AppTheme.gold)
+                        }
                     }
                 }
+                .padding(.vertical, 24)
+                
+                // Feature callouts
+                VStack(spacing: 16) {
+                    featureCallout(icon: "sparkles", text: "Beautiful artwork for each milestone")
+                    featureCallout(icon: "square.and.arrow.up", text: "Share your achievements on social media")
+                    featureCallout(icon: "trophy.fill", text: "Collect all badges as you progress")
+                }
+                .padding(.horizontal, 40)
+                
+                Spacer()
+                
+                // Continue button
+                Button(action: {
+                    continueToApp()
+                }) {
+                    Group {
+                        if isLoading {
+                            HStack(spacing: 12) {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.background))
+                                Text("Loading...")
+                                    .font(.system(size: 18, weight: .semibold))
+                            }
+                        } else {
+                            Text("Continue")
+                                .font(.system(size: 18, weight: .semibold))
+                        }
+                    }
+                    .foregroundColor(AppTheme.background)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
+                    .background(AppTheme.gold)
+                    .cornerRadius(14)
+                }
+                .disabled(isLoading)
+                .padding(.horizontal, 32)
+                .padding(.bottom, 48)
             }
-            .padding(.vertical, 20)
+        }
+        .preferredColorScheme(.dark)
+    }
+    
+    @ViewBuilder
+    private func featureCallout(icon: String, text: String) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(AppTheme.gold)
+                .frame(width: 32, height: 32)
+                .background(AppTheme.backgroundSecondary)
+                .cornerRadius(8)
             
-            Text("Share your achievements on social media")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+            Text(text)
+                .font(.system(size: 14))
+                .foregroundColor(AppTheme.textSecondary)
             
             Spacer()
-            
-            Button(action: {
-                // Save addiction data
-                let addiction = Addiction(
-                    name: addictionName,
-                    startDate: lastUsedDate,
-                    currentStreak: 0,
-                    isActive: true
-                )
-                DataManager.shared.saveAddiction(addiction)
-                appState.setCurrentAddiction(addiction)
-                
-                // Grant Phoenix Rising badge immediately
-                if let phoenixBadge = BadgeService.shared.getPhoenixRisingBadge() {
-                    let unlockedBadge = UnlockedBadge(badgeId: phoenixBadge.id, addictionId: addiction.id)
-                    DataManager.shared.saveUnlockedBadge(unlockedBadge)
-                }
-                
-                // Present Superwall paywall directly
-                isLoading = true
-                superwallService.presentOnboardingPaywall { result in
-                    isLoading = false
-                    
-                    switch result {
-                    case .purchased, .restored:
-                        // User subscribed - grant pro access and complete onboarding
-                        appState.hasProAccess = true
-                        appState.completeOnboarding()
-                    case .declined:
-                        // User declined the paywall - still complete onboarding
-                        // They can access the app without pro features or subscribe later
-                        appState.completeOnboarding()
-                    case .skipped:
-                        // Paywall was skipped (already subscribed or no paywall configured)
-                        appState.hasProAccess = superwallService.hasActiveSubscription
-                        appState.completeOnboarding()
-                    }
-                }
-            }) {
-                if isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(12)
-                } else {
-                    Text("Continue")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(12)
-                }
-            }
-            .disabled(isLoading)
-            .padding(.horizontal, 40)
-            .padding(.bottom, 40)
         }
-        .padding()
+    }
+    
+    private func continueToApp() {
+        // Save addiction data
+        let addiction = Addiction(
+            name: addictionName,
+            startDate: lastUsedDate,
+            currentStreak: 0,
+            isActive: true
+        )
+        DataManager.shared.saveAddiction(addiction)
+        appState.setCurrentAddiction(addiction)
+        
+        // Grant Phoenix Rising badge immediately
+        if let phoenixBadge = BadgeService.shared.getPhoenixRisingBadge() {
+            let unlockedBadge = UnlockedBadge(badgeId: phoenixBadge.id, addictionId: addiction.id)
+            DataManager.shared.saveUnlockedBadge(unlockedBadge)
+        }
+        
+        // Present Superwall paywall directly
+        isLoading = true
+        superwallService.presentOnboardingPaywall { result in
+            isLoading = false
+            
+            switch result {
+            case .purchased, .restored:
+                appState.hasProAccess = true
+                appState.completeOnboarding()
+            case .declined:
+                appState.completeOnboarding()
+            case .skipped:
+                appState.hasProAccess = superwallService.hasActiveSubscription
+                appState.completeOnboarding()
+            }
+        }
     }
 }
-

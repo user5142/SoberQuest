@@ -8,23 +8,38 @@ struct OnboardingFlow: View {
     
     var body: some View {
         ZStack {
+            AppTheme.background.ignoresSafeArea()
+            
             switch currentStep {
             case .welcome:
                 WelcomeView(currentStep: $currentStep)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing),
+                        removal: .move(edge: .leading)
+                    ))
             case .addictionSetup:
                 AddictionSetupView(
                     currentStep: $currentStep,
                     selectedAddictionName: $selectedAddictionName,
                     lastUsedDate: $lastUsedDate
                 )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing),
+                    removal: .move(edge: .leading)
+                ))
             case .badgePreview:
                 BadgePreviewView(
                     currentStep: $currentStep,
                     addictionName: selectedAddictionName,
                     lastUsedDate: lastUsedDate
                 )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing),
+                    removal: .move(edge: .leading)
+                ))
             }
         }
+        .animation(.easeInOut(duration: 0.3), value: currentStep)
+        .preferredColorScheme(.dark)
     }
 }
-

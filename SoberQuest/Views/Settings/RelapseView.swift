@@ -9,50 +9,87 @@ struct RelapseView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 30) {
-                Text("Reset Progress")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding(.top, 40)
+            ZStack {
+                AppTheme.background.ignoresSafeArea()
                 
-                Text("This will reset your streak and start date, but your unlocked badges will remain.")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-                
-                VStack(alignment: .leading, spacing: 16) {
-                    InfoRow(label: "Current Streak", value: "\(addiction.currentStreak) days")
-                    InfoRow(label: "Days Sober", value: "\(addiction.daysSober) days")
-                    InfoRow(label: "Unlocked Badges", value: "\(dataManager.loadUnlockedBadges(for: addiction.id).count) badges")
+                VStack(spacing: 28) {
+                    // Warning icon
+                    ZStack {
+                        Circle()
+                            .fill(Color.red.opacity(0.15))
+                            .frame(width: 80, height: 80)
+                        
+                        Image(systemName: "arrow.counterclockwise")
+                            .font(.system(size: 32, weight: .medium))
+                            .foregroundColor(.red)
+                    }
+                    .padding(.top, 32)
+                    
+                    // Header
+                    VStack(spacing: 12) {
+                        Text("Reset Progress")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(AppTheme.textPrimary)
+                        
+                        Text("This will reset your streak and start date, but your unlocked badges will remain.")
+                            .font(.system(size: 15))
+                            .foregroundColor(AppTheme.textSecondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 24)
+                    }
+                    
+                    // Stats card
+                    VStack(spacing: 0) {
+                        InfoRow(label: "Current Streak", value: "\(addiction.currentStreak) days")
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 16)
+                        
+                        Divider()
+                            .background(AppTheme.divider)
+                        
+                        InfoRow(label: "Days Sober", value: "\(addiction.daysSober) days")
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 16)
+                        
+                        Divider()
+                            .background(AppTheme.divider)
+                        
+                        InfoRow(label: "Unlocked Badges", value: "\(dataManager.loadUnlockedBadges(for: addiction.id).count) badges")
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 16)
+                    }
+                    .background(AppTheme.backgroundSecondary)
+                    .cornerRadius(16)
+                    .padding(.horizontal, 24)
+                    
+                    Spacer()
+                    
+                    // Reset button
+                    Button(action: {
+                        showConfirmation = true
+                    }) {
+                        Text("Reset Progress")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 18)
+                            .background(Color.red)
+                            .cornerRadius(14)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 48)
                 }
-                .padding()
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(12)
-                .padding(.horizontal, 40)
-                
-                Spacer()
-                
-                Button(action: {
-                    showConfirmation = true
-                }) {
-                    Text("Reset Progress")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.red)
-                        .cornerRadius(12)
-                }
-                .padding(.horizontal, 40)
-                .padding(.bottom, 40)
             }
             .navigationTitle("Reset Progress")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cancel") {
+                    Button(action: {
                         isPresented = false
+                    }) {
+                        Text("Cancel")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(AppTheme.gold)
                     }
                 }
             }
@@ -65,6 +102,7 @@ struct RelapseView: View {
                 Text("Your streak will be reset to 0 and the start date will be updated to today. Your unlocked badges will be preserved.")
             }
         }
+        .preferredColorScheme(.dark)
     }
     
     private func resetProgress() {
@@ -85,11 +123,12 @@ struct InfoRow: View {
     var body: some View {
         HStack {
             Text(label)
-                .foregroundColor(.secondary)
+                .font(.system(size: 15))
+                .foregroundColor(AppTheme.textSecondary)
             Spacer()
             Text(value)
-                .fontWeight(.medium)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundColor(AppTheme.textPrimary)
         }
     }
 }
-

@@ -4,51 +4,121 @@ struct WelcomeView: View {
     @Binding var currentStep: OnboardingStep
     
     var body: some View {
-        VStack(spacing: 30) {
-            Spacer()
+        ZStack {
+            // Dark background
+            AppTheme.background.ignoresSafeArea()
             
-            // App Icon/Logo placeholder
-            Image(systemName: "star.fill")
-                .font(.system(size: 80))
-                .foregroundColor(.blue)
-                .padding(.bottom, 20)
-            
-            Text("Welcome to SoberQuest")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-            
-            VStack(spacing: 16) {
-                Text("Track your sobriety journey")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
+            VStack(spacing: 32) {
+                Spacer()
                 
-                Text("Unlock fantasy-themed milestone badges as you progress")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
+                // App Icon/Logo
+                ZStack {
+                    // Glow effect
+                    Circle()
+                        .fill(AppTheme.gold.opacity(0.2))
+                        .frame(width: 140, height: 140)
+                        .blur(radius: 30)
+                    
+                    // Icon background
+                    Circle()
+                        .fill(AppTheme.backgroundSecondary)
+                        .frame(width: 100, height: 100)
+                        .overlay(
+                            Circle()
+                                .stroke(AppTheme.gold.opacity(0.5), lineWidth: 2)
+                        )
+                    
+                    // Star icon
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 44))
+                        .foregroundColor(AppTheme.gold)
+                }
+                .padding(.bottom, 20)
+                
+                // Title
+                VStack(spacing: 12) {
+                    Text("Welcome to")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(AppTheme.textSecondary)
+                    
+                    Text("SoberQuest")
+                        .font(.system(size: 40, weight: .bold))
+                        .foregroundColor(AppTheme.textPrimary)
+                }
+                
+                // Description
+                VStack(spacing: 20) {
+                    FeatureRow(
+                        icon: "clock.arrow.circlepath",
+                        title: "Track Your Journey",
+                        description: "Monitor your sobriety progress in real-time"
+                    )
+                    
+                    FeatureRow(
+                        icon: "trophy.fill",
+                        title: "Unlock Badges",
+                        description: "Earn fantasy-themed milestone achievements"
+                    )
+                    
+                    FeatureRow(
+                        icon: "square.and.arrow.up",
+                        title: "Share Progress",
+                        description: "Celebrate milestones with beautiful share cards"
+                    )
+                }
+                .padding(.top, 20)
+                .padding(.horizontal, 32)
+                
+                Spacer()
+                
+                // Get Started Button
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        currentStep = .addictionSetup
+                    }
+                }) {
+                    Text("Get Started")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(AppTheme.background)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(AppTheme.gold)
+                        .cornerRadius(14)
+                }
+                .padding(.horizontal, 32)
+                .padding(.bottom, 48)
+            }
+        }
+        .preferredColorScheme(.dark)
+    }
+}
+
+struct FeatureRow: View {
+    let icon: String
+    let title: String
+    let description: String
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.system(size: 22))
+                .foregroundColor(AppTheme.gold)
+                .frame(width: 44, height: 44)
+                .background(AppTheme.backgroundSecondary)
+                .cornerRadius(12)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(AppTheme.textPrimary)
+                
+                Text(description)
+                    .font(.system(size: 14))
+                    .foregroundColor(AppTheme.textSecondary)
             }
             
             Spacer()
-            
-            Button(action: {
-                withAnimation {
-                    currentStep = .addictionSetup
-                }
-            }) {
-                Text("Get Started")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(12)
-            }
-            .padding(.horizontal, 40)
-            .padding(.bottom, 40)
         }
-        .padding()
     }
 }
 
@@ -57,4 +127,3 @@ enum OnboardingStep {
     case addictionSetup
     case badgePreview
 }
-

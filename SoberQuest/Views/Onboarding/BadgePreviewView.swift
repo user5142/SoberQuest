@@ -2,8 +2,8 @@ import SwiftUI
 
 struct BadgePreviewView: View {
     @Binding var currentStep: OnboardingStep
-    @StateObject private var appState = AppState.shared
-    @StateObject private var superwallService = SuperwallService.shared
+    @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var superwallService: SuperwallService
     let addictionName: String
     let lastUsedDate: Date
     

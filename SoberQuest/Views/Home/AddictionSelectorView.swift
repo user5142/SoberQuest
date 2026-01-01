@@ -2,8 +2,8 @@ import SwiftUI
 
 struct AddictionSelectorView: View {
     @Binding var isPresented: Bool
-    @StateObject private var appState = AppState.shared
-    @StateObject private var dataManager = DataManager.shared
+    @EnvironmentObject private var appState: AppState
+    @ObservedObject private var dataManager = DataManager.shared
     
     var body: some View {
         NavigationView {

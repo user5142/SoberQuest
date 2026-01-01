@@ -2,10 +2,10 @@ import SwiftUI
 import Combine
 
 struct HomeView: View {
-    @StateObject private var appState = AppState.shared
-    @StateObject private var dataManager = DataManager.shared
-    @StateObject private var badgeService = BadgeService.shared
-    @StateObject private var superwallService = SuperwallService.shared
+    @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var superwallService: SuperwallService
+    @ObservedObject private var dataManager = DataManager.shared
+    @ObservedObject private var badgeService = BadgeService.shared
     
     @State private var timeComponents: (years: Int, months: Int, days: Int, hours: Int) = (0, 0, 0, 0)
     @State private var showAddictionSelector = false
@@ -262,7 +262,7 @@ struct HomeView: View {
 }
 
 struct PaywallRequiredView: View {
-    @StateObject private var superwallService = SuperwallService.shared
+    @EnvironmentObject private var superwallService: SuperwallService
     
     var body: some View {
         VStack(spacing: 20) {

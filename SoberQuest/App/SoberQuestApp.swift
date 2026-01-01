@@ -2,13 +2,13 @@ import SwiftUI
 
 @main
 struct SoberQuestApp: App {
-    @StateObject private var appState = AppState.shared
-    @StateObject private var superwallService = SuperwallService.shared
+    // Use ObservedObject for singletons that are already instantiated
+    @ObservedObject private var appState = AppState.shared
     
     init() {
-        // Initialize Superwall (placeholder for MVP)
-        // In production, configure with actual API key
-        superwallService.checkEntitlement()
+        // Ensure Superwall is configured at app launch
+        // Accessing .shared triggers the private init() which calls configureSuperwall()
+        _ = SuperwallService.shared
     }
     
     var body: some Scene {
@@ -21,12 +21,13 @@ struct SoberQuestApp: App {
                 }
             }
             .environmentObject(appState)
+            .environmentObject(SuperwallService.shared)
         }
     }
 }
 
 struct MainTabView: View {
-    @StateObject private var appState = AppState.shared
+    @EnvironmentObject private var appState: AppState
     @State private var showSettings = false
     @State private var showRelapseView = false
     
@@ -59,7 +60,7 @@ struct MainTabView: View {
 struct SettingsView: View {
     @Binding var isPresented: Bool
     @Binding var showRelapseView: Bool
-    @StateObject private var appState = AppState.shared
+    @EnvironmentObject private var appState: AppState
     @State private var showClearSessionConfirmation = false
     
     var body: some View {

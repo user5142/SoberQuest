@@ -3,8 +3,8 @@ import SwiftUI
 struct BadgeCollectionView: View {
     let addiction: Addiction
     @Binding var isPresented: Bool
-    @StateObject private var dataManager = DataManager.shared
-    @StateObject private var badgeService = BadgeService.shared
+    @ObservedObject private var dataManager = DataManager.shared
+    @ObservedObject private var badgeService = BadgeService.shared
     
     var body: some View {
         NavigationView {

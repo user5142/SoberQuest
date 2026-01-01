@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct OnboardingFlow: View {
-    @StateObject private var appState = AppState.shared
+    @EnvironmentObject private var appState: AppState
     @State private var currentStep: OnboardingStep = .welcome
     @State private var selectedAddictionName: String = ""
     @State private var lastUsedDate: Date = Date()

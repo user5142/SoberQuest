@@ -19,13 +19,15 @@ struct Addiction: Identifiable, Codable {
         Calendar.current.dateComponents([.day], from: startDate, to: Date()).day ?? 0
     }
     
-    var timeComponents: (years: Int, months: Int, days: Int, hours: Int) {
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour], from: startDate, to: Date())
+    var timeComponents: (years: Int, months: Int, days: Int, hours: Int, minutes: Int, seconds: Int) {
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: startDate, to: Date())
         return (
             years: components.year ?? 0,
             months: components.month ?? 0,
             days: components.day ?? 0,
-            hours: components.hour ?? 0
+            hours: components.hour ?? 0,
+            minutes: components.minute ?? 0,
+            seconds: components.second ?? 0
         )
     }
 }

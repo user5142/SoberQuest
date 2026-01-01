@@ -7,7 +7,7 @@ struct HomeView: View {
     @ObservedObject private var dataManager = DataManager.shared
     @ObservedObject private var badgeService = BadgeService.shared
     
-    @State private var timeComponents: (years: Int, months: Int, days: Int, hours: Int) = (0, 0, 0, 0)
+    @State private var timeComponents: (years: Int, months: Int, days: Int, hours: Int, minutes: Int, seconds: Int) = (0, 0, 0, 0, 0, 0)
     @State private var showAddictionSelector = false
     @State private var showBadgeUnlock = false
     @State private var unlockedBadge: BadgeDefinition?
@@ -205,22 +205,26 @@ struct HomeView: View {
     }
     
     private func formatTimeComponents() -> String {
-        var components: [String] = []
+        var parts: [String] = []
         
         if timeComponents.years > 0 {
-            components.append("\(timeComponents.years) year\(timeComponents.years > 1 ? "s" : "")")
+            parts.append("\(timeComponents.years) year\(timeComponents.years > 1 ? "s" : "")")
         }
         if timeComponents.months > 0 {
-            components.append("\(timeComponents.months) month\(timeComponents.months > 1 ? "s" : "")")
+            parts.append("\(timeComponents.months) month\(timeComponents.months > 1 ? "s" : "")")
         }
         if timeComponents.days > 0 {
-            components.append("\(timeComponents.days) day\(timeComponents.days > 1 ? "s" : "")")
-        }
-        if components.isEmpty || timeComponents.hours > 0 {
-            components.append("\(timeComponents.hours) hour\(timeComponents.hours != 1 ? "s" : "")")
+            parts.append("\(timeComponents.days) day\(timeComponents.days > 1 ? "s" : "")")
         }
         
-        return components.joined(separator: " ")
+        // Always show hours:minutes:seconds as a ticking clock
+        let timeString = String(format: "%02d:%02d:%02d", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
+        
+        if parts.isEmpty {
+            return timeString
+        } else {
+            return parts.joined(separator: " ") + "\n" + timeString
+        }
     }
     
     private func handleDailyCheckIn(for addiction: Addiction) {

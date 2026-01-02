@@ -8,6 +8,7 @@ class DataManager: ObservableObject {
     private let unlockedBadgesKey = "UnlockedBadges"
     private let onboardingCompletedKey = "OnboardingCompleted"
     private let lanternBadgeShownKey = "LanternBadgeShown"
+    private let hasUsedTrialKey = "HasUsedTrial"
     
     private init() {}
     
@@ -113,6 +114,16 @@ class DataManager: ObservableObject {
         return UserDefaults.standard.bool(forKey: lanternBadgeShownKey)
     }
     
+    // MARK: - Trial Usage Tracking
+    
+    func setHasUsedTrial(_ used: Bool) {
+        UserDefaults.standard.set(used, forKey: hasUsedTrialKey)
+    }
+    
+    func hasUsedTrial() -> Bool {
+        return UserDefaults.standard.bool(forKey: hasUsedTrialKey)
+    }
+    
     // MARK: - Clear All Data
     
     func clearAllData() {
@@ -120,6 +131,7 @@ class DataManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: unlockedBadgesKey)
         UserDefaults.standard.removeObject(forKey: onboardingCompletedKey)
         UserDefaults.standard.removeObject(forKey: lanternBadgeShownKey)
+        UserDefaults.standard.removeObject(forKey: hasUsedTrialKey)
     }
 }
 

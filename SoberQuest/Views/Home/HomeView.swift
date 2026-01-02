@@ -117,14 +117,14 @@ struct HomeView: View {
                     BadgeImageView(
                         imageAssetName: highestBadge.imageAssetName,
                         milestoneDays: highestBadge.milestoneDays,
-                        size: 160
+                        size: 220
                     )
                     .shadow(color: AppTheme.gold.opacity(0.3), radius: 20, x: 0, y: 10)
                 } else {
                     // Default character placeholder
                     RoundedRectangle(cornerRadius: 20)
                         .fill(AppTheme.cardBackgroundDark)
-                        .frame(width: 160, height: 160)
+                        .frame(width: 220, height: 220)
                         .overlay(
                             Image(systemName: "person.fill")
                                 .font(.system(size: 60))
@@ -140,7 +140,7 @@ struct HomeView: View {
                 
                 // Large Days Counter
                 Text(formatDaysDisplay())
-                    .font(.system(size: 72, weight: .bold, design: .rounded))
+                    .font(.system(size: 56, weight: .bold, design: .rounded))
                     .foregroundColor(AppTheme.textPrimary)
                     .tracking(-2)
                 

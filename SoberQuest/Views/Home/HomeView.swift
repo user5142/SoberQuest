@@ -372,6 +372,7 @@ struct HomeView: View {
 
 struct PaywallRequiredView: View {
     @EnvironmentObject private var superwallService: SuperwallService
+    @State private var isLoading = false
     
     var body: some View {
         ZStack {
@@ -391,18 +392,45 @@ struct PaywallRequiredView: View {
                     .foregroundColor(AppTheme.textSecondary)
                 
                 Button(action: {
-                    superwallService.presentPaywall()
+                    presentPaywall()
                 }) {
-                    Text("Subscribe")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(AppTheme.background)
-                        .padding(.horizontal, 48)
-                        .padding(.vertical, 16)
-                        .background(AppTheme.gold)
-                        .cornerRadius(12)
+                    Group {
+                        if isLoading {
+                            HStack(spacing: 12) {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.background))
+                                Text("Loading...")
+                                    .font(.system(size: 17, weight: .semibold))
+                            }
+                        } else {
+                            Text("Subscribe")
+                                .font(.system(size: 17, weight: .semibold))
+                        }
+                    }
+                    .foregroundColor(AppTheme.background)
+                    .padding(.horizontal, 48)
+                    .padding(.vertical, 16)
+                    .background(AppTheme.gold)
+                    .cornerRadius(12)
                 }
+                .disabled(isLoading)
                 .padding(.top, 8)
             }
+        }
+        .onAppear {
+            // Refresh entitlement when this view appears to ensure we have latest status
+            Task {
+                await superwallService.refreshEntitlement()
+            }
+        }
+    }
+    
+    private func presentPaywall() {
+        isLoading = true
+        superwallService.presentOnboardingPaywall { result in
+            isLoading = false
+            // The subscription status will be updated via Combine observation
+            // No additional action needed here
         }
     }
 }

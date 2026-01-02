@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct SoberQuestApp: App {
     @ObservedObject private var appState = AppState.shared
+    @Environment(\.scenePhase) private var scenePhase
     
     init() {
         // Ensure Superwall is configured at app launch
@@ -24,6 +25,17 @@ struct SoberQuestApp: App {
             .environmentObject(appState)
             .environmentObject(SuperwallService.shared)
             .preferredColorScheme(.dark)
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase == .active {
+                    // Refresh entitlement when app becomes active
+                    // This ensures subscription status is up-to-date after:
+                    // - App was backgrounded and user subscribed/cancelled via Settings
+                    // - App was relaunched after a subscription change
+                    Task {
+                        await SuperwallService.shared.refreshEntitlement()
+                    }
+                }
+            }
         }
     }
     

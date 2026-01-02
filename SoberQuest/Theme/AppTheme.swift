@@ -62,7 +62,7 @@ struct AppTheme {
     // MARK: - Milestone Badge Colors by Type
     static func milestoneColor(for days: Int) -> Color {
         switch days {
-        case 0: return ember       // Phoenix Rising
+        case 0: return ember       // Lantern
         case 1: return bronze      // First Step
         case 3: return copper      // Early Warrior
         case 7: return gold        // Week Warrior

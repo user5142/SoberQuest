@@ -7,7 +7,7 @@ class DataManager: ObservableObject {
     private let addictionsKey = "SavedAddictions"
     private let unlockedBadgesKey = "UnlockedBadges"
     private let onboardingCompletedKey = "OnboardingCompleted"
-    private let phoenixRisingShownKey = "PhoenixRisingBadgeShown"
+    private let lanternBadgeShownKey = "LanternBadgeShown"
     
     private init() {}
     
@@ -103,14 +103,14 @@ class DataManager: ObservableObject {
         return UserDefaults.standard.bool(forKey: onboardingCompletedKey)
     }
     
-    // MARK: - Phoenix Rising Badge Shown
+    // MARK: - Lantern Badge Shown
     
-    func setPhoenixRisingBadgeShown(_ shown: Bool) {
-        UserDefaults.standard.set(shown, forKey: phoenixRisingShownKey)
+    func setLanternBadgeShown(_ shown: Bool) {
+        UserDefaults.standard.set(shown, forKey: lanternBadgeShownKey)
     }
     
-    func isPhoenixRisingBadgeShown() -> Bool {
-        return UserDefaults.standard.bool(forKey: phoenixRisingShownKey)
+    func isLanternBadgeShown() -> Bool {
+        return UserDefaults.standard.bool(forKey: lanternBadgeShownKey)
     }
     
     // MARK: - Clear All Data
@@ -119,7 +119,7 @@ class DataManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: addictionsKey)
         UserDefaults.standard.removeObject(forKey: unlockedBadgesKey)
         UserDefaults.standard.removeObject(forKey: onboardingCompletedKey)
-        UserDefaults.standard.removeObject(forKey: phoenixRisingShownKey)
+        UserDefaults.standard.removeObject(forKey: lanternBadgeShownKey)
     }
 }
 

@@ -60,8 +60,8 @@ class BadgeService: ObservableObject {
         return unlockedBadges.contains { $0.badgeId == badgeId && $0.addictionId == addictionId }
     }
     
-    /// Returns the Phoenix Rising (day 0) starter badge
-    func getPhoenixRisingBadge() -> BadgeDefinition? {
+    /// Returns the Lantern (day 0) starter badge
+    func getLanternBadge() -> BadgeDefinition? {
         return BadgeDefinition.defaultBadges.first { $0.id == "day0" }
     }
 }

@@ -34,7 +34,7 @@ struct HomeView: View {
         .onAppear {
             updateTimer()
             appState.refreshAddiction()
-            checkForPhoenixRisingBadge()
+            checkForLanternBadge()
         }
         .onReceive(timer) { _ in
             updateTimer()
@@ -349,17 +349,17 @@ struct HomeView: View {
         }
     }
     
-    private func checkForPhoenixRisingBadge() {
-        guard !dataManager.isPhoenixRisingBadgeShown(),
+    private func checkForLanternBadge() {
+        guard !dataManager.isLanternBadgeShown(),
               let addiction = appState.currentAddiction,
-              let phoenixBadge = badgeService.getPhoenixRisingBadge() else {
+              let lanternBadge = badgeService.getLanternBadge() else {
             return
         }
         
         let unlockedBadges = dataManager.loadUnlockedBadges(for: addiction.id)
-        if badgeService.isBadgeUnlocked(badgeId: phoenixBadge.id, for: addiction.id, unlockedBadges: unlockedBadges) {
-            dataManager.setPhoenixRisingBadgeShown(true)
-            self.unlockedBadge = phoenixBadge
+        if badgeService.isBadgeUnlocked(badgeId: lanternBadge.id, for: addiction.id, unlockedBadges: unlockedBadges) {
+            dataManager.setLanternBadgeShown(true)
+            self.unlockedBadge = lanternBadge
             showBadgeUnlock = true
         }
     }

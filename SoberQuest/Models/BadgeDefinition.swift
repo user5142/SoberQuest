@@ -8,7 +8,7 @@ struct BadgeDefinition: Identifiable, Codable {
     let rarityLevel: String
     
     static let defaultBadges: [BadgeDefinition] = [
-        BadgeDefinition(id: "day0", name: "Phoenix Rising", milestoneDays: 0, imageAssetName: "badge_day0", rarityLevel: "starter"),
+        BadgeDefinition(id: "day0", name: "Lantern", milestoneDays: 0, imageAssetName: "badge_day0", rarityLevel: "starter"),
         BadgeDefinition(id: "day1", name: "First Step", milestoneDays: 1, imageAssetName: "badge_day1", rarityLevel: "common"),
         BadgeDefinition(id: "day3", name: "Early Warrior", milestoneDays: 3, imageAssetName: "badge_day3", rarityLevel: "common"),
         BadgeDefinition(id: "day7", name: "Week Warrior", milestoneDays: 7, imageAssetName: "badge_day7", rarityLevel: "uncommon"),

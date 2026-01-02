@@ -58,7 +58,7 @@ struct BadgeImageView: View {
             
             // Content
             if milestoneDays == 0 {
-                // Phoenix Rising - fire emoji
+                // Lantern - fire emoji
                 Text("🔥")
                     .font(.system(size: size * 0.4))
             } else {

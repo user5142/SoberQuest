@@ -130,9 +130,9 @@ struct BadgePreviewView: View {
         DataManager.shared.saveAddiction(addiction)
         appState.setCurrentAddiction(addiction)
         
-        // Grant Phoenix Rising badge immediately
-        if let phoenixBadge = BadgeService.shared.getPhoenixRisingBadge() {
-            let unlockedBadge = UnlockedBadge(badgeId: phoenixBadge.id, addictionId: addiction.id)
+        // Grant Lantern badge immediately
+        if let lanternBadge = BadgeService.shared.getLanternBadge() {
+            let unlockedBadge = UnlockedBadge(badgeId: lanternBadge.id, addictionId: addiction.id)
             DataManager.shared.saveUnlockedBadge(unlockedBadge)
         }
         

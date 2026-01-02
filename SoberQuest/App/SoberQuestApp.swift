@@ -27,13 +27,10 @@ struct SoberQuestApp: App {
             .preferredColorScheme(.dark)
             .onChange(of: scenePhase) { newPhase in
                 if newPhase == .active {
-                    // Refresh entitlement when app becomes active
-                    // This ensures subscription status is up-to-date after:
-                    // - App was backgrounded and user subscribed/cancelled via Settings
-                    // - App was relaunched after a subscription change
-                    Task {
-                        await SuperwallService.shared.refreshEntitlement()
-                    }
+                    // Sync check of current subscription status when app becomes active
+                    // The Combine observer on $subscriptionStatus handles reactive updates
+                    // This is a lightweight status read, not a restore (no alerts shown)
+                    SuperwallService.shared.refreshEntitlement()
                 }
             }
         }

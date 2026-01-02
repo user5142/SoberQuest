@@ -61,25 +61,19 @@ class SuperwallService: ObservableObject {
         }
     }
     
-    /// Refresh entitlement status - call this when app becomes active or after paywall dismissal
-    func refreshEntitlement() async {
-        // Force a restore to ensure we have the latest subscription status from StoreKit
-        do {
-            try await Superwall.shared.restorePurchases()
-        } catch {
-            // Restore failed - check current status anyway
-            print("SuperwallService: Restore purchases failed: \(error)")
-        }
-        
-        // After restore attempt, check the current status
-        await MainActor.run {
-            let status = Superwall.shared.subscriptionStatus
-            switch status {
-            case .active:
-                hasActiveSubscription = true
-            default:
-                hasActiveSubscription = false
-            }
+    /// Refresh entitlement status by reading current subscription status
+    /// Note: Does NOT call restorePurchases() as that shows alerts.
+    /// The Combine observer on $subscriptionStatus handles reactive updates automatically.
+    func refreshEntitlement() {
+        // Simply read the current subscription status - no restore needed
+        // Superwall's $subscriptionStatus publisher (observed in observeSubscriptionStatus)
+        // automatically updates hasActiveSubscription when status changes
+        let status = Superwall.shared.subscriptionStatus
+        switch status {
+        case .active:
+            hasActiveSubscription = true
+        default:
+            hasActiveSubscription = false
         }
     }
     
@@ -112,14 +106,11 @@ class SuperwallService: ObservableObject {
             }
         }
         
-        handler.onSkip { [weak self] _ in
+        handler.onSkip { _ in
             // User was skipped from seeing the paywall (already has access, etc.)
-            // Verify entitlement to be sure
-            Task {
-                await self?.refreshEntitlement()
-                await MainActor.run {
-                    completion(.skipped)
-                }
+            // The Combine observer handles status updates, just complete
+            DispatchQueue.main.async {
+                completion(.skipped)
             }
         }
         
@@ -147,13 +138,11 @@ class SuperwallService: ObservableObject {
         // For purchase/restore results, verify the subscription is actually active
         switch result {
         case .purchased, .restored:
-            // Wait a moment for StoreKit to process, then verify
+            // Wait a moment for StoreKit/Superwall to process and update subscriptionStatus
             try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 second delay
-            
-            // Refresh to ensure we have the latest status
-            await refreshEntitlement()
-            
+
             await MainActor.run {
+                // The Combine observer should have updated hasActiveSubscription by now
                 if self.hasActiveSubscription {
                     // Purchase/restore was successful
                     if !hasUsedTrial {
@@ -167,12 +156,12 @@ class SuperwallService: ObservableObject {
                     completion(.declined)
                 }
             }
-            
+
         case .declined:
             await MainActor.run {
                 completion(.declined)
             }
-            
+
         case .skipped:
             await MainActor.run {
                 completion(.skipped)
@@ -202,10 +191,8 @@ class SuperwallService: ObservableObject {
             }
         }
         
-        handler.onSkip { [weak self] _ in
-            Task {
-                await self?.refreshEntitlement()
-            }
+        handler.onSkip { _ in
+            // The Combine observer handles status updates automatically
         }
         
         Superwall.shared.register(placement: placement, handler: handler)

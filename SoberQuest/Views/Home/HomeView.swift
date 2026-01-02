@@ -373,24 +373,25 @@ struct HomeView: View {
 struct PaywallRequiredView: View {
     @EnvironmentObject private var superwallService: SuperwallService
     @State private var isLoading = false
-    
+    @State private var hasAutoPresented = false
+
     var body: some View {
         ZStack {
             AppTheme.background.ignoresSafeArea()
-            
+
             VStack(spacing: 24) {
                 Image(systemName: "crown.fill")
                     .font(.system(size: 60))
                     .foregroundColor(AppTheme.gold)
-                
+
                 Text("Pro Access Required")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(AppTheme.textPrimary)
-                
+
                 Text("Subscribe to unlock all features")
                     .font(.system(size: 16))
                     .foregroundColor(AppTheme.textSecondary)
-                
+
                 Button(action: {
                     presentPaywall()
                 }) {
@@ -418,19 +419,21 @@ struct PaywallRequiredView: View {
             }
         }
         .onAppear {
-            // Refresh entitlement when this view appears to ensure we have latest status
-            Task {
-                await superwallService.refreshEntitlement()
-            }
+            // Auto-present winback paywall immediately for cancelled users
+            // Guard against multiple presentations (e.g., tab switching)
+            guard !hasAutoPresented && !isLoading else { return }
+            hasAutoPresented = true
+            presentPaywall()
         }
     }
-    
+
     private func presentPaywall() {
+        guard !isLoading else { return }
         isLoading = true
         superwallService.presentOnboardingPaywall { result in
             isLoading = false
             // The subscription status will be updated via Combine observation
-            // No additional action needed here
+            // hasActiveSubscription change will automatically switch away from this view
         }
     }
 }

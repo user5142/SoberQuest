@@ -105,13 +105,13 @@ class DataManager: ObservableObject {
         return UserDefaults.standard.bool(forKey: onboardingCompletedKey)
     }
     
-    // MARK: - Lantern Badge Shown
-    
-    func setLanternBadgeShown(_ shown: Bool) {
+    // MARK: - Initial Badge Shown
+
+    func setInitialBadgeShown(_ shown: Bool) {
         UserDefaults.standard.set(shown, forKey: lanternBadgeShownKey)
     }
-    
-    func isLanternBadgeShown() -> Bool {
+
+    func isInitialBadgeShown() -> Bool {
         return UserDefaults.standard.bool(forKey: lanternBadgeShownKey)
     }
     

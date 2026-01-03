@@ -36,7 +36,7 @@ struct HomeView: View {
         .onAppear {
             updateTimer()
             appState.refreshAddiction()
-            checkForLanternBadge()
+            checkForInitialBadge()
         }
         .onReceive(timer) { _ in
             updateTimer()
@@ -372,17 +372,16 @@ struct HomeView: View {
         }
     }
     
-    private func checkForLanternBadge() {
-        guard !dataManager.isLanternBadgeShown(),
-              let addiction = appState.currentAddiction,
-              let lanternBadge = badgeService.getLanternBadge() else {
+    private func checkForInitialBadge() {
+        guard !dataManager.isInitialBadgeShown(),
+              let addiction = appState.currentAddiction else {
             return
         }
-        
+
         let unlockedBadges = dataManager.loadUnlockedBadges(for: addiction.id)
-        if badgeService.isBadgeUnlocked(badgeId: lanternBadge.id, for: addiction.id, unlockedBadges: unlockedBadges) {
-            dataManager.setLanternBadgeShown(true)
-            self.unlockedBadge = lanternBadge
+        if let highestBadge = badgeService.getHighestUnlockedBadge(for: addiction.id, unlockedBadges: unlockedBadges) {
+            dataManager.setInitialBadgeShown(true)
+            self.unlockedBadge = highestBadge
             showBadgeUnlock = true
         }
     }

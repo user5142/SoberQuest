@@ -136,10 +136,13 @@ struct BadgePreviewView: View {
             DataManager.shared.saveMotivation(trimmedMotivation)
         }
         
-        // Grant Lantern badge immediately
-        if let lanternBadge = BadgeService.shared.getLanternBadge() {
-            let unlockedBadge = UnlockedBadge(badgeId: lanternBadge.id, addictionId: addiction.id)
-            DataManager.shared.saveUnlockedBadge(unlockedBadge)
+        // Grant all badges earned based on days sober
+        let daysSober = addiction.daysSober
+        for badge in BadgeDefinition.defaultBadges {
+            if daysSober >= badge.milestoneDays {
+                let unlockedBadge = UnlockedBadge(badgeId: badge.id, addictionId: addiction.id)
+                DataManager.shared.saveUnlockedBadge(unlockedBadge)
+            }
         }
         
         // Present Superwall paywall directly

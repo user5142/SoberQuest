@@ -95,15 +95,8 @@ struct HomeView: View {
     @ViewBuilder
     private func heroSection(addiction: Addiction) -> some View {
         ZStack {
-            // Subtle gradient background for hero area
-            LinearGradient(
-                colors: [
-                    AppTheme.backgroundSecondary,
-                    AppTheme.background
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            // Solid background for hero area
+            AppTheme.backgroundSecondary
             
             VStack(spacing: 20) {
                 // Settings button (top left) and Badge collection button (top right)

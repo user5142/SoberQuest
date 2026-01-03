@@ -65,60 +65,71 @@ struct SoberQuestApp: App {
     }
 }
 
-// MARK: - Main Tab View
+// MARK: - Main Tab View (Tab bar temporarily disabled - using settings icon in HomeView instead)
 struct MainTabView: View {
     @EnvironmentObject private var appState: AppState
-    @State private var selectedTab: Tab = .home
-    
-    enum Tab {
-        case home
-        case toolkit
-        case settings
-    }
-    
+
+    // Tab bar temporarily disabled
+    // @State private var selectedTab: Tab = .home
+    //
+    // enum Tab {
+    //     case home
+    //     case toolkit
+    //     case settings
+    // }
+
     var body: some View {
-        TabView(selection: $selectedTab) {
-            // Home Tab
-            NavigationView {
-                HomeView()
-                    .navigationBarHidden(true)
-            }
-            .navigationViewStyle(StackNavigationViewStyle())
-            .tabItem {
-                VStack {
-                    Image(systemName: selectedTab == .home ? "house.fill" : "house")
-                    Text("Home")
-                }
-            }
-            .tag(Tab.home)
-            
-            // Toolkit Tab
-            NavigationView {
-                ToolkitView()
-            }
-            .navigationViewStyle(StackNavigationViewStyle())
-            .tabItem {
-                VStack {
-                    Image(systemName: selectedTab == .toolkit ? "square.grid.2x2.fill" : "square.grid.2x2")
-                    Text("Toolkit")
-                }
-            }
-            .tag(Tab.toolkit)
-            
-            // Settings Tab
-            NavigationView {
-                SettingsView()
-            }
-            .navigationViewStyle(StackNavigationViewStyle())
-            .tabItem {
-                VStack {
-                    Image(systemName: selectedTab == .settings ? "gearshape.fill" : "gearshape")
-                    Text("Settings")
-                }
-            }
-            .tag(Tab.settings)
+        // Tab bar temporarily disabled - showing HomeView directly
+        // Settings accessible via gear icon in top left of HomeView
+        NavigationView {
+            HomeView()
+                .navigationBarHidden(true)
         }
-        .accentColor(AppTheme.tabBarSelected)
+        .navigationViewStyle(StackNavigationViewStyle())
+
+        // Original TabView (temporarily disabled)
+        // TabView(selection: $selectedTab) {
+        //     // Home Tab
+        //     NavigationView {
+        //         HomeView()
+        //             .navigationBarHidden(true)
+        //     }
+        //     .navigationViewStyle(StackNavigationViewStyle())
+        //     .tabItem {
+        //         VStack {
+        //             Image(systemName: selectedTab == .home ? "house.fill" : "house")
+        //             Text("Home")
+        //         }
+        //     }
+        //     .tag(Tab.home)
+        //
+        //     // Toolkit Tab
+        //     NavigationView {
+        //         ToolkitView()
+        //     }
+        //     .navigationViewStyle(StackNavigationViewStyle())
+        //     .tabItem {
+        //         VStack {
+        //             Image(systemName: selectedTab == .toolkit ? "square.grid.2x2.fill" : "square.grid.2x2")
+        //             Text("Toolkit")
+        //         }
+        //     }
+        //     .tag(Tab.toolkit)
+        //
+        //     // Settings Tab
+        //     NavigationView {
+        //         SettingsView()
+        //     }
+        //     .navigationViewStyle(StackNavigationViewStyle())
+        //     .tabItem {
+        //         VStack {
+        //             Image(systemName: selectedTab == .settings ? "gearshape.fill" : "gearshape")
+        //             Text("Settings")
+        //         }
+        //     }
+        //     .tag(Tab.settings)
+        // }
+        // .accentColor(AppTheme.tabBarSelected)
     }
 }
 

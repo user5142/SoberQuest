@@ -16,6 +16,7 @@ struct HomeView: View {
     @State private var shareImage: UIImage?
     @State private var showLogUrge = false
     @State private var showResetConfirmation = false
+    @State private var showSettings = false
     
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -65,6 +66,11 @@ struct HomeView: View {
                 ShareSheet(activityItems: [image])
             }
         }
+        .sheet(isPresented: $showSettings) {
+            NavigationView {
+                SettingsView()
+            }
+        }
     }
     
     @ViewBuilder
@@ -100,9 +106,18 @@ struct HomeView: View {
             )
             
             VStack(spacing: 20) {
-                // Badge collection button (top right)
+                // Settings button (top left) and Badge collection button (top right)
                 HStack {
+                    Button(action: {
+                        showSettings = true
+                    }) {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 22, weight: .medium))
+                            .foregroundColor(AppTheme.textSecondary)
+                    }
+
                     Spacer()
+
                     Button(action: {
                         showBadgeCollection = true
                     }) {
@@ -182,13 +197,13 @@ struct HomeView: View {
                 showResetConfirmation = true
             }
 
-            // Log Urge Button
-            actionButton(
-                icon: "clock.arrow.circlepath",
-                label: "Log Urge"
-            ) {
-                handleDailyCheckIn(for: addiction)
-            }
+            // Log Urge Button (temporarily disabled)
+            // actionButton(
+            //     icon: "clock.arrow.circlepath",
+            //     label: "Log Urge"
+            // ) {
+            //     handleDailyCheckIn(for: addiction)
+            // }
 
             // Share Button
             actionButton(
@@ -254,7 +269,7 @@ struct HomeView: View {
             .cornerRadius(16)
             .padding(.horizontal, 16)
         }
-        .padding(.bottom, 100) // Space for tab bar
+        .padding(.bottom, 32) // Reduced since tab bar is hidden
     }
     
     // MARK: - Helper Functions

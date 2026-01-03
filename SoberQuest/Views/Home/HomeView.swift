@@ -174,14 +174,14 @@ struct HomeView: View {
     @ViewBuilder
     private func actionButtonsRow(addiction: Addiction) -> some View {
         HStack(spacing: 40) {
-            // Share Button
+            // Reset Button
             actionButton(
-                icon: "square.and.arrow.up",
-                label: "Share"
+                icon: "arrow.counterclockwise",
+                label: "Reset"
             ) {
-                generateShareCard(for: addiction)
+                showResetConfirmation = true
             }
-            
+
             // Log Urge Button
             actionButton(
                 icon: "clock.arrow.circlepath",
@@ -189,13 +189,13 @@ struct HomeView: View {
             ) {
                 handleDailyCheckIn(for: addiction)
             }
-            
-            // Reset Button
+
+            // Share Button
             actionButton(
-                icon: "arrow.counterclockwise",
-                label: "Reset"
+                icon: "square.and.arrow.up",
+                label: "Share"
             ) {
-                showResetConfirmation = true
+                generateShareCard(for: addiction)
             }
         }
         .alert("Reset Progress?", isPresented: $showResetConfirmation) {
@@ -216,9 +216,7 @@ struct HomeView: View {
                     .font(.system(size: 22, weight: .medium))
                     .foregroundColor(AppTheme.textPrimary)
                     .frame(width: 48, height: 48)
-                    .background(AppTheme.cardBackgroundDark)
-                    .clipShape(Circle())
-                
+
                 Text(label)
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(AppTheme.textSecondary)

@@ -12,8 +12,8 @@ struct HomeView: View {
     @State private var showBadgeUnlock = false
     @State private var unlockedBadge: BadgeDefinition?
     @State private var showBadgeCollection = false
-    @State private var showShareSheet = false
-    @State private var shareImage: UIImage?
+    @State private var showSharePreview = false
+    @State private var sharePreviewBadge: BadgeDefinition?
     @State private var showLogUrge = false
     @State private var showResetConfirmation = false
     @State private var showSettings = false
@@ -49,11 +49,7 @@ struct HomeView: View {
                 BadgeUnlockView(
                     badge: badge,
                     addiction: addiction,
-                    isPresented: $showBadgeUnlock,
-                    onShare: { shareImage in
-                        self.shareImage = shareImage
-                        self.showShareSheet = true
-                    }
+                    isPresented: $showBadgeUnlock
                 )
             }
         }
@@ -62,9 +58,13 @@ struct HomeView: View {
                 BadgeCollectionView(addiction: addiction, isPresented: $showBadgeCollection)
             }
         }
-        .sheet(isPresented: $showShareSheet) {
-            if let image = shareImage {
-                ShareSheet(activityItems: [image])
+        .fullScreenCover(isPresented: $showSharePreview) {
+            if let badge = sharePreviewBadge, let addiction = appState.currentAddiction {
+                SharePreviewView(
+                    badge: badge,
+                    addiction: addiction,
+                    isPresented: $showSharePreview
+                )
             }
         }
         .sheet(isPresented: $showSettings) {
@@ -366,9 +366,8 @@ struct HomeView: View {
     
     private func generateShareCard(for addiction: Addiction) {
         if let highestBadge = getHighestUnlockedBadge(for: addiction) {
-            let shareCard = ShareCardView(badge: highestBadge, addiction: addiction, daysSober: addiction.daysSober)
-            shareImage = shareCard.asUIImage()
-            showShareSheet = true
+            sharePreviewBadge = highestBadge
+            showSharePreview = true
         }
     }
     

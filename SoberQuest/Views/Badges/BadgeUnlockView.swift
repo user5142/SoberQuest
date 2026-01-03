@@ -4,18 +4,18 @@ struct BadgeUnlockView: View {
     let badge: BadgeDefinition
     let addiction: Addiction
     @Binding var isPresented: Bool
-    let onShare: (UIImage) -> Void
-    
+
     @State private var scale: CGFloat = 0.3
     @State private var opacity: Double = 0
     @State private var showContent = false
-    
+    @State private var showSharePreview = false
+
     var body: some View {
         ZStack {
             // Background
             AppTheme.background
                 .ignoresSafeArea()
-            
+
             VStack(spacing: 32) {
                 Spacer()
 
@@ -75,21 +75,14 @@ struct BadgeUnlockView: View {
                     }
                 }
                 .opacity(showContent ? 1 : 0)
-                
+
                 Spacer()
-                
+
                 // Action buttons
                 VStack(spacing: 14) {
                     // Share button
                     Button(action: {
-                        let shareCard = ShareCardView(
-                            badge: badge,
-                            addiction: addiction,
-                            daysSober: badge.milestoneDays
-                        )
-                        if let image = shareCard.asUIImage() {
-                            onShare(image)
-                        }
+                        showSharePreview = true
                     }) {
                         HStack(spacing: 10) {
                             Image(systemName: "square.and.arrow.up")
@@ -103,7 +96,7 @@ struct BadgeUnlockView: View {
                         .background(AppTheme.buttonPrimary)
                         .cornerRadius(14)
                     }
-                    
+
                     // Continue button
                     Button(action: {
                         withAnimation {
@@ -129,5 +122,12 @@ struct BadgeUnlockView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .fullScreenCover(isPresented: $showSharePreview) {
+            SharePreviewView(
+                badge: badge,
+                addiction: addiction,
+                isPresented: $showSharePreview
+            )
+        }
     }
 }

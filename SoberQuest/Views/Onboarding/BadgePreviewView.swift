@@ -45,16 +45,15 @@ struct BadgePreviewView: View {
                             )
                             .scaleEffect(animatedBadges[index] ? 1.0 : 0.5)
                             .opacity(animatedBadges[index] ? 1.0 : 0.0)
-                            .shadow(color: AppTheme.gold.opacity(0.3), radius: 10, x: 0, y: 5)
                             .onAppear {
                                 withAnimation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.15)) {
                                     animatedBadges[index] = true
                                 }
                             }
-                            
+
                             Text(badge.milestoneDisplayText)
                                 .font(.system(size: 13, weight: .medium))
-                                .foregroundColor(AppTheme.gold)
+                                .foregroundColor(AppTheme.textSecondary)
                         }
                     }
                 }
@@ -78,7 +77,7 @@ struct BadgePreviewView: View {
                         if isLoading {
                             HStack(spacing: 12) {
                                 ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.background))
+                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.textPrimary))
                                 Text("Loading...")
                                     .font(.system(size: 18, weight: .semibold))
                             }
@@ -87,10 +86,10 @@ struct BadgePreviewView: View {
                                 .font(.system(size: 18, weight: .semibold))
                         }
                     }
-                    .foregroundColor(AppTheme.background)
+                    .foregroundColor(AppTheme.textPrimary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 18)
-                    .background(AppTheme.gold)
+                    .background(AppTheme.buttonPrimary)
                     .cornerRadius(14)
                 }
                 .disabled(isLoading)
@@ -106,15 +105,15 @@ struct BadgePreviewView: View {
         HStack(spacing: 14) {
             Image(systemName: icon)
                 .font(.system(size: 16, weight: .medium))
-                .foregroundColor(AppTheme.gold)
+                .foregroundColor(AppTheme.textPrimary)
                 .frame(width: 32, height: 32)
                 .background(AppTheme.backgroundSecondary)
                 .cornerRadius(8)
-            
+
             Text(text)
                 .font(.system(size: 14))
                 .foregroundColor(AppTheme.textSecondary)
-            
+
             Spacer()
         }
     }

@@ -32,7 +32,7 @@ struct DateSelectionView: View {
                             displayedComponents: .date
                         )
                         .datePickerStyle(.graphical)
-                        .accentColor(AppTheme.gold)
+                        .accentColor(AppTheme.textPrimary)
                         .colorScheme(.dark)
                         .padding()
                         .background(AppTheme.backgroundSecondary)
@@ -55,10 +55,10 @@ struct DateSelectionView: View {
                 }) {
                     Text("Continue")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(AppTheme.background)
+                        .foregroundColor(AppTheme.textPrimary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
-                        .background(AppTheme.gold)
+                        .background(AppTheme.buttonPrimary)
                         .cornerRadius(14)
                 }
                 .padding(.horizontal, 24)

@@ -61,7 +61,7 @@ struct SoberQuestApp: App {
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         UINavigationBar.appearance().compactAppearance = navBarAppearance
-        UINavigationBar.appearance().tintColor = UIColor(AppTheme.gold)
+        UINavigationBar.appearance().tintColor = UIColor.white
     }
 }
 
@@ -142,12 +142,12 @@ struct ToolkitView: View {
             VStack(spacing: 20) {
                 Image(systemName: "hammer.fill")
                     .font(.system(size: 48))
-                    .foregroundColor(AppTheme.gold.opacity(0.6))
-                
+                    .foregroundColor(AppTheme.textSecondary)
+
                 Text("Toolkit")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(AppTheme.textPrimary)
-                
+
                 Text("Coming Soon")
                     .font(.system(size: 16))
                     .foregroundColor(AppTheme.textSecondary)

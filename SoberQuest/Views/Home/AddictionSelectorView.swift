@@ -21,41 +21,41 @@ struct AddictionSelectorView: View {
                                     // Days counter circle
                                     ZStack {
                                         Circle()
-                                            .fill(addiction.isActive ? AppTheme.gold.opacity(0.2) : AppTheme.backgroundSecondary)
+                                            .fill(addiction.isActive ? AppTheme.cardBackgroundDark : AppTheme.backgroundSecondary)
                                             .frame(width: 50, height: 50)
-                                        
+
                                         Text("\(addiction.daysSober)")
                                             .font(.system(size: 18, weight: .bold))
-                                            .foregroundColor(addiction.isActive ? AppTheme.gold : AppTheme.textSecondary)
+                                            .foregroundColor(addiction.isActive ? AppTheme.textPrimary : AppTheme.textSecondary)
                                     }
-                                    
+
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(addiction.name)
                                             .font(.system(size: 17, weight: .semibold))
                                             .foregroundColor(AppTheme.textPrimary)
-                                        
+
                                         Text("\(addiction.daysSober) days sober")
                                             .font(.system(size: 14))
                                             .foregroundColor(AppTheme.textSecondary)
                                     }
-                                    
+
                                     Spacer()
-                                    
+
                                     if addiction.isActive {
                                         Image(systemName: "checkmark.circle.fill")
                                             .font(.system(size: 24))
-                                            .foregroundColor(AppTheme.gold)
+                                            .foregroundColor(AppTheme.textPrimary)
                                     }
                                 }
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 18)
                                 .background(
                                     RoundedRectangle(cornerRadius: 16)
-                                        .fill(addiction.isActive ? AppTheme.gold.opacity(0.1) : AppTheme.backgroundSecondary)
+                                        .fill(addiction.isActive ? AppTheme.cardBackgroundDark : AppTheme.backgroundSecondary)
                                 )
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 16)
-                                        .stroke(addiction.isActive ? AppTheme.gold.opacity(0.3) : Color.clear, lineWidth: 1)
+                                        .stroke(addiction.isActive ? AppTheme.divider : Color.clear, lineWidth: 1)
                                 )
                             }
                         }
@@ -73,7 +73,7 @@ struct AddictionSelectorView: View {
                     }) {
                         Text("Done")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(AppTheme.gold)
+                            .foregroundColor(AppTheme.textPrimary)
                     }
                 }
             }

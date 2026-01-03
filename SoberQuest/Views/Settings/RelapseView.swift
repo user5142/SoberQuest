@@ -89,7 +89,7 @@ struct RelapseView: View {
                     }) {
                         Text("Cancel")
                             .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(AppTheme.gold)
+                            .foregroundColor(AppTheme.textPrimary)
                     }
                 }
             }

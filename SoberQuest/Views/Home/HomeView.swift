@@ -121,7 +121,7 @@ struct HomeView: View {
                     Button(action: {
                         showBadgeCollection = true
                     }) {
-                        DiamondIcon(size: 24, color: AppTheme.gold.opacity(0.7))
+                        DiamondIcon(size: 24, color: AppTheme.textSecondary)
                     }
                 }
                 .padding(.horizontal, 24)
@@ -134,7 +134,6 @@ struct HomeView: View {
                         milestoneDays: highestBadge.milestoneDays,
                         size: 220
                     )
-                    .shadow(color: AppTheme.gold.opacity(0.3), radius: 20, x: 0, y: 10)
                 } else {
                     // Default character placeholder
                     RoundedRectangle(cornerRadius: 20)
@@ -395,7 +394,7 @@ struct PaywallRequiredView: View {
             VStack(spacing: 24) {
                 Image(systemName: "crown.fill")
                     .font(.system(size: 60))
-                    .foregroundColor(AppTheme.gold)
+                    .foregroundColor(AppTheme.textPrimary)
 
                 Text("Pro Access Required")
                     .font(.system(size: 28, weight: .bold))
@@ -412,7 +411,7 @@ struct PaywallRequiredView: View {
                         if isLoading {
                             HStack(spacing: 12) {
                                 ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.background))
+                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.textPrimary))
                                 Text("Loading...")
                                     .font(.system(size: 17, weight: .semibold))
                             }
@@ -421,10 +420,10 @@ struct PaywallRequiredView: View {
                                 .font(.system(size: 17, weight: .semibold))
                         }
                     }
-                    .foregroundColor(AppTheme.background)
+                    .foregroundColor(AppTheme.textPrimary)
                     .padding(.horizontal, 48)
                     .padding(.vertical, 16)
-                    .background(AppTheme.gold)
+                    .background(AppTheme.buttonPrimary)
                     .cornerRadius(12)
                 }
                 .disabled(isLoading)

@@ -46,7 +46,7 @@ struct AddictionSetupView: View {
                                 .cornerRadius(12)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .stroke(AppTheme.gold.opacity(0.5), lineWidth: 1)
+                                        .stroke(AppTheme.divider, lineWidth: 1)
                                 )
                                 .onChange(of: customAddiction) { newValue in
                                     if !newValue.isEmpty {
@@ -74,10 +74,10 @@ struct AddictionSetupView: View {
                 }) {
                     Text("Continue")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(selectedAddictionName.isEmpty ? AppTheme.textMuted : AppTheme.background)
+                        .foregroundColor(selectedAddictionName.isEmpty ? AppTheme.textMuted : AppTheme.textPrimary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
-                        .background(selectedAddictionName.isEmpty ? AppTheme.backgroundSecondary : AppTheme.gold)
+                        .background(selectedAddictionName.isEmpty ? AppTheme.backgroundSecondary : AppTheme.buttonPrimary)
                         .cornerRadius(14)
                 }
                 .disabled(selectedAddictionName.isEmpty)
@@ -100,7 +100,7 @@ struct AddictionSetupView: View {
     @ViewBuilder
     private func addictionOption(_ name: String, isCustom: Bool) -> some View {
         let isSelected = isCustom ? selectedAddiction == "custom" : selectedAddiction == name
-        
+
         Button(action: {
             if isCustom {
                 selectedAddiction = "custom"
@@ -120,13 +120,13 @@ struct AddictionSetupView: View {
                 Text(name)
                     .font(.system(size: 17, weight: .medium))
                     .foregroundColor(AppTheme.textPrimary)
-                
+
                 Spacer()
-                
+
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 22))
-                        .foregroundColor(AppTheme.gold)
+                        .foregroundColor(AppTheme.textPrimary)
                 } else {
                     Circle()
                         .stroke(AppTheme.textMuted, lineWidth: 2)
@@ -137,11 +137,11 @@ struct AddictionSetupView: View {
             .padding(.vertical, 18)
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(isSelected ? AppTheme.gold.opacity(0.15) : AppTheme.backgroundSecondary)
+                    .fill(isSelected ? AppTheme.cardBackgroundDark : AppTheme.backgroundSecondary)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(isSelected ? AppTheme.gold.opacity(0.5) : Color.clear, lineWidth: 1)
+                    .stroke(isSelected ? AppTheme.divider : Color.clear, lineWidth: 1)
             )
         }
     }

@@ -8,7 +8,6 @@ struct BadgeUnlockView: View {
     
     @State private var scale: CGFloat = 0.3
     @State private var opacity: Double = 0
-    @State private var glowOpacity: Double = 0
     @State private var showContent = false
     
     var body: some View {
@@ -17,40 +16,27 @@ struct BadgeUnlockView: View {
             AppTheme.background
                 .ignoresSafeArea()
             
-            // Radial glow effect
-            RadialGradient(
-                colors: [
-                    AppTheme.gold.opacity(0.3 * glowOpacity),
-                    AppTheme.gold.opacity(0.1 * glowOpacity),
-                    Color.clear
-                ],
-                center: .center,
-                startRadius: 50,
-                endRadius: 300
-            )
-            .ignoresSafeArea()
-            
             VStack(spacing: 32) {
                 Spacer()
-                
+
                 // "Milestone Unlocked" header
                 VStack(spacing: 8) {
                     Text("MILESTONE UNLOCKED")
                         .font(.system(size: 14, weight: .bold))
                         .tracking(3)
-                        .foregroundColor(AppTheme.gold)
+                        .foregroundColor(AppTheme.textPrimary)
                         .opacity(showContent ? 1 : 0)
                 }
-                
+
                 // Badge with animation
                 ZStack {
-                    // Outer glow ring
+                    // Outer ring
                     Circle()
-                        .stroke(AppTheme.gold.opacity(0.3), lineWidth: 2)
+                        .stroke(AppTheme.divider, lineWidth: 1)
                         .frame(width: 240, height: 240)
                         .scaleEffect(scale * 1.1)
                         .opacity(opacity * 0.5)
-                    
+
                     BadgeImageView(
                         imageAssetName: badge.imageAssetName,
                         milestoneDays: badge.milestoneDays,
@@ -58,7 +44,6 @@ struct BadgeUnlockView: View {
                     )
                     .scaleEffect(scale)
                     .opacity(opacity)
-                    .shadow(color: AppTheme.gold.opacity(0.5), radius: 30, x: 0, y: 0)
                 }
                 .onAppear {
                     // Animate badge entrance
@@ -66,26 +51,22 @@ struct BadgeUnlockView: View {
                         scale = 1.0
                         opacity = 1.0
                     }
-                    
-                    withAnimation(.easeIn(duration: 1.0).delay(0.3)) {
-                        glowOpacity = 1.0
-                    }
-                    
+
                     withAnimation(.easeIn(duration: 0.5).delay(0.5)) {
                         showContent = true
                     }
                 }
-                
+
                 // Badge info
                 VStack(spacing: 12) {
                     Text(badge.name)
                         .font(.system(size: 28, weight: .bold))
                         .foregroundColor(AppTheme.textPrimary)
-                    
+
                     Text(badge.milestoneDays == 0 ? "Your Journey Begins" : "Day \(badge.milestoneDays) Achieved")
                         .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(AppTheme.gold)
-                    
+                        .foregroundColor(AppTheme.textSecondary)
+
                     if badge.milestoneDays > 0 {
                         Text("\(badge.milestoneDays) days sober from \(addiction.name)")
                             .font(.system(size: 14))
@@ -116,10 +97,10 @@ struct BadgeUnlockView: View {
                             Text("Share Your Milestone")
                                 .font(.system(size: 17, weight: .semibold))
                         }
-                        .foregroundColor(AppTheme.background)
+                        .foregroundColor(AppTheme.textPrimary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
-                        .background(AppTheme.gold)
+                        .background(AppTheme.buttonPrimary)
                         .cornerRadius(14)
                     }
                     

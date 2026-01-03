@@ -18,13 +18,13 @@ struct BadgeCollectionView: View {
                             Text("Your Collection")
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(AppTheme.textSecondary)
-                            
+
                             let unlockedCount = dataManager.loadUnlockedBadges(for: addiction.id).count
                             let totalCount = badgeService.getAllBadges().count
-                            
+
                             Text("\(unlockedCount) / \(totalCount)")
                                 .font(.system(size: 32, weight: .bold))
-                                .foregroundColor(AppTheme.gold)
+                                .foregroundColor(AppTheme.textPrimary)
                         }
                         .padding(.top, 16)
                         
@@ -55,7 +55,7 @@ struct BadgeCollectionView: View {
                     }) {
                         Text("Done")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(AppTheme.gold)
+                            .foregroundColor(AppTheme.textPrimary)
                     }
                 }
             }
@@ -103,10 +103,10 @@ struct BadgeCell: View {
                     .foregroundColor(isUnlocked ? AppTheme.textPrimary : AppTheme.textMuted)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
-                
+
                 Text(badge.milestoneDisplayText)
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(isUnlocked ? AppTheme.gold : AppTheme.textMuted)
+                    .foregroundColor(isUnlocked ? AppTheme.textSecondary : AppTheme.textMuted)
             }
         }
         .frame(maxWidth: .infinity)
@@ -118,7 +118,7 @@ struct BadgeCell: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(isUnlocked ? AppTheme.gold.opacity(0.3) : Color.clear, lineWidth: 1)
+                .stroke(isUnlocked ? AppTheme.divider : Color.clear, lineWidth: 1)
         )
     }
 }

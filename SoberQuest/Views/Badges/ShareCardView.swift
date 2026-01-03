@@ -76,13 +76,13 @@ struct ShareCardView: View {
                 Text(badge.name)
                     .font(.system(size: 56, weight: .bold))
                     .foregroundColor(AppTheme.textOnCard)
-                
+
                 Spacer()
-                
+
                 // Diamond icon
                 Image(systemName: "suit.diamond.fill")
                     .font(.system(size: 36))
-                    .foregroundColor(AppTheme.gold.opacity(0.7))
+                    .foregroundColor(AppTheme.textSecondary)
             }
             .padding(.horizontal, 40)
             .padding(.top, 40)
@@ -113,8 +113,8 @@ struct ShareCardView: View {
             HStack(spacing: 12) {
                 Image(systemName: "star.fill")
                     .font(.system(size: 24))
-                    .foregroundColor(AppTheme.gold)
-                
+                    .foregroundColor(AppTheme.textOnCard)
+
                 Text(badge.milestoneDays == 0 ? "New Journey" : "Day \(badge.milestoneDays) Milestone")
                     .font(.system(size: 32, weight: .semibold))
                     .foregroundColor(AppTheme.textOnCard)
@@ -125,7 +125,7 @@ struct ShareCardView: View {
             .cornerRadius(40)
             .overlay(
                 RoundedRectangle(cornerRadius: 40)
-                    .stroke(AppTheme.gold.opacity(0.3), lineWidth: 2)
+                    .stroke(AppTheme.divider, lineWidth: 1)
             )
             .padding(.top, 24)
             

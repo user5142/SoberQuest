@@ -3,7 +3,6 @@ import SwiftUI
 struct AddictionSetupView: View {
     @Binding var currentStep: OnboardingStep
     @Binding var selectedAddictionName: String
-    @Binding var lastUsedDate: Date
     @State private var selectedAddiction: String = ""
     @State private var customAddiction: String = ""
     @State private var showCustomInput: Bool = false
@@ -57,31 +56,7 @@ struct AddictionSetupView: View {
                         }
                     }
                     .padding(.horizontal, 24)
-                    
-                    // Date picker
-                    if !selectedAddictionName.isEmpty {
-                        VStack(spacing: 16) {
-                            Text("When did you last use?")
-                                .font(.system(size: 18, weight: .semibold))
-                                .foregroundColor(AppTheme.textPrimary)
-                            
-                            DatePicker(
-                                "Last used date",
-                                selection: $lastUsedDate,
-                                in: ...Date(),
-                                displayedComponents: .date
-                            )
-                            .datePickerStyle(.graphical)
-                            .accentColor(AppTheme.gold)
-                            .colorScheme(.dark)
-                            .padding()
-                            .background(AppTheme.backgroundSecondary)
-                            .cornerRadius(16)
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.top, 8)
-                    }
-                    
+
                     Spacer(minLength: 100)
                 }
             }
@@ -93,7 +68,7 @@ struct AddictionSetupView: View {
                 Button(action: {
                     if !selectedAddictionName.isEmpty {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .badgePreview
+                            currentStep = .dateSelection
                         }
                     }
                 }) {

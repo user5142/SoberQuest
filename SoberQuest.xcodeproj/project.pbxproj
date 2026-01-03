@@ -32,12 +32,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CBB20ECC2F06C07F00F4C7BB /* SoberQuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SoberQuestTests.xctest; path = "/Users/m.j/Projects/SoberQuest/build/Debug-iphoneos/SoberQuest.app/PlugIns/SoberQuestTests.xctest"; sourceTree = "<absolute>"; };
-		CBB20ED62F06C07F00F4C7BB /* SoberQuestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SoberQuestUITests.xctest; path = "/Users/m.j/Projects/SoberQuest/build/Debug-iphoneos/SoberQuestUITests-Runner.app/PlugIns/SoberQuestUITests.xctest"; sourceTree = "<absolute>"; };
-		CBB20F462F06C20800F4C7BB /* SoberQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = SoberQuest.app; path = "/Users/m.j/Projects/SoberQuest/build/Debug-iphoneos/SoberQuest.app"; sourceTree = "<absolute>"; };
 		CBB20F472F06C22400F4C7BB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = IMPLEMENTATION_CHECKLIST.md; sourceTree = "<group>"; };
-		CBB20F562F06C2F900F4C7BB /* SoberQuest Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "SoberQuest Dev.app"; path = "/Users/m.j/Projects/SoberQuest/build/Debug-iphoneos/SoberQuest Dev.app"; sourceTree = "<absolute>"; };
+		CBCFAA852F0810CE00494C1B /* SoberQuest Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SoberQuest Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBCFAA862F0810CE00494C1B /* SoberQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoberQuest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBCFAA872F0810CE00494C1B /* SoberQuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoberQuestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBCFAA882F0810CE00494C1B /* SoberQuestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoberQuestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -132,6 +132,10 @@
 				CBB20ED92F06C07F00F4C7BB /* SoberQuestUITests */,
 				CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */,
 				CBB20F472F06C22400F4C7BB /* README.md */,
+				CBCFAA852F0810CE00494C1B /* SoberQuest Dev.app */,
+				CBCFAA862F0810CE00494C1B /* SoberQuest.app */,
+				CBCFAA872F0810CE00494C1B /* SoberQuestTests.xctest */,
+				CBCFAA882F0810CE00494C1B /* SoberQuestUITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -158,7 +162,7 @@
 				CBB20F592F06C4A200F4C7BB /* SuperwallKit */,
 			);
 			productName = SoberQuest;
-			productReference = CBB20F462F06C20800F4C7BB /* SoberQuest.app */;
+			productReference = CBCFAA862F0810CE00494C1B /* SoberQuest.app */;
 			productType = "com.apple.product-type.application";
 		};
 		CBB20ECB2F06C07F00F4C7BB /* SoberQuestTests */ = {
@@ -181,7 +185,7 @@
 			packageProductDependencies = (
 			);
 			productName = SoberQuestTests;
-			productReference = CBB20ECC2F06C07F00F4C7BB /* SoberQuestTests.xctest */;
+			productReference = CBCFAA872F0810CE00494C1B /* SoberQuestTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		CBB20ED52F06C07F00F4C7BB /* SoberQuestUITests */ = {
@@ -204,7 +208,7 @@
 			packageProductDependencies = (
 			);
 			productName = SoberQuestUITests;
-			productReference = CBB20ED62F06C07F00F4C7BB /* SoberQuestUITests.xctest */;
+			productReference = CBCFAA882F0810CE00494C1B /* SoberQuestUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		CBB20F4D2F06C2F900F4C7BB /* SoberQuest Dev */ = {
@@ -226,7 +230,7 @@
 			packageProductDependencies = (
 			);
 			productName = SoberQuest;
-			productReference = CBB20F562F06C2F900F4C7BB /* SoberQuest Dev.app */;
+			productReference = CBCFAA852F0810CE00494C1B /* SoberQuest Dev.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

@@ -20,8 +20,17 @@ struct OnboardingFlow: View {
             case .addictionSetup:
                 AddictionSetupView(
                     currentStep: $currentStep,
-                    selectedAddictionName: $selectedAddictionName,
-                    lastUsedDate: $lastUsedDate
+                    selectedAddictionName: $selectedAddictionName
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing),
+                    removal: .move(edge: .leading)
+                ))
+            case .dateSelection:
+                DateSelectionView(
+                    currentStep: $currentStep,
+                    lastUsedDate: $lastUsedDate,
+                    addictionName: selectedAddictionName
                 )
                 .transition(.asymmetric(
                     insertion: .move(edge: .trailing),

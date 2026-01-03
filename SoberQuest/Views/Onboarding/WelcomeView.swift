@@ -125,5 +125,6 @@ struct FeatureRow: View {
 enum OnboardingStep {
     case welcome
     case addictionSetup
+    case dateSelection
     case badgePreview
 }

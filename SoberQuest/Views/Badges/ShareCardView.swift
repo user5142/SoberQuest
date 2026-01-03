@@ -52,7 +52,7 @@ struct ShareCardView: View {
     }
 
     private var timeLineText: String {
-        String(format: "%02d:%02d:%02d", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
+        "\(timeComponents.hours)hr \(timeComponents.minutes)min \(timeComponents.seconds)s"
     }
 
     var body: some View {
@@ -76,23 +76,24 @@ struct ShareCardView: View {
                 }
 
                 Spacer()
-                    .frame(height: 50)
+                    .frame(height: 80)
 
                 // Addiction-free label
                 Text("You've been \(addiction.name.lowercased())-free for:")
                     .font(.system(size: 36, weight: .medium))
+                    .tracking(2.5)
                     .foregroundColor(AppTheme.textSecondary)
 
                 Spacer()
-                    .frame(height: 16)
+                    .frame(height: 20)
 
-                // Days sober
+                // Days sober - emphasized achievement
                 Text(daysLineText)
-                    .font(.system(size: 100, weight: .bold))
+                    .font(.system(size: 160, weight: .heavy))
                     .foregroundColor(AppTheme.textPrimary)
 
                 Spacer()
-                    .frame(height: 8)
+                    .frame(height: 12)
 
                 // Time display (hours:minutes:seconds)
                 Text(timeLineText)
@@ -100,20 +101,20 @@ struct ShareCardView: View {
                     .foregroundColor(AppTheme.textSecondary)
 
                 Spacer()
-                    .frame(height: 50)
+                    .frame(height: 60)
 
                 // Quote with border
                 Text(inspirationalQuote)
-                    .font(.system(size: 38, weight: .regular))
+                    .font(.system(size: 32, weight: .regular))
                     .italic()
                     .foregroundColor(AppTheme.textSecondary)
                     .multilineTextAlignment(.center)
                     .lineSpacing(10)
                     .padding(.horizontal, 40)
                     .padding(.vertical, 32)
-                    .frame(maxWidth: 1000)
+                    .frame(maxWidth: 600)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
+                        RoundedRectangle(cornerRadius: 28)
                             .stroke(AppTheme.divider, lineWidth: 2)
                     )
 

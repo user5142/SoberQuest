@@ -120,5 +120,6 @@ enum OnboardingStep {
     case welcome
     case addictionSetup
     case dateSelection
+    case motivationSetup
     case badgePreview
 }

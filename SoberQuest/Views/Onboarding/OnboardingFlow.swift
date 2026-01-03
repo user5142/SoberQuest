@@ -5,6 +5,7 @@ struct OnboardingFlow: View {
     @State private var currentStep: OnboardingStep = .welcome
     @State private var selectedAddictionName: String = ""
     @State private var lastUsedDate: Date = Date()
+    @State private var motivationText: String = ""
     
     var body: some View {
         ZStack {
@@ -36,11 +37,22 @@ struct OnboardingFlow: View {
                     insertion: .move(edge: .trailing),
                     removal: .move(edge: .leading)
                 ))
+            case .motivationSetup:
+                MotivationSetupView(
+                    currentStep: $currentStep,
+                    motivationText: $motivationText,
+                    addictionName: selectedAddictionName
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing),
+                    removal: .move(edge: .leading)
+                ))
             case .badgePreview:
                 BadgePreviewView(
                     currentStep: $currentStep,
                     addictionName: selectedAddictionName,
-                    lastUsedDate: lastUsedDate
+                    lastUsedDate: lastUsedDate,
+                    motivationText: motivationText
                 )
                 .transition(.asymmetric(
                     insertion: .move(edge: .trailing),

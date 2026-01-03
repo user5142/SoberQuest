@@ -17,6 +17,7 @@ struct HomeView: View {
     @State private var showLogUrge = false
     @State private var showResetConfirmation = false
     @State private var showSettings = false
+    @State private var showEditMotivation = false
     
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -70,6 +71,9 @@ struct HomeView: View {
             NavigationView {
                 SettingsView()
             }
+        }
+        .sheet(isPresented: $showEditMotivation) {
+            EditMotivationView(isPresented: $showEditMotivation)
         }
     }
     
@@ -240,28 +244,42 @@ struct HomeView: View {
                 Text("Why I'm doing this")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(AppTheme.textSecondary)
-                
+
                 Circle()
                     .fill(AppTheme.textMuted)
                     .frame(width: 6, height: 6)
+
+                Spacer()
+
+                Button(action: {
+                    showEditMotivation = true
+                }) {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(AppTheme.textSecondary)
+                }
             }
             .padding(.horizontal, 20)
-            
+
             // Motivation Card
-            VStack(spacing: 0) {
-                Text(getMotivationQuote())
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(AppTheme.textPrimary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 28)
+            Button(action: {
+                showEditMotivation = true
+            }) {
+                VStack(spacing: 0) {
+                    Text(getMotivationQuote())
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(AppTheme.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 28)
+                }
+                .frame(maxWidth: .infinity)
+                .background(AppTheme.backgroundSecondary)
+                .cornerRadius(16)
             }
-            .frame(maxWidth: .infinity)
-            .background(AppTheme.backgroundSecondary)
-            .cornerRadius(16)
             .padding(.horizontal, 16)
         }
-        .padding(.bottom, 32) // Reduced since tab bar is hidden
+        .padding(.bottom, 32)
     }
     
     // MARK: - Helper Functions
@@ -370,8 +388,91 @@ struct HomeView: View {
     }
     
     private func getMotivationQuote() -> String {
-        // TODO: Allow user to set custom motivation
-        return "To be the best man I can be for\nmy family and friends, and live\nto my fullest potential"
+        if let savedMotivation = dataManager.loadMotivation(), !savedMotivation.isEmpty {
+            return savedMotivation
+        }
+        return "Tap to add your motivation..."
+    }
+}
+
+// MARK: - Edit Motivation View
+struct EditMotivationView: View {
+    @Binding var isPresented: Bool
+    @ObservedObject private var dataManager = DataManager.shared
+    @State private var motivationText: String = ""
+    @FocusState private var isTextFieldFocused: Bool
+
+    var body: some View {
+        NavigationView {
+            ZStack {
+                AppTheme.background.ignoresSafeArea()
+
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 24) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Your motivation")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(AppTheme.textSecondary)
+
+                            TextEditor(text: $motivationText)
+                                .font(.system(size: 16))
+                                .foregroundColor(AppTheme.textPrimary)
+                                .scrollContentBackground(.hidden)
+                                .frame(minHeight: 150)
+                                .padding(16)
+                                .background(AppTheme.backgroundSecondary)
+                                .cornerRadius(16)
+                                .focused($isTextFieldFocused)
+                                .overlay(
+                                    Group {
+                                        if motivationText.isEmpty {
+                                            Text("e.g., To be healthier for my family, to feel more present, to save money...")
+                                                .font(.system(size: 16))
+                                                .foregroundColor(AppTheme.textMuted)
+                                                .padding(20)
+                                                .allowsHitTesting(false)
+                                        }
+                                    },
+                                    alignment: .topLeading
+                                )
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 20)
+
+                        Spacer()
+                    }
+                }
+                .onTapGesture {
+                    isTextFieldFocused = false
+                }
+            }
+            .navigationTitle("Why I'm doing this")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        isPresented = false
+                    }
+                    .foregroundColor(AppTheme.textSecondary)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        let trimmed = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        dataManager.saveMotivation(trimmed)
+                        isPresented = false
+                    }
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(AppTheme.textPrimary)
+                }
+            }
+        }
+        .preferredColorScheme(.dark)
+        .onAppear {
+            motivationText = dataManager.loadMotivation() ?? ""
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                isTextFieldFocused = true
+            }
+        }
     }
 }
 

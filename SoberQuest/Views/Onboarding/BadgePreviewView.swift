@@ -6,6 +6,7 @@ struct BadgePreviewView: View {
     @EnvironmentObject private var superwallService: SuperwallService
     let addictionName: String
     let lastUsedDate: Date
+    let motivationText: String
     
     @State private var isLoading = false
     @State private var animatedBadges: [Bool] = [false, false, false]
@@ -128,6 +129,12 @@ struct BadgePreviewView: View {
         )
         DataManager.shared.saveAddiction(addiction)
         appState.setCurrentAddiction(addiction)
+
+        // Save motivation text
+        let trimmedMotivation = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmedMotivation.isEmpty {
+            DataManager.shared.saveMotivation(trimmedMotivation)
+        }
         
         // Grant Lantern badge immediately
         if let lanternBadge = BadgeService.shared.getLanternBadge() {

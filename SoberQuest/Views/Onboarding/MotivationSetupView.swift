@@ -1,9 +1,11 @@
 import SwiftUI
 
-struct DateSelectionView: View {
+struct MotivationSetupView: View {
     @Binding var currentStep: OnboardingStep
-    @Binding var lastUsedDate: Date
+    @Binding var motivationText: String
     let addictionName: String
+
+    @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
         ZStack {
@@ -13,35 +15,47 @@ struct DateSelectionView: View {
                 VStack(spacing: 28) {
                     // Header
                     VStack(spacing: 12) {
-                        Text("When did you last use?")
+                        Text("Why are you doing this?")
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(AppTheme.textPrimary)
 
-                        Text("This helps us track your progress")
+                        Text("Your motivation will keep you going")
                             .font(.system(size: 15))
                             .foregroundColor(AppTheme.textSecondary)
                     }
                     .padding(.top, 48)
 
-                    // Date picker
+                    // Text input area
                     VStack(spacing: 16) {
-                        DatePicker(
-                            "Last used date",
-                            selection: $lastUsedDate,
-                            in: ...Date(),
-                            displayedComponents: .date
-                        )
-                        .datePickerStyle(.graphical)
-                        .accentColor(AppTheme.textPrimary)
-                        .colorScheme(.dark)
-                        .padding()
-                        .background(AppTheme.backgroundSecondary)
-                        .cornerRadius(16)
+                        TextEditor(text: $motivationText)
+                            .font(.system(size: 16))
+                            .foregroundColor(AppTheme.textPrimary)
+                            .scrollContentBackground(.hidden)
+                            .frame(minHeight: 150)
+                            .padding(16)
+                            .background(AppTheme.backgroundSecondary)
+                            .cornerRadius(16)
+                            .focused($isTextFieldFocused)
+                            .overlay(
+                                Group {
+                                    if motivationText.isEmpty {
+                                        Text("e.g., To be healthier for my family, to feel more present, to save money...")
+                                            .font(.system(size: 16))
+                                            .foregroundColor(AppTheme.textMuted)
+                                            .padding(20)
+                                            .allowsHitTesting(false)
+                                    }
+                                },
+                                alignment: .topLeading
+                            )
                     }
                     .padding(.horizontal, 24)
 
                     Spacer(minLength: 100)
                 }
+            }
+            .onTapGesture {
+                isTextFieldFocused = false
             }
 
             // Continue button fixed at bottom
@@ -49,11 +63,12 @@ struct DateSelectionView: View {
                 Spacer()
 
                 Button(action: {
+                    isTextFieldFocused = false
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .motivationSetup
+                        currentStep = .badgePreview
                     }
                 }) {
-                    Text("Continue")
+                    Text(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Skip" : "Continue")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(AppTheme.buttonPrimaryText)
                         .frame(maxWidth: .infinity)

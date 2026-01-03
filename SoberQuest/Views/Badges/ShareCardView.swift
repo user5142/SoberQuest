@@ -4,8 +4,8 @@ struct ShareCardView: View {
     let badge: BadgeDefinition
     let addiction: Addiction
     let daysSober: Int
-    
-    // Sample quotes for different milestones
+
+    // Quote for each milestone
     private var inspirationalQuote: String {
         switch badge.milestoneDays {
         case 0:
@@ -28,239 +28,105 @@ struct ShareCardView: View {
             return "\"All we have to decide is what to do with the time that is given us.\" — Gandalf"
         }
     }
-    
-    // Stats based on milestone
-    private var stats: [(label: String, value: String)] {
-        switch badge.milestoneDays {
-        case 0...1:
-            return [("Clarity", "+1"), ("Discipline", "Low"), ("Hope", "Rising")]
-        case 2...7:
-            return [("Clarity", "+3"), ("Discipline", "Growing"), ("Hope", "Strong")]
-        case 8...30:
-            return [("Clarity", "+7"), ("Discipline", "Medium"), ("Hope", "Steady")]
-        case 31...60:
-            return [("Clarity", "+15"), ("Discipline", "High"), ("Hope", "Unshaken")]
-        default:
-            return [("Clarity", "+30"), ("Discipline", "Master"), ("Hope", "Radiant")]
+
+    private var daysSoberText: String {
+        if badge.milestoneDays == 0 {
+            return "Day 1"
+        } else {
+            return badge.milestoneDays == 1 ? "1 Day" : "\(badge.milestoneDays) Days"
         }
     }
-    
+
     var body: some View {
         ZStack {
-            // Dark background
+            // Outer dark background
             AppTheme.background
-            
+
+            // Inner lighter border/frame
+            RoundedRectangle(cornerRadius: 48)
+                .fill(AppTheme.backgroundSecondary)
+                .padding(40)
+
+            // Content
             VStack(spacing: 0) {
                 Spacer()
-                
-                // Main Card
-                cardContent
-                    .padding(.horizontal, 24)
-                
-                // Share button area (for the actual share view)
-                shareButton
-                    .padding(.top, 24)
-                    .padding(.horizontal, 24)
-                
-                Spacer()
-            }
-        }
-        .frame(width: 1080, height: 1920)
-    }
-    
-    // MARK: - Card Content
-    private var cardContent: some View {
-        VStack(spacing: 0) {
-            // Card Header with title and diamond
-            HStack {
-                Text(badge.name)
-                    .font(.system(size: 56, weight: .bold))
-                    .foregroundColor(AppTheme.textOnCard)
 
-                Spacer()
-
-                // Diamond icon
-                Image(systemName: "suit.diamond.fill")
-                    .font(.system(size: 36))
-                    .foregroundColor(AppTheme.textSecondary)
-            }
-            .padding(.horizontal, 40)
-            .padding(.top, 40)
-            
-            // Character/Badge with fantasy background
-            ZStack {
-                // Fantasy background
-                fantasyBackgroundView
-                    .frame(height: 500)
-                    .clipShape(RoundedRectangle(cornerRadius: 24))
-                    .padding(.horizontal, 24)
-                
-                // Character/Badge overlay
+                // Badge - central focus, large
                 if let uiImage = UIImage(named: badge.imageAssetName) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 400)
-                        .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+                        .frame(maxWidth: 900, maxHeight: 900)
+                        .shadow(color: .black.opacity(0.4), radius: 30, x: 0, y: 15)
                 } else {
-                    // Fallback
                     placeholderBadge
                 }
-            }
-            .padding(.top, 24)
-            
-            // Milestone Badge Pill
-            HStack(spacing: 12) {
-                Image(systemName: "star.fill")
-                    .font(.system(size: 24))
-                    .foregroundColor(AppTheme.textOnCard)
 
-                Text(badge.milestoneDays == 0 ? "New Journey" : "Day \(badge.milestoneDays) Milestone")
-                    .font(.system(size: 32, weight: .semibold))
-                    .foregroundColor(AppTheme.textOnCard)
-            }
-            .padding(.horizontal, 32)
-            .padding(.vertical, 18)
-            .background(Color.white.opacity(0.8))
-            .cornerRadius(40)
-            .overlay(
-                RoundedRectangle(cornerRadius: 40)
-                    .stroke(AppTheme.divider, lineWidth: 1)
-            )
-            .padding(.top, 24)
-            
-            // Quote Section
-            VStack(alignment: .leading, spacing: 20) {
+                Spacer()
+                    .frame(height: 50)
+
+                // Addiction-free label
+                Text("You've been \(addiction.name.lowercased())-free for:")
+                    .font(.system(size: 36, weight: .medium))
+                    .foregroundColor(AppTheme.textSecondary)
+
+                Spacer()
+                    .frame(height: 16)
+
+                // Days sober
+                Text(daysSoberText)
+                    .font(.system(size: 140, weight: .bold))
+                    .foregroundColor(AppTheme.textPrimary)
+
+                Spacer()
+                    .frame(height: 50)
+
+                // Quote with border
                 Text(inspirationalQuote)
-                    .font(.system(size: 28, weight: .regular))
+                    .font(.system(size: 38, weight: .regular))
                     .italic()
-                    .foregroundColor(AppTheme.textOnCard.opacity(0.9))
-                    .lineSpacing(6)
-                
-                // Stats
-                VStack(alignment: .leading, spacing: 8) {
-                    ForEach(stats, id: \.label) { stat in
-                        Text("\(stat.label): \(stat.value)")
-                            .font(.system(size: 26, weight: .medium))
-                            .foregroundColor(AppTheme.textOnCard.opacity(0.8))
-                    }
-                }
-                .padding(.top, 8)
-            }
-            .padding(32)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.white.opacity(0.5))
-            .cornerRadius(20)
-            .padding(.horizontal, 24)
-            .padding(.top, 24)
-            .padding(.bottom, 40)
-        }
-        .background(AppTheme.cardGradient)
-        .cornerRadius(40)
-        .shadow(color: .black.opacity(0.4), radius: 30, x: 0, y: 15)
-    }
-    
-    // MARK: - Fantasy Background
-    private var fantasyBackgroundView: some View {
-        ZStack {
-            // Base gradient
-            LinearGradient(
-                colors: [
-                    Color(hex: "E8F4F8"),
-                    Color(hex: "D4E5ED"),
-                    Color(hex: "C5D8E3")
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            
-            // Mystical elements overlay
-            GeometryReader { geo in
-                // Distant mountains/crystals silhouette
-                Path { path in
-                    let w = geo.size.width
-                    let h = geo.size.height
-                    
-                    path.move(to: CGPoint(x: 0, y: h * 0.7))
-                    path.addLine(to: CGPoint(x: w * 0.15, y: h * 0.5))
-                    path.addLine(to: CGPoint(x: w * 0.25, y: h * 0.6))
-                    path.addLine(to: CGPoint(x: w * 0.4, y: h * 0.35))
-                    path.addLine(to: CGPoint(x: w * 0.5, y: h * 0.55))
-                    path.addLine(to: CGPoint(x: w * 0.65, y: h * 0.4))
-                    path.addLine(to: CGPoint(x: w * 0.75, y: h * 0.5))
-                    path.addLine(to: CGPoint(x: w * 0.9, y: h * 0.45))
-                    path.addLine(to: CGPoint(x: w, y: h * 0.6))
-                    path.addLine(to: CGPoint(x: w, y: h))
-                    path.addLine(to: CGPoint(x: 0, y: h))
-                    path.closeSubpath()
-                }
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color(hex: "A8C5D6").opacity(0.6),
-                            Color(hex: "8BB3C8").opacity(0.4)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
+                    .foregroundColor(AppTheme.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(10)
+                    .padding(.horizontal, 40)
+                    .padding(.vertical, 32)
+                    .frame(maxWidth: 1000)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(AppTheme.divider, lineWidth: 2)
                     )
-                )
+
+                Spacer()
+
+                // Bottom branding
+                HStack {
+                    Spacer()
+                    Text("SoberQuest")
+                        .font(.system(size: 36, weight: .semibold))
+                        .foregroundColor(AppTheme.textMuted)
+                }
+                .padding(.horizontal, 80)
+                .padding(.bottom, 60)
             }
-            
-            // Sparkle effects
-            ForEach(0..<8, id: \.self) { i in
-                Circle()
-                    .fill(Color.white.opacity(0.6))
-                    .frame(width: CGFloat.random(in: 4...12), height: CGFloat.random(in: 4...12))
-                    .offset(
-                        x: CGFloat.random(in: -200...200),
-                        y: CGFloat.random(in: -200...100)
-                    )
-                    .blur(radius: 1)
-            }
+            .padding(40)
         }
+        .frame(width: 1600, height: 2000)
     }
-    
+
     // MARK: - Placeholder Badge
     private var placeholderBadge: some View {
-        RoundedRectangle(cornerRadius: 24)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        AppTheme.milestoneColor(for: badge.milestoneDays).opacity(0.8),
-                        AppTheme.milestoneColor(for: badge.milestoneDays)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .frame(width: 300, height: 300)
+        RoundedRectangle(cornerRadius: 48)
+            .fill(AppTheme.cardBackgroundDark)
+            .frame(width: 600, height: 600)
             .overlay(
                 Text(badge.milestoneDays == 0 ? "🔥" : "\(badge.milestoneDays)")
-                    .font(.system(size: 100, weight: .bold))
+                    .font(.system(size: 200, weight: .bold))
                     .foregroundColor(.white)
             )
     }
-    
-    // MARK: - Share Button
-    private var shareButton: some View {
-        HStack(spacing: 16) {
-            Image(systemName: "square.and.arrow.up")
-                .font(.system(size: 28, weight: .medium))
-            
-            Text("Share Your Milestone")
-                .font(.system(size: 32, weight: .semibold))
-        }
-        .foregroundColor(AppTheme.textOnCard)
-        .padding(.horizontal, 48)
-        .padding(.vertical, 24)
-        .frame(maxWidth: .infinity)
-        .background(AppTheme.cardBackground)
-        .cornerRadius(24)
-        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-    }
-    
+
     func asUIImage() -> UIImage? {
-        let targetSize = CGSize(width: 1080, height: 1920)
+        let targetSize = CGSize(width: 1600, height: 2000)
 
         // Wrap view with explicit environment values
         let wrappedView = self
@@ -285,7 +151,7 @@ struct ShareCardView: View {
 
         // Render with proper format
         let format = UIGraphicsImageRendererFormat()
-        format.scale = 1.0 // Use 1x scale for consistent 1080x1920 output
+        format.scale = 1.0 // Use 1x scale for consistent 1600x2000 output
         format.opaque = true
 
         let renderer = UIGraphicsImageRenderer(size: targetSize, format: format)

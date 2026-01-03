@@ -74,7 +74,7 @@ struct AddictionSetupView: View {
                 }) {
                     Text("Continue")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(selectedAddictionName.isEmpty ? AppTheme.textMuted : AppTheme.textPrimary)
+                        .foregroundColor(selectedAddictionName.isEmpty ? AppTheme.textMuted : AppTheme.buttonPrimaryText)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
                         .background(selectedAddictionName.isEmpty ? AppTheme.backgroundSecondary : AppTheme.buttonPrimary)

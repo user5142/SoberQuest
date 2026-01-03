@@ -97,7 +97,7 @@ struct BadgeUnlockView: View {
                             Text("Share Your Milestone")
                                 .font(.system(size: 17, weight: .semibold))
                         }
-                        .foregroundColor(AppTheme.textPrimary)
+                        .foregroundColor(AppTheme.buttonPrimaryText)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
                         .background(AppTheme.buttonPrimary)

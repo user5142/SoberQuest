@@ -411,7 +411,7 @@ struct PaywallRequiredView: View {
                         if isLoading {
                             HStack(spacing: 12) {
                                 ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.textPrimary))
+                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.buttonPrimaryText))
                                 Text("Loading...")
                                     .font(.system(size: 17, weight: .semibold))
                             }
@@ -420,7 +420,7 @@ struct PaywallRequiredView: View {
                                 .font(.system(size: 17, weight: .semibold))
                         }
                     }
-                    .foregroundColor(AppTheme.textPrimary)
+                    .foregroundColor(AppTheme.buttonPrimaryText)
                     .padding(.horizontal, 48)
                     .padding(.vertical, 16)
                     .background(AppTheme.buttonPrimary)

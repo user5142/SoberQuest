@@ -77,7 +77,7 @@ struct BadgePreviewView: View {
                         if isLoading {
                             HStack(spacing: 12) {
                                 ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.textPrimary))
+                                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.buttonPrimaryText))
                                 Text("Loading...")
                                     .font(.system(size: 18, weight: .semibold))
                             }
@@ -86,7 +86,7 @@ struct BadgePreviewView: View {
                                 .font(.system(size: 18, weight: .semibold))
                         }
                     }
-                    .foregroundColor(AppTheme.textPrimary)
+                    .foregroundColor(AppTheme.buttonPrimaryText)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 18)
                     .background(AppTheme.buttonPrimary)

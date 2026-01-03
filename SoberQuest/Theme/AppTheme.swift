@@ -30,7 +30,8 @@ struct AppTheme {
     static let frost = Color(hex: "38BDF8")                // Ice blue
 
     // MARK: - UI Element Colors
-    static let buttonPrimary = Color(hex: "2A2A2A")        // Dark button background
+    static let buttonPrimary = Color.white                 // Light button background
+    static let buttonPrimaryText = Color(hex: "1A1A1A")    // Dark text on light button
     static let buttonSecondary = Color(hex: "1A1A1A")      // Darker button variant
     static let divider = Color(hex: "2A2A2A")
     static let tabBarBackground = Color(hex: "0D0D0D")

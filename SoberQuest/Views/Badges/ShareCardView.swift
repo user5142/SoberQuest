@@ -3,7 +3,6 @@ import SwiftUI
 struct ShareCardView: View {
     let badge: BadgeDefinition
     let addiction: Addiction
-    let daysSober: Int
 
     // Quote for each milestone
     private var inspirationalQuote: String {
@@ -29,12 +28,31 @@ struct ShareCardView: View {
         }
     }
 
-    private var daysSoberText: String {
-        if badge.milestoneDays == 0 {
-            return "Day 1"
-        } else {
-            return badge.milestoneDays == 1 ? "1 Day" : "\(badge.milestoneDays) Days"
+    private var timeComponents: (years: Int, months: Int, days: Int, hours: Int, minutes: Int, seconds: Int) {
+        addiction.timeComponents
+    }
+
+    private var daysLineText: String {
+        var parts: [String] = []
+
+        if timeComponents.years > 0 {
+            parts.append("\(timeComponents.years) year\(timeComponents.years > 1 ? "s" : "")")
         }
+        if timeComponents.months > 0 {
+            parts.append("\(timeComponents.months) month\(timeComponents.months > 1 ? "s" : "")")
+        }
+        if timeComponents.days > 0 {
+            parts.append("\(timeComponents.days) day\(timeComponents.days > 1 ? "s" : "")")
+        }
+
+        if parts.isEmpty {
+            return "Day 1"
+        }
+        return parts.joined(separator: " ")
+    }
+
+    private var timeLineText: String {
+        String(format: "%02d:%02d:%02d", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
     }
 
     var body: some View {
@@ -69,9 +87,17 @@ struct ShareCardView: View {
                     .frame(height: 16)
 
                 // Days sober
-                Text(daysSoberText)
-                    .font(.system(size: 140, weight: .bold))
+                Text(daysLineText)
+                    .font(.system(size: 100, weight: .bold))
                     .foregroundColor(AppTheme.textPrimary)
+
+                Spacer()
+                    .frame(height: 8)
+
+                // Time display (hours:minutes:seconds)
+                Text(timeLineText)
+                    .font(.system(size: 72, weight: .semibold))
+                    .foregroundColor(AppTheme.textSecondary)
 
                 Spacer()
                     .frame(height: 50)
@@ -307,8 +333,7 @@ struct SharePreviewView: View {
         DispatchQueue.global(qos: .userInitiated).async {
             let shareCard = ShareCardView(
                 badge: badge,
-                addiction: addiction,
-                daysSober: badge.milestoneDays
+                addiction: addiction
             )
 
             // Must create UIImage on main thread due to UIKit requirements

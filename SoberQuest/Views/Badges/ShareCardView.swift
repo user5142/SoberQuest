@@ -39,13 +39,8 @@ struct ShareCardView: View {
 
     var body: some View {
         ZStack {
-            // Outer dark background
-            AppTheme.background
-
-            // Inner lighter border/frame
-            RoundedRectangle(cornerRadius: 48)
-                .fill(AppTheme.backgroundSecondary)
-                .padding(40)
+            // Solid background
+            Color(hex: "191918")
 
             // Content
             VStack(spacing: 0) {
@@ -134,7 +129,7 @@ struct ShareCardView: View {
 
         let controller = UIHostingController(rootView: wrappedView)
         controller.view.bounds = CGRect(origin: .zero, size: targetSize)
-        controller.view.backgroundColor = UIColor(AppTheme.background)
+        controller.view.backgroundColor = UIColor(Color(hex: "191918"))
 
         // Force dark mode on the view's trait collection
         controller.overrideUserInterfaceStyle = .dark
@@ -240,6 +235,10 @@ struct SharePreviewView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .cornerRadius(16)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                            )
                             .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
                             .padding(.horizontal, 24)
                     }

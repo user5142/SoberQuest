@@ -132,7 +132,7 @@ struct ShareCardView: View {
             }
             .padding(40)
         }
-        .frame(width: 1600, height: 2000)
+        .frame(width: 1200, height: 2000)
     }
 
     // MARK: - Placeholder Badge
@@ -148,7 +148,7 @@ struct ShareCardView: View {
     }
 
     func asUIImage() -> UIImage? {
-        let targetSize = CGSize(width: 1600, height: 2000)
+        let targetSize = CGSize(width: 1200, height: 2000)
 
         // Wrap view with explicit environment values
         let wrappedView = self

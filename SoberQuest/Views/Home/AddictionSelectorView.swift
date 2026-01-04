@@ -4,12 +4,13 @@ struct AddictionSelectorView: View {
     @Binding var isPresented: Bool
     @EnvironmentObject private var appState: AppState
     @ObservedObject private var dataManager = DataManager.shared
-    
+    @State private var showAddAddiction = false
+
     var body: some View {
         NavigationView {
             ZStack {
                 AppTheme.background.ignoresSafeArea()
-                
+
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 12) {
                         ForEach(dataManager.loadAddictions()) { addiction in
@@ -59,9 +60,40 @@ struct AddictionSelectorView: View {
                                 )
                             }
                         }
+
+                        // Add New Tracker Button
+                        Button(action: {
+                            showAddAddiction = true
+                        }) {
+                            HStack(spacing: 16) {
+                                ZStack {
+                                    Circle()
+                                        .fill(AppTheme.backgroundSecondary)
+                                        .frame(width: 50, height: 50)
+
+                                    Image(systemName: "plus")
+                                        .font(.system(size: 22, weight: .medium))
+                                        .foregroundColor(AppTheme.textSecondary)
+                                }
+
+                                Text("Add New Tracker")
+                                    .font(.system(size: 17, weight: .semibold))
+                                    .foregroundColor(AppTheme.textSecondary)
+
+                                Spacer()
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 18)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(AppTheme.divider, lineWidth: 1)
+                            )
+                        }
+                        .padding(.top, 8)
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
+                    .padding(.bottom, 24)
                 }
             }
             .navigationTitle("Select Tracker")
@@ -76,6 +108,10 @@ struct AddictionSelectorView: View {
                             .foregroundColor(AppTheme.textPrimary)
                     }
                 }
+            }
+            .sheet(isPresented: $showAddAddiction) {
+                AddAddictionView(isPresented: $showAddAddiction)
+                    .environmentObject(appState)
             }
         }
         .preferredColorScheme(.dark)

@@ -103,7 +103,7 @@ struct HomeView: View {
             AppTheme.backgroundSecondary
             
             VStack(spacing: 20) {
-                // Settings button (top left) and Badge collection button (top right)
+                // Settings button (top left), Addiction switcher (center), Badge collection (top right)
                 HStack {
                     Button(action: {
                         showSettings = true
@@ -111,6 +111,27 @@ struct HomeView: View {
                         Image(systemName: "gearshape")
                             .font(.system(size: 22, weight: .medium))
                             .foregroundColor(AppTheme.textSecondary)
+                    }
+
+                    Spacer()
+
+                    // Addiction Switcher - tappable indicator showing current addiction
+                    Button(action: {
+                        showAddictionSelector = true
+                    }) {
+                        HStack(spacing: 6) {
+                            Text(addiction.name)
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(AppTheme.textPrimary)
+
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundColor(AppTheme.textSecondary)
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(AppTheme.cardBackgroundDark)
+                        .cornerRadius(20)
                     }
 
                     Spacer()

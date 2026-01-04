@@ -280,6 +280,8 @@ struct SharePreviewView: View {
                     Spacer()
                 }
 
+                Spacer()
+
                 // Action buttons
                 VStack(spacing: 12) {
                     // Share button

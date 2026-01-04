@@ -9,6 +9,7 @@ struct HomeView: View {
     
     @State private var timeComponents: (years: Int, months: Int, days: Int, hours: Int, minutes: Int, seconds: Int) = (0, 0, 0, 0, 0, 0)
     @State private var showAddictionSelector = false
+    @State private var showAddAddiction = false
     @State private var showBadgeUnlock = false
     @State private var unlockedBadge: BadgeDefinition?
     @State private var showBadgeCollection = false
@@ -28,8 +29,7 @@ struct HomeView: View {
             } else if let addiction = appState.currentAddiction {
                 mainContentView(addiction: addiction)
             } else {
-                Text("No addiction selected")
-                    .foregroundColor(AppTheme.textSecondary)
+                emptyStateView
             }
         }
         .background(AppTheme.background)
@@ -43,6 +43,10 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showAddictionSelector) {
             AddictionSelectorView(isPresented: $showAddictionSelector)
+        }
+        .sheet(isPresented: $showAddAddiction) {
+            AddAddictionView(isPresented: $showAddAddiction)
+                .environmentObject(appState)
         }
         .sheet(isPresented: $showBadgeUnlock) {
             if let badge = unlockedBadge, let addiction = appState.currentAddiction {
@@ -81,17 +85,64 @@ struct HomeView: View {
     private func mainContentView(addiction: Addiction) -> some View {
         ZStack {
             AppTheme.background.ignoresSafeArea()
-            
+
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
                     // Hero Section with Character
                     heroSection(addiction: addiction)
-                    
+
                     // "Why I'm doing this" Section
                     motivationSection(addiction: addiction)
                         .padding(.top, 16)
                 }
             }
+        }
+    }
+
+    // MARK: - Empty State View
+    private var emptyStateView: some View {
+        ZStack {
+            AppTheme.background.ignoresSafeArea()
+
+            VStack(spacing: 24) {
+                Spacer()
+
+                Image("badge_day3")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 120, height: 120)
+
+                VStack(spacing: 8) {
+                    Text("No Trackers Yet")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(AppTheme.textPrimary)
+
+                    Text("Start your journey by adding\na tracker for what you want to quit.")
+                        .font(.system(size: 16))
+                        .foregroundColor(AppTheme.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+
+                Button(action: {
+                    showAddAddiction = true
+                }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Add Tracker")
+                            .font(.system(size: 17, weight: .semibold))
+                    }
+                    .foregroundColor(AppTheme.buttonPrimaryText)
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 16)
+                    .background(AppTheme.buttonPrimary)
+                    .cornerRadius(12)
+                }
+                .padding(.top, 8)
+
+                Spacer()
+            }
+            .padding(.horizontal, 24)
         }
     }
     

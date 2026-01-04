@@ -36,6 +36,20 @@ class AppState: ObservableObject {
         currentAddiction = addiction
         dataManager.setActiveAddiction(addiction)
     }
+
+    func deleteAddiction(_ addiction: Addiction) {
+        dataManager.deleteAddiction(addiction)
+
+        // If we deleted the current addiction, switch to another one
+        if currentAddiction?.id == addiction.id {
+            let remainingAddictions = dataManager.loadAddictions()
+            if let firstAddiction = remainingAddictions.first {
+                setCurrentAddiction(firstAddiction)
+            } else {
+                currentAddiction = nil
+            }
+        }
+    }
     
     func refreshAddiction() {
         if let addiction = dataManager.getActiveAddiction() {

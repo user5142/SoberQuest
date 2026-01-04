@@ -5,6 +5,8 @@ struct AddictionSelectorView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject private var dataManager = DataManager.shared
     @State private var showAddAddiction = false
+    @State private var showDeleteConfirmation = false
+    @State private var addictionToDelete: Addiction?
 
     var body: some View {
         NavigationView {
@@ -59,6 +61,14 @@ struct AddictionSelectorView: View {
                                         .stroke(addiction.isActive ? AppTheme.divider : Color.clear, lineWidth: 1)
                                 )
                             }
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    addictionToDelete = addiction
+                                    showDeleteConfirmation = true
+                                } label: {
+                                    Label("Delete Tracker", systemImage: "trash")
+                                }
+                            }
                         }
 
                         // Add New Tracker Button
@@ -112,6 +122,26 @@ struct AddictionSelectorView: View {
             .sheet(isPresented: $showAddAddiction) {
                 AddAddictionView(isPresented: $showAddAddiction)
                     .environmentObject(appState)
+            }
+            .alert("Delete Tracker?", isPresented: $showDeleteConfirmation) {
+                Button("Cancel", role: .cancel) {
+                    addictionToDelete = nil
+                }
+                Button("Delete", role: .destructive) {
+                    if let addiction = addictionToDelete {
+                        appState.deleteAddiction(addiction)
+                        addictionToDelete = nil
+
+                        // Close sheet if no addictions left
+                        if dataManager.loadAddictions().isEmpty {
+                            isPresented = false
+                        }
+                    }
+                }
+            } message: {
+                if let addiction = addictionToDelete {
+                    Text("This will permanently delete your \"\(addiction.name)\" tracker and all its badges. This cannot be undone.")
+                }
             }
         }
         .preferredColorScheme(.dark)

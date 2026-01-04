@@ -43,6 +43,15 @@ class DataManager: ObservableObject {
         var addictions = loadAddictions()
         addictions.removeAll { $0.id == addiction.id }
         saveAddictions(addictions)
+
+        // Also delete associated badges
+        deleteBadges(for: addiction.id)
+    }
+
+    func deleteBadges(for addictionId: UUID) {
+        var badges = loadUnlockedBadges()
+        badges.removeAll { $0.addictionId == addictionId }
+        saveUnlockedBadges(badges)
     }
     
     func getActiveAddiction() -> Addiction? {

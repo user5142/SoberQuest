@@ -12,22 +12,11 @@ struct WelcomeView: View {
                 Spacer()
                 
                 // App Icon/Logo
-                ZStack {
-                    // Icon background
-                    Circle()
-                        .fill(AppTheme.backgroundSecondary)
-                        .frame(width: 100, height: 100)
-                        .overlay(
-                            Circle()
-                                .stroke(AppTheme.divider, lineWidth: 1)
-                        )
-
-                    // Star icon
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 44))
-                        .foregroundColor(AppTheme.textPrimary)
-                }
-                .padding(.bottom, 20)
+                Image("badge_day3")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    // .padding(.bottom, 20)
                 
                 // Title
                 VStack(spacing: 12) {

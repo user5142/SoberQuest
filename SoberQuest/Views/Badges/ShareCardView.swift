@@ -257,18 +257,16 @@ struct SharePreviewView: View {
                     }
                     Spacer()
                 } else if let image = shareImage {
-                    ScrollView {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .cornerRadius(16)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                            )
-                            .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
-                            .padding(.horizontal, 24)
-                    }
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .cornerRadius(16)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        )
+                        .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+                        .padding(.horizontal, 24)
                 } else {
                     Spacer()
                     VStack(spacing: 16) {

@@ -272,9 +272,12 @@ struct AddAddictionView: View {
         dataManager.saveAddiction(newAddiction)
         appState.setCurrentAddiction(newAddiction)
 
-        // Award initial badge (Day 0 - The Lantern)
-        let initialBadge = UnlockedBadge(badgeId: "day0", addictionId: newAddiction.id)
-        dataManager.saveUnlockedBadge(initialBadge)
+        // Award all badges based on days sober from the selected date
+        let daysSober = newAddiction.daysSober
+        for badge in BadgeDefinition.defaultBadges where badge.milestoneDays <= daysSober {
+            let unlockedBadge = UnlockedBadge(badgeId: badge.id, addictionId: newAddiction.id)
+            dataManager.saveUnlockedBadge(unlockedBadge)
+        }
 
         // Dismiss
         isPresented = false

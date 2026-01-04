@@ -98,7 +98,7 @@ struct BadgeCell: View {
             }
             
             VStack(spacing: 4) {
-                Text(badge.name)
+                Text(isUnlocked ? badge.name : "???")
                     .font(.system(size: 12, weight: isUnlocked ? .semibold : .regular))
                     .foregroundColor(isUnlocked ? AppTheme.textPrimary : AppTheme.textMuted)
                     .multilineTextAlignment(.center)

@@ -190,7 +190,12 @@ struct HomeView: View {
                     Button(action: {
                         showBadgeCollection = true
                     }) {
-                        DiamondIcon(size: 24, color: AppTheme.textSecondary)
+                        Image("diamond")
+                            .renderingMode(.template)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 28, height: 28)
+                            .foregroundColor(AppTheme.textSecondary)
                     }
                 }
                 .padding(.horizontal, 24)

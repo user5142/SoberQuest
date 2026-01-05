@@ -5,7 +5,8 @@ struct BadgeCollectionView: View {
     @Binding var isPresented: Bool
     @ObservedObject private var dataManager = DataManager.shared
     @ObservedObject private var badgeService = BadgeService.shared
-    
+    @State private var selectedBadge: BadgeDefinition?
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -35,10 +36,15 @@ struct BadgeCollectionView: View {
                             GridItem(.flexible(), spacing: 16)
                         ], spacing: 20) {
                             ForEach(badgeService.getAllBadges()) { badge in
-                                BadgeCell(
-                                    badge: badge,
-                                    isUnlocked: isBadgeUnlocked(badge.id)
-                                )
+                                Button(action: {
+                                    selectedBadge = badge
+                                }) {
+                                    BadgeCell(
+                                        badge: badge,
+                                        isUnlocked: isBadgeUnlocked(badge.id)
+                                    )
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
                         }
                         .padding(.horizontal, 16)
@@ -58,6 +64,14 @@ struct BadgeCollectionView: View {
                             .foregroundColor(AppTheme.textPrimary)
                     }
                 }
+            }
+            .sheet(item: $selectedBadge) { badge in
+                BadgeDetailView(
+                    badge: badge,
+                    addiction: addiction,
+                    isUnlocked: isBadgeUnlocked(badge.id),
+                    onDismiss: { selectedBadge = nil }
+                )
             }
         }
         .preferredColorScheme(.dark)

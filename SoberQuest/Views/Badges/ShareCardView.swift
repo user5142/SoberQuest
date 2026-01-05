@@ -3,6 +3,7 @@ import SwiftUI
 struct ShareCardView: View {
     let badge: BadgeDefinition
     let addiction: Addiction
+    var useMilestoneDays: Bool = false
 
     // Quote for each milestone
     private var inspirationalQuote: String {
@@ -33,6 +34,18 @@ struct ShareCardView: View {
     }
 
     private var daysLineText: String {
+        // When useMilestoneDays is true, show just the badge's milestone day count
+        if useMilestoneDays {
+            if badge.milestoneDays == 0 {
+                return "Day 1"
+            } else if badge.milestoneDays == 1 {
+                return "1 day"
+            } else {
+                return "\(badge.milestoneDays) days"
+            }
+        }
+
+        // Otherwise show the actual current time
         var parts: [String] = []
 
         if timeComponents.years > 0 {
@@ -78,30 +91,47 @@ struct ShareCardView: View {
                 Spacer()
                     .frame(height: 80)
 
-                // Addiction-free label
-                Text("You've been \(addiction.name.lowercased())-free for:")
-                    .font(.system(size: 36, weight: .medium))
-                    .tracking(2.5)
-                    .foregroundColor(AppTheme.textSecondary)
+                if useMilestoneDays {
+                    // Badge name and milestone day for collection shares
+                    Text(badge.name)
+                        .font(.system(size: 72, weight: .bold))
+                        .foregroundColor(AppTheme.textPrimary)
+
+                    Spacer()
+                        .frame(height: 20)
+
+                    Text(badge.milestoneDays == 0 ? "The Start" : "Day \(badge.milestoneDays)")
+                        .font(.system(size: 160, weight: .heavy))
+                        .foregroundColor(AppTheme.textPrimary)
+                } else {
+                    // Addiction-free label for main screen shares
+                    Text("You've been \(addiction.name.lowercased())-free for:")
+                        .font(.system(size: 36, weight: .medium))
+                        .tracking(2.5)
+                        .foregroundColor(AppTheme.textSecondary)
+
+                    Spacer()
+                        .frame(height: 20)
+
+                    // Days sober - emphasized achievement
+                    Text(daysLineText)
+                        .font(.system(size: 160, weight: .heavy))
+                        .foregroundColor(AppTheme.textPrimary)
+                }
+
+                // Only show time display when not using milestone days
+                if !useMilestoneDays {
+                    Spacer()
+                        .frame(height: 12)
+
+                    // Time display (hours:minutes:seconds)
+                    Text(timeLineText)
+                        .font(.system(size: 72, weight: .semibold))
+                        .foregroundColor(AppTheme.textSecondary)
+                }
 
                 Spacer()
-                    .frame(height: 20)
-
-                // Days sober - emphasized achievement
-                Text(daysLineText)
-                    .font(.system(size: 160, weight: .heavy))
-                    .foregroundColor(AppTheme.textPrimary)
-
-                Spacer()
-                    .frame(height: 12)
-
-                // Time display (hours:minutes:seconds)
-                Text(timeLineText)
-                    .font(.system(size: 72, weight: .semibold))
-                    .foregroundColor(AppTheme.textSecondary)
-
-                Spacer()
-                    .frame(height: 60)
+                    .frame(height: useMilestoneDays ? 80 : 60)
 
                 // Quote with border
                 Text(inspirationalQuote)
@@ -209,6 +239,7 @@ struct SharePreviewView: View {
     let addiction: Addiction
     @Binding var isPresented: Bool
     var onDismissParent: (() -> Void)? = nil
+    var useMilestoneDays: Bool = false
 
     @State private var shareImage: UIImage?
     @State private var isGenerating = true
@@ -334,7 +365,8 @@ struct SharePreviewView: View {
         DispatchQueue.global(qos: .userInitiated).async {
             let shareCard = ShareCardView(
                 badge: badge,
-                addiction: addiction
+                addiction: addiction,
+                useMilestoneDays: useMilestoneDays
             )
 
             // Must create UIImage on main thread due to UIKit requirements

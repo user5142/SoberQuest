@@ -375,16 +375,59 @@ struct HomeView: View {
     }
     
     private func formatDaysDisplay() -> String {
-        let totalDays = timeComponents.years * 365 + timeComponents.months * 30 + timeComponents.days
-        if totalDays == 1 {
-            return "1 day"
+        // Hierarchical display: years > months > days
+        if timeComponents.years >= 1 {
+            // 1 year or more: show years as primary
+            if timeComponents.years == 1 {
+                return "1 year"
+            } else {
+                return "\(timeComponents.years) years"
+            }
+        } else if timeComponents.months >= 1 {
+            // 1 month or more (but less than 1 year): show months as primary
+            if timeComponents.months == 1 {
+                return "1 month"
+            } else {
+                return "\(timeComponents.months) months"
+            }
         } else {
-            return "\(totalDays) days"
+            // Less than 1 month: show days as primary
+            let totalDays = timeComponents.days
+            if totalDays == 1 {
+                return "1 day"
+            } else if totalDays == 0 {
+                return "Day 1"
+            } else {
+                return "\(totalDays) days"
+            }
         }
     }
-    
+
     private func formatTimerDisplay() -> String {
-        return String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
+        // Secondary display based on primary tier
+        if timeComponents.years >= 1 {
+            // Primary is years, show months/days/hours in pill
+            var parts: [String] = []
+            if timeComponents.months > 0 {
+                parts.append("\(timeComponents.months)mo")
+            }
+            if timeComponents.days > 0 {
+                parts.append("\(timeComponents.days)d")
+            }
+            parts.append(String(format: "%dhr %02dm", timeComponents.hours, timeComponents.minutes))
+            return parts.joined(separator: " ")
+        } else if timeComponents.months >= 1 {
+            // Primary is months, show days/hours/minutes in pill
+            var parts: [String] = []
+            if timeComponents.days > 0 {
+                parts.append("\(timeComponents.days)d")
+            }
+            parts.append(String(format: "%dhr %02dm", timeComponents.hours, timeComponents.minutes))
+            return parts.joined(separator: " ")
+        } else {
+            // Primary is days, show hours/minutes/seconds in pill
+            return String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
+        }
     }
     
     private func formatTimeComponents() -> String {

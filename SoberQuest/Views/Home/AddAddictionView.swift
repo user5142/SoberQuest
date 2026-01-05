@@ -8,10 +8,12 @@ struct AddAddictionView: View {
     @State private var currentStep: AddAddictionStep = .nameSelection
     @State private var selectedAddictionName: String = ""
     @State private var lastUsedDate: Date = Date()
+    @State private var motivationText: String = ""
 
     enum AddAddictionStep {
         case nameSelection
         case dateSelection
+        case motivationSetup
     }
 
     var body: some View {
@@ -24,21 +26,28 @@ struct AddAddictionView: View {
                     nameSelectionView
                 case .dateSelection:
                     dateSelectionView
+                case .motivationSetup:
+                    motivationSetupView
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        if currentStep == .dateSelection {
+                        switch currentStep {
+                        case .nameSelection:
+                            isPresented = false
+                        case .dateSelection:
                             withAnimation(.easeInOut(duration: 0.3)) {
                                 currentStep = .nameSelection
                             }
-                        } else {
-                            isPresented = false
+                        case .motivationSetup:
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                currentStep = .dateSelection
+                            }
                         }
                     }) {
-                        Image(systemName: currentStep == .dateSelection ? "chevron.left" : "xmark")
+                        Image(systemName: currentStep == .nameSelection ? "xmark" : "chevron.left")
                             .font(.system(size: 16, weight: .medium))
                             .foregroundColor(AppTheme.textSecondary)
                     }
@@ -228,14 +237,99 @@ struct AddAddictionView: View {
                 }
             }
 
+            // Continue button fixed at bottom
+            VStack {
+                Spacer()
+
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        currentStep = .motivationSetup
+                    }
+                }) {
+                    Text("Continue")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(AppTheme.buttonPrimaryText)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(AppTheme.buttonPrimary)
+                        .cornerRadius(14)
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 48)
+                .background(
+                    LinearGradient(
+                        colors: [AppTheme.background.opacity(0), AppTheme.background],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: 120)
+                    .offset(y: -40)
+                )
+            }
+        }
+    }
+
+    // MARK: - Motivation Setup View
+    @FocusState private var isMotivationFocused: Bool
+
+    private var motivationSetupView: some View {
+        ZStack {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 28) {
+                    // Header
+                    VStack(spacing: 12) {
+                        Text("Why are you quitting?")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(AppTheme.textPrimary)
+
+                        Text("Your motivation will keep you going")
+                            .font(.system(size: 15))
+                            .foregroundColor(AppTheme.textSecondary)
+                    }
+                    .padding(.top, 24)
+
+                    // Text input area
+                    VStack(spacing: 16) {
+                        TextEditor(text: $motivationText)
+                            .font(.system(size: 16))
+                            .foregroundColor(AppTheme.textPrimary)
+                            .scrollContentBackground(.hidden)
+                            .frame(minHeight: 150)
+                            .padding(16)
+                            .background(AppTheme.backgroundSecondary)
+                            .cornerRadius(16)
+                            .focused($isMotivationFocused)
+                            .overlay(
+                                Group {
+                                    if motivationText.isEmpty {
+                                        Text("e.g., To be healthier for my family, to feel more present, to save money...")
+                                            .font(.system(size: 16))
+                                            .foregroundColor(AppTheme.textMuted)
+                                            .padding(20)
+                                            .allowsHitTesting(false)
+                                    }
+                                },
+                                alignment: .topLeading
+                            )
+                    }
+                    .padding(.horizontal, 24)
+
+                    Spacer(minLength: 100)
+                }
+            }
+            .onTapGesture {
+                isMotivationFocused = false
+            }
+
             // Add Tracker button fixed at bottom
             VStack {
                 Spacer()
 
                 Button(action: {
+                    isMotivationFocused = false
                     createAddictionAndDismiss()
                 }) {
-                    Text("Add Tracker")
+                    Text(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Skip" : "Add Tracker")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(AppTheme.buttonPrimaryText)
                         .frame(maxWidth: .infinity)
@@ -260,12 +354,14 @@ struct AddAddictionView: View {
 
     // MARK: - Create Addiction
     private func createAddictionAndDismiss() {
-        // Create new addiction
+        // Create new addiction with motivation
+        let trimmedMotivation = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
         let newAddiction = Addiction(
             name: selectedAddictionName,
             startDate: lastUsedDate,
             currentStreak: 0,
-            isActive: true
+            isActive: true,
+            motivation: trimmedMotivation.isEmpty ? nil : trimmedMotivation
         )
 
         // Save and set as active

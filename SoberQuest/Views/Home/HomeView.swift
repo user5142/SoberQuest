@@ -78,7 +78,10 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $showEditMotivation) {
-            EditMotivationView(isPresented: $showEditMotivation)
+            if let addiction = appState.currentAddiction {
+                EditMotivationView(isPresented: $showEditMotivation, addiction: addiction)
+                    .environmentObject(appState)
+            }
         }
         .sheet(isPresented: $showEditDate) {
             if let addiction = appState.currentAddiction {
@@ -354,7 +357,7 @@ struct HomeView: View {
                 showEditMotivation = true
             }) {
                 VStack(spacing: 0) {
-                    Text(getMotivationQuote())
+                    Text(getMotivationQuote(for: addiction))
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(AppTheme.textPrimary)
                         .multilineTextAlignment(.center)
@@ -537,9 +540,9 @@ struct HomeView: View {
         }
     }
     
-    private func getMotivationQuote() -> String {
-        if let savedMotivation = dataManager.loadMotivation(), !savedMotivation.isEmpty {
-            return savedMotivation
+    private func getMotivationQuote(for addiction: Addiction) -> String {
+        if let motivation = addiction.motivation, !motivation.isEmpty {
+            return motivation
         }
         return "Tap to add your motivation..."
     }
@@ -548,7 +551,8 @@ struct HomeView: View {
 // MARK: - Edit Motivation View
 struct EditMotivationView: View {
     @Binding var isPresented: Bool
-    @ObservedObject private var dataManager = DataManager.shared
+    @EnvironmentObject private var appState: AppState
+    let addiction: Addiction
     @State private var motivationText: String = ""
     @FocusState private var isTextFieldFocused: Bool
 
@@ -608,7 +612,10 @@ struct EditMotivationView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         let trimmed = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
-                        dataManager.saveMotivation(trimmed)
+                        var updatedAddiction = addiction
+                        updatedAddiction.motivation = trimmed.isEmpty ? nil : trimmed
+                        DataManager.shared.saveAddiction(updatedAddiction)
+                        appState.setCurrentAddiction(updatedAddiction)
                         isPresented = false
                     }
                     .font(.system(size: 17, weight: .semibold))
@@ -618,7 +625,7 @@ struct EditMotivationView: View {
         }
         .preferredColorScheme(.dark)
         .onAppear {
-            motivationText = dataManager.loadMotivation() ?? ""
+            motivationText = addiction.motivation ?? ""
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isTextFieldFocused = true
             }

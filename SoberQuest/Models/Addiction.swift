@@ -6,13 +6,15 @@ struct Addiction: Identifiable, Codable {
     var startDate: Date
     var currentStreak: Int
     var isActive: Bool
-    
-    init(id: UUID = UUID(), name: String, startDate: Date, currentStreak: Int = 0, isActive: Bool = true) {
+    var motivation: String?
+
+    init(id: UUID = UUID(), name: String, startDate: Date, currentStreak: Int = 0, isActive: Bool = true, motivation: String? = nil) {
         self.id = id
         self.name = name
         self.startDate = startDate
         self.currentStreak = currentStreak
         self.isActive = isActive
+        self.motivation = motivation
     }
     
     var daysSober: Int {

@@ -120,21 +120,17 @@ struct BadgePreviewView: View {
     }
     
     private func continueToApp() {
-        // Save addiction data
+        // Save addiction data with motivation
+        let trimmedMotivation = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
         let addiction = Addiction(
             name: addictionName,
             startDate: lastUsedDate,
             currentStreak: 0,
-            isActive: true
+            isActive: true,
+            motivation: trimmedMotivation.isEmpty ? nil : trimmedMotivation
         )
         DataManager.shared.saveAddiction(addiction)
         appState.setCurrentAddiction(addiction)
-
-        // Save motivation text
-        let trimmedMotivation = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !trimmedMotivation.isEmpty {
-            DataManager.shared.saveMotivation(trimmedMotivation)
-        }
         
         // Grant all badges earned based on days sober
         let daysSober = addiction.daysSober

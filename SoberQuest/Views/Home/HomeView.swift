@@ -255,14 +255,18 @@ struct HomeView: View {
     }
     
     // MARK: - Timer Pill
+    @ViewBuilder
     private var timerPill: some View {
-        Text(formatTimerDisplay())
-            .font(.system(size: 16, weight: .medium, design: .monospaced))
-            .foregroundColor(AppTheme.textPrimary)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-            .background(AppTheme.timerPillBackground)
-            .cornerRadius(24)
+        let display = formatTimerDisplay()
+        if !display.isEmpty {
+            Text(display)
+                .font(.system(size: 16, weight: .medium, design: .monospaced))
+                .foregroundColor(AppTheme.textPrimary)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 10)
+                .background(AppTheme.timerPillBackground)
+                .cornerRadius(24)
+        }
     }
     
     // MARK: - Action Buttons Row
@@ -375,30 +379,42 @@ struct HomeView: View {
     }
     
     private func formatDaysDisplay() -> String {
-        // Hierarchical display: years > months > days
+        // Hierarchical display: years > months > days > hours > minutes > seconds
         if timeComponents.years >= 1 {
-            // 1 year or more: show years as primary
             if timeComponents.years == 1 {
                 return "1 year"
             } else {
                 return "\(timeComponents.years) years"
             }
         } else if timeComponents.months >= 1 {
-            // 1 month or more (but less than 1 year): show months as primary
             if timeComponents.months == 1 {
                 return "1 month"
             } else {
                 return "\(timeComponents.months) months"
             }
-        } else {
-            // Less than 1 month: show days as primary
-            let totalDays = timeComponents.days
-            if totalDays == 1 {
+        } else if timeComponents.days >= 1 {
+            if timeComponents.days == 1 {
                 return "1 day"
-            } else if totalDays == 0 {
-                return "Day 1"
             } else {
-                return "\(totalDays) days"
+                return "\(timeComponents.days) days"
+            }
+        } else if timeComponents.hours >= 1 {
+            if timeComponents.hours == 1 {
+                return "1 hour"
+            } else {
+                return "\(timeComponents.hours) hours"
+            }
+        } else if timeComponents.minutes >= 1 {
+            if timeComponents.minutes == 1 {
+                return "1 minute"
+            } else {
+                return "\(timeComponents.minutes) mins"
+            }
+        } else {
+            if timeComponents.seconds == 1 {
+                return "1 second"
+            } else {
+                return "\(timeComponents.seconds) secs"
             }
         }
     }
@@ -424,9 +440,18 @@ struct HomeView: View {
             }
             parts.append(String(format: "%dhr %02dm", timeComponents.hours, timeComponents.minutes))
             return parts.joined(separator: " ")
-        } else {
+        } else if timeComponents.days >= 1 {
             // Primary is days, show hours/minutes/seconds in pill
             return String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
+        } else if timeComponents.hours >= 1 {
+            // Primary is hours, show minutes/seconds in pill
+            return String(format: "%02dm %02ds", timeComponents.minutes, timeComponents.seconds)
+        } else if timeComponents.minutes >= 1 {
+            // Primary is minutes, show seconds in pill
+            return String(format: "%02ds", timeComponents.seconds)
+        } else {
+            // Primary is seconds, show empty or minimal pill
+            return ""
         }
     }
     

@@ -19,6 +19,7 @@ struct HomeView: View {
     @State private var showResetConfirmation = false
     @State private var showSettings = false
     @State private var showEditMotivation = false
+    @State private var showEditDate = false
     
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -78,6 +79,12 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showEditMotivation) {
             EditMotivationView(isPresented: $showEditMotivation)
+        }
+        .sheet(isPresented: $showEditDate) {
+            if let addiction = appState.currentAddiction {
+                EditDateView(isPresented: $showEditDate, addiction: addiction)
+                    .environmentObject(appState)
+            }
         }
     }
     
@@ -261,7 +268,7 @@ struct HomeView: View {
     // MARK: - Action Buttons Row
     @ViewBuilder
     private func actionButtonsRow(addiction: Addiction) -> some View {
-        HStack(spacing: 40) {
+        HStack(spacing: 32) {
             // Reset Button
             actionButton(
                 icon: "arrow.counterclockwise",
@@ -270,13 +277,13 @@ struct HomeView: View {
                 showResetConfirmation = true
             }
 
-            // Log Urge Button (temporarily disabled)
-            // actionButton(
-            //     icon: "clock.arrow.circlepath",
-            //     label: "Log Urge"
-            // ) {
-            //     handleDailyCheckIn(for: addiction)
-            // }
+            // Edit Date Button
+            actionButton(
+                icon: "calendar",
+                label: "Edit"
+            ) {
+                showEditDate = true
+            }
 
             // Share Button
             actionButton(

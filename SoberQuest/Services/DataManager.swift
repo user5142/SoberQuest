@@ -53,6 +53,12 @@ class DataManager: ObservableObject {
         badges.removeAll { $0.addictionId == addictionId }
         saveUnlockedBadges(badges)
     }
+
+    func removeBadge(badgeId: String, for addictionId: UUID) {
+        var badges = loadUnlockedBadges()
+        badges.removeAll { $0.badgeId == badgeId && $0.addictionId == addictionId }
+        saveUnlockedBadges(badges)
+    }
     
     func getActiveAddiction() -> Addiction? {
         return loadAddictions().first { $0.isActive }

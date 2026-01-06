@@ -389,44 +389,84 @@ struct HomeView: View {
         Button(action: {
             showUrgeGame = true
         }) {
-            HStack(spacing: 12) {
-                // Icon
-                Image(systemName: "bolt.shield.fill")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(AppTheme.textPrimary)
-                    .frame(width: 40, height: 40)
-                    .background(AppTheme.cardBackgroundDark)
-                    .cornerRadius(10)
+            ZStack {
+                // Background gradient
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.15, green: 0.1, blue: 0.2),
+                        Color(red: 0.1, green: 0.08, blue: 0.15)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
 
-                // Text
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Slay urge monsters")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(AppTheme.textPrimary)
+                // Content
+                HStack(spacing: 16) {
+                    // Monster image
+                    ZStack {
+                        // Glow effect behind monster
+                        Circle()
+                            .fill(Color.purple.opacity(0.3))
+                            .frame(width: 60, height: 60)
+                            .blur(radius: 8)
 
-                    if addiction.urgesDefeated > 0 {
-                        Text("\(addiction.urgesDefeated) urges conquered")
-                            .font(.system(size: 13))
-                            .foregroundColor(AppTheme.textSecondary)
-                    } else {
-                        Text("Quick breathing & focus game")
-                            .font(.system(size: 13))
-                            .foregroundColor(AppTheme.textSecondary)
+                        Image("urge_monster")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                    }
+
+                    // Text content
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 8) {
+                            Text("Slay Urge Monsters")
+                                .font(.system(size: 17, weight: .bold))
+                                .foregroundColor(AppTheme.textPrimary)
+
+                            Image(systemName: "bolt.fill")
+                                .font(.system(size: 12))
+                                .foregroundColor(.yellow)
+                        }
+
+                        if addiction.urgesDefeated > 0 {
+                            HStack(spacing: 4) {
+                                Image(systemName: "flame.fill")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.orange)
+                                Text("\(addiction.urgesDefeated) defeated")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor(AppTheme.textSecondary)
+                            }
+                        } else {
+                            Text("Feeling an urge? Fight back!")
+                                .font(.system(size: 13))
+                                .foregroundColor(AppTheme.textSecondary)
+                        }
+                    }
+
+                    Spacer()
+
+                    // Play button style arrow
+                    ZStack {
+                        Circle()
+                            .fill(Color.purple.opacity(0.3))
+                            .frame(width: 36, height: 36)
+
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(AppTheme.textPrimary)
                     }
                 }
-
-                Spacer()
-
-                // Chevron
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(AppTheme.textSecondary)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
-            .background(AppTheme.backgroundSecondary)
+            .frame(height: 80)
             .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.purple.opacity(0.3), lineWidth: 1)
+            )
         }
         .padding(.horizontal, 16)
         .padding(.top, 16)

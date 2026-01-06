@@ -103,20 +103,11 @@ struct MonsterSlayingPhaseView: View {
     @ViewBuilder
     private func monsterView(monster: Monster, index: Int) -> some View {
         ZStack {
-            // Monster body with custom image
-            Circle()
-                .fill(AppTheme.backgroundSecondary)
-                .frame(width: 80, height: 80)
-                .overlay(
-                    Circle()
-                        .stroke(AppTheme.textSecondary.opacity(0.3), lineWidth: 2)
-                )
-                .overlay(
-                    Image("urge_monster")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                )
+            // Monster image (no bubble)
+            Image("urge_monster")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 70, height: 70)
 
             // Slash effect (appears when slashed)
             if monster.isSlashed {

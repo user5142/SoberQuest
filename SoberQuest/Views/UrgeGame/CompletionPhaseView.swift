@@ -33,9 +33,10 @@ struct CompletionPhaseView: View {
                     .scaleEffect(celebrationScale)
                     .opacity(0.3)
 
-                Image(systemName: "checkmark.shield.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(AppTheme.textPrimary)
+                Image("knight_helmet")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
                     .scaleEffect(celebrationScale)
             }
             .onAppear {

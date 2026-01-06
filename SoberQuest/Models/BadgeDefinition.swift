@@ -14,8 +14,8 @@ struct BadgeDefinition: Identifiable, Codable {
         BadgeDefinition(id: "day7", name: "Shield", milestoneDays: 7, imageAssetName: "badge_day7", rarityLevel: "uncommon"),
         BadgeDefinition(id: "day14", name: "Campfire", milestoneDays: 14, imageAssetName: "badge_day14", rarityLevel: "uncommon"),
         BadgeDefinition(id: "day30", name: "Traveler's Sword", milestoneDays: 30, imageAssetName: "badge_day30", rarityLevel: "rare"),
-        BadgeDefinition(id: "day60", name: "Two Month Hero", milestoneDays: 60, imageAssetName: "badge_day60", rarityLevel: "rare"),
-        BadgeDefinition(id: "day90", name: "Quarter Century", milestoneDays: 90, imageAssetName: "badge_day90", rarityLevel: "epic")
+        BadgeDefinition(id: "day60", name: "Glint Fox", milestoneDays: 60, imageAssetName: "badge_day60", rarityLevel: "rare"),
+        BadgeDefinition(id: "day90", name: "Crystal Drake", milestoneDays: 90, imageAssetName: "badge_day90", rarityLevel: "epic")
     ]
     
     /// Returns the display text for the milestone (e.g., "Day 1" or "Start" for day 0)

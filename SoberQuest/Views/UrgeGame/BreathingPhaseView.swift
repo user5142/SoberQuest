@@ -35,9 +35,10 @@ struct BreathingPhaseView: View {
                     .opacity(opacity)
 
                 // Center icon
-                Image(systemName: "wind")
-                    .font(.system(size: 40))
-                    .foregroundColor(AppTheme.textPrimary)
+                Image("calm_wind2")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
             }
             .accessibilityLabel("Breathing circle")
             .accessibilityHint("Tap to continue to the next phase")

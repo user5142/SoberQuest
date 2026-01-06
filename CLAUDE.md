@@ -52,3 +52,7 @@ To bypass Superwall during development, temporarily modify `SuperwallService.che
 
 - **SuperwallKit**: `https://github.com/superwall-me/Superwall-iOS` (SPM)
   - Placements: `onboarding_paywall`, `winback_paywall`
+
+  ### Commiting and Pushing (Git)
+
+  Never perform git commit or git push without user's approval.

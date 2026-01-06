@@ -3,6 +3,7 @@ import SwiftUI
 struct Monster: Identifiable {
     let id = UUID()
     var position: CGPoint
+    var velocity: CGSize
     var isSlashed: Bool = false
     var slashAngle: Double = 0.0
     var scale: CGFloat = 0.0
@@ -15,9 +16,12 @@ struct MonsterSlayingPhaseView: View {
     @State private var dragPath: [CGPoint] = []
     @State private var currentDragPosition: CGPoint? = nil
     @State private var monstersSlashed: Int = 0
+    @State private var screenSize: CGSize = .zero
 
-    private let totalMonsters = 4
+    private let totalMonsters = 7
     private let hitRadius: CGFloat = 40
+    private let monsterSpeed: CGFloat = 30.0
+    private let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
 
     var body: some View {
         GeometryReader { geometry in
@@ -86,7 +90,11 @@ struct MonsterSlayingPhaseView: View {
                     }
             )
             .onAppear {
+                screenSize = geometry.size
                 spawnMonsters(in: geometry.size)
+            }
+            .onReceive(timer) { _ in
+                updateMonsterPositions()
             }
         }
     }
@@ -94,18 +102,19 @@ struct MonsterSlayingPhaseView: View {
     @ViewBuilder
     private func monsterView(monster: Monster, index: Int) -> some View {
         ZStack {
-            // Monster body (dark blob with cloud icon)
+            // Monster body with custom image
             Circle()
                 .fill(AppTheme.backgroundSecondary)
                 .frame(width: 80, height: 80)
                 .overlay(
                     Circle()
-                        .stroke(AppTheme.textSecondary, lineWidth: 2)
+                        .stroke(AppTheme.textSecondary.opacity(0.3), lineWidth: 2)
                 )
                 .overlay(
-                    Image(systemName: "cloud.fill")
-                        .font(.system(size: 30))
-                        .foregroundColor(AppTheme.textSecondary)
+                    Image("urge_monster")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
                 )
 
             // Slash effect (appears when slashed)
@@ -136,17 +145,59 @@ struct MonsterSlayingPhaseView: View {
             let x = CGFloat.random(in: safeArea...(size.width - safeArea))
             let y = CGFloat.random(in: (size.height * 0.2)...(size.height * 0.6))
 
-            let monster = Monster(position: CGPoint(x: x, y: y))
+            // Random velocity for wandering
+            let velocityX = CGFloat.random(in: -1...1) * monsterSpeed
+            let velocityY = CGFloat.random(in: -1...1) * monsterSpeed
+
+            let monster = Monster(
+                position: CGPoint(x: x, y: y),
+                velocity: CGSize(width: velocityX, height: velocityY)
+            )
             monsters.append(monster)
         }
 
         // Animate monsters in with stagger
         for index in monsters.indices {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.15) {
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
                     monsters[index].scale = 1.0
                 }
             }
+        }
+    }
+
+    private func updateMonsterPositions() {
+        let safeArea: CGFloat = 50
+
+        for index in monsters.indices {
+            // Don't move slashed monsters
+            guard !monsters[index].isSlashed else { continue }
+
+            // Update position
+            var newX = monsters[index].position.x + monsters[index].velocity.width * 0.05
+            var newY = monsters[index].position.y + monsters[index].velocity.height * 0.05
+
+            var newVelocity = monsters[index].velocity
+
+            // Bounce off edges
+            if newX < safeArea || newX > screenSize.width - safeArea {
+                newVelocity.width = -newVelocity.width
+                newX = monsters[index].position.x + newVelocity.width * 0.05
+            }
+
+            if newY < screenSize.height * 0.15 || newY > screenSize.height * 0.7 {
+                newVelocity.height = -newVelocity.height
+                newY = monsters[index].position.y + newVelocity.height * 0.05
+            }
+
+            // Randomly change direction occasionally (every ~2-3 seconds on average)
+            if Double.random(in: 0...1) < 0.01 {
+                newVelocity.width = CGFloat.random(in: -1...1) * monsterSpeed
+                newVelocity.height = CGFloat.random(in: -1...1) * monsterSpeed
+            }
+
+            monsters[index].position = CGPoint(x: newX, y: newY)
+            monsters[index].velocity = newVelocity
         }
     }
 

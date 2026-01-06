@@ -35,7 +35,7 @@ struct BreathingPhaseView: View {
                     .opacity(opacity)
 
                 // Center icon
-                Image("calm_wind2")
+                Image("calm_wave")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)

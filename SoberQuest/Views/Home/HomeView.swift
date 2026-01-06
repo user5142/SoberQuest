@@ -20,7 +20,8 @@ struct HomeView: View {
     @State private var showSettings = false
     @State private var showEditMotivation = false
     @State private var showEditDate = false
-    
+    @State private var showUrgeGame = false
+
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
@@ -89,6 +90,12 @@ struct HomeView: View {
                     .environmentObject(appState)
             }
         }
+        .sheet(isPresented: $showUrgeGame) {
+            if let addiction = appState.currentAddiction {
+                UrgeGameView(isPresented: $showUrgeGame, addiction: addiction)
+                    .environmentObject(appState)
+            }
+        }
     }
     
     @ViewBuilder
@@ -104,6 +111,9 @@ struct HomeView: View {
                     // "Why I'm doing this" Section
                     motivationSection(addiction: addiction)
                         .padding(.top, 16)
+
+                    // Urge Game Section
+                    urgeGameSection(addiction: addiction)
                 }
             }
         }
@@ -372,7 +382,57 @@ struct HomeView: View {
         }
         .padding(.bottom, 32)
     }
-    
+
+    // MARK: - Urge Game Section
+    @ViewBuilder
+    private func urgeGameSection(addiction: Addiction) -> some View {
+        Button(action: {
+            showUrgeGame = true
+        }) {
+            HStack(spacing: 12) {
+                // Icon
+                Image(systemName: "bolt.shield.fill")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(AppTheme.textPrimary)
+                    .frame(width: 40, height: 40)
+                    .background(AppTheme.cardBackgroundDark)
+                    .cornerRadius(10)
+
+                // Text
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Slay urge monsters")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(AppTheme.textPrimary)
+
+                    if addiction.urgesDefeated > 0 {
+                        Text("\(addiction.urgesDefeated) urges conquered")
+                            .font(.system(size: 13))
+                            .foregroundColor(AppTheme.textSecondary)
+                    } else {
+                        Text("Quick breathing & focus game")
+                            .font(.system(size: 13))
+                            .foregroundColor(AppTheme.textSecondary)
+                    }
+                }
+
+                Spacer()
+
+                // Chevron
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(AppTheme.textSecondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 18)
+            .frame(maxWidth: .infinity)
+            .background(AppTheme.backgroundSecondary)
+            .cornerRadius(16)
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 16)
+        .padding(.bottom, 32)
+    }
+
     // MARK: - Helper Functions
     
     private func updateTimer() {

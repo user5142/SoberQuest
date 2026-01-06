@@ -149,7 +149,21 @@ class DataManager: ObservableObject {
     func loadMotivation() -> String? {
         return UserDefaults.standard.string(forKey: userMotivationKey)
     }
-    
+
+    // MARK: - Urge Game Tracking
+
+    func incrementUrgesDefeated(for addictionId: UUID) {
+        var addictions = loadAddictions()
+        if let index = addictions.firstIndex(where: { $0.id == addictionId }) {
+            addictions[index].urgesDefeated += 1
+            saveAddictions(addictions)
+        }
+    }
+
+    func getUrgesDefeated(for addictionId: UUID) -> Int {
+        return loadAddictions().first(where: { $0.id == addictionId })?.urgesDefeated ?? 0
+    }
+
     // MARK: - Clear All Data
     
     func clearAllData() {

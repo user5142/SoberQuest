@@ -19,9 +19,9 @@ struct MonsterSlayingPhaseView: View {
     @State private var monstersSlashed: Int = 0
     @State private var screenSize: CGSize = .zero
 
-    private let totalMonsters = 7
+    private let totalMonsters = 14
     private let hitRadius: CGFloat = 40
-    private let monsterSpeed: CGFloat = 30.0
+    private let monsterSpeed: CGFloat = 120.0
     private let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
 
     var body: some View {

@@ -37,7 +37,7 @@ struct AddictionSelectorView: View {
                                             .font(.system(size: 17, weight: .semibold))
                                             .foregroundColor(AppTheme.textPrimary)
 
-                                        Text("\(addiction.daysSober) days sober")
+                                        Text("Since \(formatSoberDate(addiction.startDate))")
                                             .font(.system(size: 14))
                                             .foregroundColor(AppTheme.textSecondary)
                                     }
@@ -145,5 +145,12 @@ struct AddictionSelectorView: View {
             }
         }
         .preferredColorScheme(.dark)
+    }
+
+    private func formatSoberDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
     }
 }

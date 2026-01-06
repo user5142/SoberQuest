@@ -21,6 +21,7 @@ struct HomeView: View {
     @State private var showEditMotivation = false
     @State private var showEditDate = false
     @State private var showUrgeGame = false
+    @State private var showSoberDate = false
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -240,11 +241,17 @@ struct HomeView: View {
                         )
                 }
                 
-                // "You've been X-free for:" text
-                Text("You've been \(addiction.name.lowercased())-free for:")
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(AppTheme.textSecondary)
-                    .padding(.top, 8)
+                // "You've been X-free for:" text (tappable to reveal sober date)
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showSoberDate.toggle()
+                    }
+                }) {
+                    Text(showSoberDate ? "Sober since \(formatSoberDate(addiction.startDate))" : "You've been \(addiction.name.lowercased())-free for:")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+                .padding(.top, 8)
                 
                 // Large Days Counter
                 Text(formatDaysDisplay())
@@ -438,6 +445,13 @@ struct HomeView: View {
         if let addiction = appState.currentAddiction {
             timeComponents = addiction.timeComponents
         }
+    }
+
+    private func formatSoberDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
     }
     
     private func formatDaysDisplay() -> String {

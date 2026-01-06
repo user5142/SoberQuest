@@ -305,7 +305,8 @@ struct HomeView: View {
             // Share Button
             actionButton(
                 icon: "square.and.arrow.up",
-                label: "Share"
+                label: "Share",
+                iconOffset: -2
             ) {
                 generateShareCard(for: addiction)
             }
@@ -321,13 +322,14 @@ struct HomeView: View {
     }
     
     @ViewBuilder
-    private func actionButton(icon: String, label: String, action: @escaping () -> Void) -> some View {
+    private func actionButton(icon: String, label: String, iconOffset: CGFloat = 0, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.system(size: 22, weight: .medium))
                     .foregroundColor(AppTheme.textPrimary)
                     .frame(width: 48, height: 48)
+                    .offset(y: iconOffset)
 
                 Text(label)
                     .font(.system(size: 12, weight: .medium))

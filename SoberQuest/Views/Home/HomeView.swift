@@ -443,11 +443,8 @@ struct HomeView: View {
     private func formatDaysDisplay() -> String {
         // Hierarchical display: years > months > days > hours > minutes > seconds
         if timeComponents.years >= 1 {
-            if timeComponents.years == 1 {
-                return "1 year"
-            } else {
-                return "\(timeComponents.years) years"
-            }
+            // Just show years in header, rest goes in pill
+            return timeComponents.years == 1 ? "1 year" : "\(timeComponents.years) years"
         } else if timeComponents.months >= 1 {
             if timeComponents.months == 1 {
                 return "1 month"
@@ -484,7 +481,7 @@ struct HomeView: View {
     private func formatTimerDisplay() -> String {
         // Secondary display based on primary tier
         if timeComponents.years >= 1 {
-            // Primary is years, show months/days/hours in pill
+            // Primary is years, show months/days/hrs/mins/secs in pill
             var parts: [String] = []
             if timeComponents.months > 0 {
                 parts.append("\(timeComponents.months)mo")
@@ -492,7 +489,7 @@ struct HomeView: View {
             if timeComponents.days > 0 {
                 parts.append("\(timeComponents.days)d")
             }
-            parts.append(String(format: "%dhr %02dm", timeComponents.hours, timeComponents.minutes))
+            parts.append(String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds))
             return parts.joined(separator: " ")
         } else if timeComponents.months >= 1 {
             // Primary is months, show days/hours/minutes in pill

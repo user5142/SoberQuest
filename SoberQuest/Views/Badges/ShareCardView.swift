@@ -33,6 +33,12 @@ struct ShareCardView: View {
         addiction.timeComponents
     }
 
+    private var currentDateFormatted: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d, yyyy"
+        return formatter.string(from: Date())
+    }
+
     private var daysLineText: String {
         // When useMilestoneDays is true, show just the badge's milestone day count
         if useMilestoneDays {
@@ -108,6 +114,20 @@ struct ShareCardView: View {
             // Content
             VStack(spacing: 0) {
                 Spacer()
+
+                // Badge name and date (only for main screen shares)
+                if !useMilestoneDays {
+                    Text(badge.name)
+                        .font(.system(size: 54, weight: .bold))
+                        .foregroundColor(AppTheme.textPrimary)
+
+                    Spacer()
+                        .frame(height: 8)
+
+                    Text(currentDateFormatted)
+                        .font(.system(size: 36, weight: .medium))
+                        .foregroundColor(AppTheme.textSecondary)
+                }
 
                 // Badge - central focus, large
                 if let uiImage = UIImage(named: badge.imageAssetName) {

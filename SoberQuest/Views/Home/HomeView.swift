@@ -380,7 +380,7 @@ struct HomeView: View {
             }
             .padding(.horizontal, 16)
         }
-        .padding(.bottom, 32)
+        .padding(.bottom, 30)
     }
 
     // MARK: - Urge Game Section
@@ -389,87 +389,46 @@ struct HomeView: View {
         Button(action: {
             showUrgeGame = true
         }) {
-            ZStack {
-                // Background gradient
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.15, green: 0.1, blue: 0.2),
-                        Color(red: 0.1, green: 0.08, blue: 0.15)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
+            HStack(spacing: 14) {
+                // Monster image
+                Image("urge_monster")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 44, height: 44)
 
-                // Content
-                HStack(spacing: 16) {
-                    // Monster image
-                    ZStack {
-                        // Glow effect behind monster
-                        Circle()
-                            .fill(Color.purple.opacity(0.3))
-                            .frame(width: 60, height: 60)
-                            .blur(radius: 8)
+                // Text content
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Slay Urge Monsters")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(AppTheme.textPrimary)
 
-                        Image("urge_monster")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                    }
-
-                    // Text content
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 8) {
-                            Text("Slay Urge Monsters")
-                                .font(.system(size: 17, weight: .bold))
-                                .foregroundColor(AppTheme.textPrimary)
-
-                            Image(systemName: "bolt.fill")
-                                .font(.system(size: 12))
-                                .foregroundColor(.yellow)
-                        }
-
-                        if addiction.urgesDefeated > 0 {
-                            HStack(spacing: 4) {
-                                Image(systemName: "flame.fill")
-                                    .font(.system(size: 11))
-                                    .foregroundColor(.orange)
-                                Text("\(addiction.urgesDefeated) defeated")
-                                    .font(.system(size: 13, weight: .medium))
-                                    .foregroundColor(AppTheme.textSecondary)
-                            }
-                        } else {
-                            Text("Feeling an urge? Fight back!")
-                                .font(.system(size: 13))
-                                .foregroundColor(AppTheme.textSecondary)
-                        }
-                    }
-
-                    Spacer()
-
-                    // Play button style arrow
-                    ZStack {
-                        Circle()
-                            .fill(Color.purple.opacity(0.3))
-                            .frame(width: 36, height: 36)
-
-                        Image(systemName: "play.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(AppTheme.textPrimary)
+                    if addiction.urgesDefeated > 0 {
+                        Text("\(addiction.urgesDefeated) defeated")
+                            .font(.system(size: 13))
+                            .foregroundColor(AppTheme.textSecondary)
+                    } else {
+                        Text("Feeling an urge? Fight back!")
+                            .font(.system(size: 13))
+                            .foregroundColor(AppTheme.textSecondary)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.textMuted)
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 80)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(AppTheme.backgroundSecondary)
             .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.purple.opacity(0.3), lineWidth: 1)
+                    .stroke(Color.purple.opacity(0.25), lineWidth: 1)
             )
         }
         .padding(.horizontal, 16)
-        .padding(.top, 16)
         .padding(.bottom, 32)
     }
 

@@ -33,7 +33,7 @@ struct CompletionPhaseView: View {
                     .scaleEffect(celebrationScale)
                     .opacity(0.3)
 
-                Image("knight_helmet")
+                Image("battle_medallion")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)

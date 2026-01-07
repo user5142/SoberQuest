@@ -113,8 +113,8 @@ struct HomeView: View {
                     motivationSection(addiction: addiction)
                         .padding(.top, 16)
 
-                    // Urge Game Section
-                    urgeGameSection(addiction: addiction)
+                    // "My sober anniversary" Section
+                    anniversarySection(addiction: addiction)
                 }
             }
         }
@@ -301,12 +301,23 @@ struct HomeView: View {
                 showResetConfirmation = true
             }
 
-            // Edit Date Button
-            actionButton(
-                icon: "calendar",
-                label: "Edit"
-            ) {
-                showEditDate = true
+            // Log Urge Button
+            Button(action: {
+                showUrgeGame = true
+            }) {
+                VStack(spacing: 20) {
+                    Image("crisis_alert")
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 26, height: 26)
+                        .foregroundColor(AppTheme.textPrimary)
+                        .frame(width: 48, height: 48, alignment: .bottom)
+
+                    Text("Log Urge")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(AppTheme.textSecondary)
+                }
             }
 
             // Share Button
@@ -390,52 +401,50 @@ struct HomeView: View {
         .padding(.bottom, 30)
     }
 
-    // MARK: - Urge Game Section
+    // MARK: - Anniversary Section
     @ViewBuilder
-    private func urgeGameSection(addiction: Addiction) -> some View {
-        Button(action: {
-            showUrgeGame = true
-        }) {
-            HStack(spacing: 14) {
-                // Monster image
-                Image("urge_monster")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 44, height: 44)
+    private func anniversarySection(addiction: Addiction) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // Section Header
+            HStack(spacing: 8) {
+                Text("My sober anniversary")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.textSecondary)
 
-                // Text content
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Slay Urge Monsters")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(AppTheme.textPrimary)
-
-                    if addiction.urgesDefeated > 0 {
-                        Text("\(addiction.urgesDefeated) defeated")
-                            .font(.system(size: 13))
-                            .foregroundColor(AppTheme.textSecondary)
-                    } else {
-                        Text("Feeling an urge? Fight back!")
-                            .font(.system(size: 13))
-                            .foregroundColor(AppTheme.textSecondary)
-                    }
-                }
+                Circle()
+                    .fill(AppTheme.textMuted)
+                    .frame(width: 6, height: 6)
 
                 Spacer()
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(AppTheme.textMuted)
+                Button(action: {
+                    showEditDate = true
+                }) {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+            }
+            .padding(.horizontal, 20)
+
+            // Anniversary Card
+            Button(action: {
+                showEditDate = true
+            }) {
+                VStack(spacing: 0) {
+                    Text(formatSoberDate(addiction.startDate))
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(AppTheme.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 28)
+                }
+                .frame(maxWidth: .infinity)
+                .background(AppTheme.backgroundSecondary)
+                .cornerRadius(16)
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 14)
-            .background(AppTheme.backgroundSecondary)
-            .cornerRadius(16)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.purple.opacity(0.25), lineWidth: 1)
-            )
         }
-        .padding(.horizontal, 16)
         .padding(.bottom, 32)
     }
 

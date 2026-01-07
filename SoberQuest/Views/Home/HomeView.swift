@@ -515,12 +515,12 @@ struct HomeView: View {
             parts.append(String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds))
             return parts.joined(separator: " ")
         } else if timeComponents.months >= 1 {
-            // Primary is months, show days/hours/minutes in pill
+            // Primary is months, show days/hours/minutes/seconds in pill
             var parts: [String] = []
             if timeComponents.days > 0 {
                 parts.append("\(timeComponents.days)d")
             }
-            parts.append(String(format: "%dhr %02dm", timeComponents.hours, timeComponents.minutes))
+            parts.append(String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds))
             return parts.joined(separator: " ")
         } else if timeComponents.days >= 1 {
             // Primary is days, show hours/minutes/seconds in pill

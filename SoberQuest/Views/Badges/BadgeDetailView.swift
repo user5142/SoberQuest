@@ -27,7 +27,7 @@ struct BadgeDetailView: View {
                     }
                 }
                 .padding(.horizontal, 16)
-                .padding(.top, 8)
+                .padding(.top, 40)
 
                 Spacer()
 
@@ -70,10 +70,14 @@ struct BadgeDetailView: View {
                         .foregroundColor(AppTheme.textSecondary)
 
                     if isUnlocked {
-                        Text("\(badge.milestoneDays) days sober from \(addiction.name)")
-                            .font(.system(size: 14))
+                        // Badge description
+                        Text(badge.description)
+                            .font(.system(size: 15))
                             .foregroundColor(AppTheme.textSecondary)
-                            .padding(.top, 4)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.horizontal, 24)
+                            .padding(.top, 8)
                     } else {
                         Text("Reach \(badge.milestoneDays) days to unlock")
                             .font(.system(size: 14))

@@ -22,6 +22,8 @@ struct HomeView: View {
     @State private var showEditDate = false
     @State private var showUrgeGame = false
     @State private var showSoberDate = false
+    @State private var showBadgeDetail = false
+    @State private var selectedBadgeForDetail: BadgeDefinition?
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -95,6 +97,16 @@ struct HomeView: View {
             if let addiction = appState.currentAddiction {
                 UrgeGameView(isPresented: $showUrgeGame, addiction: addiction)
                     .environmentObject(appState)
+            }
+        }
+        .sheet(isPresented: $showBadgeDetail) {
+            if let badge = selectedBadgeForDetail, let addiction = appState.currentAddiction {
+                BadgeDetailView(
+                    badge: badge,
+                    addiction: addiction,
+                    isUnlocked: true,
+                    onDismiss: { showBadgeDetail = false }
+                )
             }
         }
     }
@@ -222,13 +234,18 @@ struct HomeView: View {
                 .padding(.horizontal, 24)
                 .padding(.top, 16)
                 
-                // Character/Badge Image
+                // Character/Badge Image (tappable for details)
                 if let highestBadge = getHighestUnlockedBadge(for: addiction) {
-                    BadgeImageView(
-                        imageAssetName: highestBadge.imageAssetName,
-                        milestoneDays: highestBadge.milestoneDays,
-                        size: 220
-                    )
+                    Button(action: {
+                        selectedBadgeForDetail = highestBadge
+                        showBadgeDetail = true
+                    }) {
+                        BadgeImageView(
+                            imageAssetName: highestBadge.imageAssetName,
+                            milestoneDays: highestBadge.milestoneDays,
+                            size: 220
+                        )
+                    }
                 } else {
                     // Default character placeholder
                     RoundedRectangle(cornerRadius: 20)
@@ -779,3 +796,4 @@ struct PaywallRequiredView: View {
         }
     }
 }
+

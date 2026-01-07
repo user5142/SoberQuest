@@ -6,17 +6,18 @@ struct BadgeDefinition: Identifiable, Codable {
     let milestoneDays: Int
     let imageAssetName: String
     let rarityLevel: String
-    
+    let description: String
+
     static let defaultBadges: [BadgeDefinition] = [
-        BadgeDefinition(id: "day0", name: "Lantern", milestoneDays: 0, imageAssetName: "badge_day0", rarityLevel: "starter"),
-        BadgeDefinition(id: "day1", name: "Apprentice", milestoneDays: 1, imageAssetName: "badge_day1", rarityLevel: "common"),
-        BadgeDefinition(id: "day3", name: "Compass", milestoneDays: 3, imageAssetName: "badge_day3", rarityLevel: "common"),
-        BadgeDefinition(id: "day7", name: "Shield", milestoneDays: 7, imageAssetName: "badge_day7", rarityLevel: "uncommon"),
-        BadgeDefinition(id: "day14", name: "Campfire", milestoneDays: 14, imageAssetName: "badge_day14", rarityLevel: "uncommon"),
-        BadgeDefinition(id: "day30", name: "Traveler's Sword", milestoneDays: 30, imageAssetName: "badge_day30", rarityLevel: "rare"),
-        BadgeDefinition(id: "day60", name: "Glint Fox", milestoneDays: 60, imageAssetName: "badge_day60", rarityLevel: "rare"),
-        BadgeDefinition(id: "day90", name: "Crystal Drake", milestoneDays: 90, imageAssetName: "badge_day90", rarityLevel: "epic"),
-        BadgeDefinition(id: "day100", name: "Phoenix Guardian", milestoneDays: 100, imageAssetName: "badge_day100", rarityLevel: "epic")
+        BadgeDefinition(id: "day0", name: "Lantern", milestoneDays: 0, imageAssetName: "badge_day0", rarityLevel: "starter", description: "Every journey begins with a single spark. This lantern lights your path through the darkness ahead."),
+        BadgeDefinition(id: "day1", name: "Apprentice", milestoneDays: 1, imageAssetName: "badge_day1", rarityLevel: "common", description: "You've taken your first step on the path of mastery. The apprentice learns that strength comes from within."),
+        BadgeDefinition(id: "day3", name: "Compass", milestoneDays: 3, imageAssetName: "badge_day3", rarityLevel: "common", description: "Three days of clarity! This compass always points toward your true north, guiding you through temptation."),
+        BadgeDefinition(id: "day7", name: "Shield", milestoneDays: 7, imageAssetName: "badge_day7", rarityLevel: "uncommon", description: "A full week of resilience! This shield protects you from the arrows of doubt and craving."),
+        BadgeDefinition(id: "day14", name: "Campfire", milestoneDays: 14, imageAssetName: "badge_day14", rarityLevel: "uncommon", description: "Two weeks strong! Gather around this campfire - a place of warmth, rest, and renewed determination."),
+        BadgeDefinition(id: "day30", name: "Traveler's Sword", milestoneDays: 30, imageAssetName: "badge_day30", rarityLevel: "rare", description: "One month of victory! This sword was forged in the fires of your commitment and tempered by your will."),
+        BadgeDefinition(id: "day60", name: "Glint Fox", milestoneDays: 60, imageAssetName: "badge_day60", rarityLevel: "rare", description: "Two months of cunning! Like the Glint Fox, you've learned to outsmart temptation at every turn."),
+        BadgeDefinition(id: "day90", name: "Crystal Drake", milestoneDays: 90, imageAssetName: "badge_day90", rarityLevel: "epic", description: "Three months of transformation! The Crystal Drake represents your evolution into something truly magnificent."),
+        BadgeDefinition(id: "day100", name: "Phoenix Guardian", milestoneDays: 100, imageAssetName: "badge_day100", rarityLevel: "epic", description: "100 days of rebirth! Like the Phoenix, you've risen from the ashes, reborn stronger and more radiant than ever.")
     ]
     
     /// Returns the display text for the milestone (e.g., "Day 1" or "Start" for day 0)

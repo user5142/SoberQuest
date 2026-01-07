@@ -35,7 +35,7 @@ struct ShareCardView: View {
 
     private var currentDateFormatted: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM d, yyyy"
+        formatter.dateFormat = "MM/dd/yyyy"
         return formatter.string(from: Date())
     }
 
@@ -115,18 +115,11 @@ struct ShareCardView: View {
             VStack(spacing: 0) {
                 Spacer()
 
-                // Badge name and date (only for main screen shares)
+                // Badge name (only for main screen shares)
                 if !useMilestoneDays {
                     Text(badge.name)
                         .font(.system(size: 54, weight: .bold))
                         .foregroundColor(AppTheme.textPrimary)
-
-                    Spacer()
-                        .frame(height: 8)
-
-                    Text(currentDateFormatted)
-                        .font(.system(size: 36, weight: .medium))
-                        .foregroundColor(AppTheme.textSecondary)
                 }
 
                 // Badge - central focus, large
@@ -202,8 +195,11 @@ struct ShareCardView: View {
 
                 Spacer()
 
-                // Bottom branding
+                // Bottom branding with date
                 HStack {
+                    Text(currentDateFormatted)
+                        .font(.system(size: 36, weight: .semibold))
+                        .foregroundColor(AppTheme.textMuted)
                     Spacer()
                     Text("SoberQuest")
                         .font(.system(size: 36, weight: .semibold))

@@ -314,7 +314,7 @@ struct HomeView: View {
                         .foregroundColor(AppTheme.textPrimary)
                         .frame(width: 48, height: 48, alignment: .bottom)
 
-                    Text("Log Urge")
+                    Text("Conquer Urge")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(AppTheme.textSecondary)
                 }

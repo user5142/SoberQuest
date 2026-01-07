@@ -195,11 +195,13 @@ struct ShareCardView: View {
 
                 Spacer()
 
-                // Bottom branding with date
+                // Bottom branding with date (date only for home view shares)
                 HStack {
-                    Text(currentDateFormatted)
-                        .font(.system(size: 36, weight: .semibold))
-                        .foregroundColor(AppTheme.textMuted)
+                    if !useMilestoneDays {
+                        Text(currentDateFormatted)
+                            .font(.system(size: 36, weight: .semibold))
+                            .foregroundColor(AppTheme.textMuted)
+                    }
                     Spacer()
                     Text("SoberQuest")
                         .font(.system(size: 36, weight: .semibold))

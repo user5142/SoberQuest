@@ -135,26 +135,43 @@ class SuperwallService: ObservableObject {
         hasUsedTrial: Bool,
         completion: @escaping (AppPaywallResult) -> Void
     ) async {
-        // For purchase/restore results, verify the subscription is actually active
+        // For purchase/restore results, trust Superwall's result and wait for status to sync
         switch result {
         case .purchased, .restored:
-            // Wait a moment for StoreKit/Superwall to process and update subscriptionStatus
-            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 second delay
+            // Superwall only returns .purchased/.restored when StoreKit confirms success.
+            // Wait for subscription status to sync with retry logic.
+            let maxAttempts = 10
+            let delayMs: UInt64 = 300_000_000 // 0.3 seconds between attempts
 
-            await MainActor.run {
-                // The Combine observer should have updated hasActiveSubscription by now
-                if self.hasActiveSubscription {
-                    // Purchase/restore was successful
-                    if !hasUsedTrial {
-                        DataManager.shared.setHasUsedTrial(true)
+            for attempt in 1...maxAttempts {
+                try? await Task.sleep(nanoseconds: delayMs)
+
+                // Check current status
+                let status = Superwall.shared.subscriptionStatus
+                if case .active = status {
+                    await MainActor.run {
+                        self.hasActiveSubscription = true
+                        if !hasUsedTrial {
+                            DataManager.shared.setHasUsedTrial(true)
+                        }
+                        completion(result)
                     }
-                    completion(result)
-                } else {
-                    // Purchase reported but subscription not active - treat as declined
-                    // This can happen if the payment didn't complete
-                    print("SuperwallService: Purchase/restore reported but subscription not active")
-                    completion(.declined)
+                    return
                 }
+
+                print("SuperwallService: Waiting for subscription status (attempt \(attempt)/\(maxAttempts))")
+            }
+
+            // If status still not active after retries, trust Superwall's result anyway
+            // The Combine observer will update the UI when status eventually syncs
+            await MainActor.run {
+                print("SuperwallService: Subscription status not yet active, but trusting Superwall result")
+                if !hasUsedTrial {
+                    DataManager.shared.setHasUsedTrial(true)
+                }
+                // Force update - Superwall confirmed the purchase succeeded
+                self.hasActiveSubscription = true
+                completion(result)
             }
 
         case .declined:

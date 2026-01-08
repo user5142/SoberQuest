@@ -28,6 +28,10 @@ struct AppTheme {
     static let ember = Color(hex: "F97316")                // Ember orange
     static let forest = Color(hex: "22C55E")               // Forest green
     static let frost = Color(hex: "38BDF8")                // Ice blue
+    static let phoenix = Color(hex: "EF4444")              // Phoenix red
+    static let ancientGold = Color(hex: "D4AF37")          // Ancient gold
+    static let parchment = Color(hex: "C4A574")            // Leather/parchment tan
+    static let obsidian = Color(hex: "4B0082")             // Obsidian indigo
 
     // MARK: - UI Element Colors
     static let buttonPrimary = Color.white                 // Light button background
@@ -69,7 +73,11 @@ struct AppTheme {
         case 14: return goldLight  // Fortnight Champion
         case 30: return mystic     // Month Master
         case 60: return forest     // Two Month Hero
-        case 90: return frost      // Quarter Century
+        case 90: return frost      // Crystal Drake
+        case 100: return phoenix   // Phoenix Guardian
+        case 120: return ancientGold // Ancient Key
+        case 150: return parchment // Leather-bound Map
+        case 180: return obsidian  // Obsidian Crown
         default: return textPrimary
         }
     }

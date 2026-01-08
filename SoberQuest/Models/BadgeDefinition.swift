@@ -17,7 +17,10 @@ struct BadgeDefinition: Identifiable, Codable {
         BadgeDefinition(id: "day30", name: "Traveler's Sword", milestoneDays: 30, imageAssetName: "badge_day30", rarityLevel: "rare", description: "One month of victory! This sword was forged in the fires of your commitment and tempered by your will."),
         BadgeDefinition(id: "day60", name: "Glint Fox", milestoneDays: 60, imageAssetName: "badge_day60", rarityLevel: "rare", description: "Two months of cunning! Like the Glint Fox, you've learned to outsmart temptation at every turn."),
         BadgeDefinition(id: "day90", name: "Crystal Drake", milestoneDays: 90, imageAssetName: "badge_day90", rarityLevel: "epic", description: "Three months of transformation! The Crystal Drake represents your evolution into something truly magnificent."),
-        BadgeDefinition(id: "day100", name: "Phoenix Guardian", milestoneDays: 100, imageAssetName: "badge_day100", rarityLevel: "epic", description: "100 days of rebirth! Like the Phoenix, you've risen from the ashes, reborn stronger and more radiant than ever.")
+        BadgeDefinition(id: "day100", name: "Phoenix Guardian", milestoneDays: 100, imageAssetName: "badge_day100", rarityLevel: "epic", description: "100 days of rebirth! Like the Phoenix, you've risen from the ashes, reborn stronger and more radiant than ever."),
+        BadgeDefinition(id: "day120", name: "Ancient Key", milestoneDays: 120, imageAssetName: "badge_day120", rarityLevel: "legendary", description: "120 days of discovery! This ancient key unlocks doors once thought sealed forever—the doors to your true potential."),
+        BadgeDefinition(id: "day150", name: "Leather-bound Map", milestoneDays: 150, imageAssetName: "badge_day150", rarityLevel: "legendary", description: "150 days of exploration! This weathered map charts the territory you've conquered and reveals paths yet to come."),
+        BadgeDefinition(id: "day180", name: "Obsidian Crown", milestoneDays: 180, imageAssetName: "badge_day180", rarityLevel: "mythic", description: "Half a year of sovereignty! The Obsidian Crown marks you as ruler of your own destiny, unshakeable and resolute.")
     ]
     
     /// Returns the display text for the milestone (e.g., "Day 1" or "Start" for day 0)

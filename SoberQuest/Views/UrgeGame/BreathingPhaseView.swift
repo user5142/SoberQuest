@@ -35,10 +35,10 @@ struct BreathingPhaseView: View {
                     .opacity(opacity)
 
                 // Center icon
-                Image("calm_wave")
+                Image("calm_wave_2")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 120, height: 120)
             }
             .accessibilityLabel("Breathing circle")
             .accessibilityHint("Tap to continue to the next phase")

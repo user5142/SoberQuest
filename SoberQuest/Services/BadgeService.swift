@@ -9,17 +9,28 @@ class BadgeService: ObservableObject {
     func checkForNewBadges(addiction: Addiction, unlockedBadges: [UnlockedBadge]) -> BadgeDefinition? {
         let daysSober = addiction.daysSober
         let unlockedBadgeIds = Set(unlockedBadges.map { $0.badgeId })
-        
+
         // Find the highest milestone that should be unlocked but isn't
         let allBadges = BadgeDefinition.defaultBadges.sorted { $0.milestoneDays > $1.milestoneDays }
-        
+
         for badge in allBadges {
             if daysSober >= badge.milestoneDays && !unlockedBadgeIds.contains(badge.id) {
                 return badge
             }
         }
-        
+
         return nil
+    }
+
+    /// Returns ALL badges the user qualifies for but hasn't unlocked yet.
+    /// Used for retroactively unlocking badges when new milestones are added.
+    func getAllMissingBadges(addiction: Addiction, unlockedBadges: [UnlockedBadge]) -> [BadgeDefinition] {
+        let daysSober = addiction.daysSober
+        let unlockedBadgeIds = Set(unlockedBadges.map { $0.badgeId })
+
+        return BadgeDefinition.defaultBadges.filter { badge in
+            daysSober >= badge.milestoneDays && !unlockedBadgeIds.contains(badge.id)
+        }
     }
     
     func getHighestUnlockedBadge(for addictionId: UUID, unlockedBadges: [UnlockedBadge]) -> BadgeDefinition? {

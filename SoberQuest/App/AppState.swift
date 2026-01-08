@@ -20,9 +20,13 @@ class AppState: ObservableObject {
     private func loadInitialState() {
         isOnboardingCompleted = dataManager.isOnboardingCompleted()
         hasProAccess = superwallService.hasProAccess
-        
+
         if isOnboardingCompleted {
             currentAddiction = dataManager.getActiveAddiction()
+            // Sync badges to retroactively unlock any new milestones
+            if let addiction = currentAddiction {
+                dataManager.syncBadgesForAddiction(addiction)
+            }
         }
     }
     
@@ -54,6 +58,8 @@ class AppState: ObservableObject {
     func refreshAddiction() {
         if let addiction = dataManager.getActiveAddiction() {
             currentAddiction = addiction
+            // Sync badges to retroactively unlock any new milestones
+            dataManager.syncBadgesForAddiction(addiction)
         }
     }
     

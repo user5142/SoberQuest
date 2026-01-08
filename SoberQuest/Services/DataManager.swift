@@ -109,7 +109,19 @@ class DataManager: ObservableObject {
             UserDefaults.standard.set(data, forKey: unlockedBadgesKey)
         }
     }
-    
+
+    /// Silently unlocks all badges the user qualifies for but hasn't unlocked yet.
+    /// Called at app launch to retroactively grant badges when new milestones are added.
+    func syncBadgesForAddiction(_ addiction: Addiction) {
+        let unlockedBadges = loadUnlockedBadges(for: addiction.id)
+        let missingBadges = BadgeService.shared.getAllMissingBadges(addiction: addiction, unlockedBadges: unlockedBadges)
+
+        for badge in missingBadges {
+            let unlockedBadge = UnlockedBadge(badgeId: badge.id, addictionId: addiction.id)
+            saveUnlockedBadge(unlockedBadge)
+        }
+    }
+
     // MARK: - Onboarding
     
     func setOnboardingCompleted(_ completed: Bool) {

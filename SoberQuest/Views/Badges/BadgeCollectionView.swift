@@ -96,15 +96,16 @@ struct BadgeCell: View {
                     milestoneDays: badge.milestoneDays,
                     size: 72
                 )
-                .opacity(isUnlocked ? 1.0 : 0.25)
+                .blur(radius: isUnlocked ? 0 : 8)
+                .opacity(isUnlocked ? 1.0 : 0.15)
                 .saturation(isUnlocked ? 1.0 : 0.0)
-                
+
                 // Lock overlay
                 if !isUnlocked {
                     Circle()
-                        .fill(AppTheme.background.opacity(0.5))
+                        .fill(AppTheme.background.opacity(0.7))
                         .frame(width: 72, height: 72)
-                    
+
                     Image(systemName: "lock.fill")
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(AppTheme.textMuted)

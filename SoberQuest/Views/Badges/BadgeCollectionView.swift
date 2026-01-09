@@ -124,7 +124,7 @@ struct BadgeCell: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
+        .frame(height: 140)
         .padding(.horizontal, 8)
         .background(
             RoundedRectangle(cornerRadius: 16)

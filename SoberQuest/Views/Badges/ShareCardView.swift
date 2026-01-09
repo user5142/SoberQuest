@@ -5,28 +5,9 @@ struct ShareCardView: View {
     let addiction: Addiction
     var useMilestoneDays: Bool = false
 
-    // Quote for each milestone
+    // Quote from badge definition
     private var inspirationalQuote: String {
-        switch badge.milestoneDays {
-        case 0:
-            return "\"All we have to decide is what to do with the time that is given us.\" — Gandalf"
-        case 1:
-            return "\"All we have to decide is what to do with the time that is given us.\" — Gandalf"
-        case 3:
-            return "\"It is not the strength of the body, but the strength of the spirit.\" — Tolkien"
-        case 7:
-            return "\"Even the smallest person can change the course of the future.\" — Galadriel"
-        case 14:
-            return "\"Courage is not the absence of fear, but acting in spite of it.\" — Unknown"
-        case 30:
-            return "\"The only way out is through.\" — Robert Frost"
-        case 60:
-            return "\"Perseverance is not a long race; it is many short races.\" — Walter Elliot"
-        case 90:
-            return "\"What we achieve inwardly will change outer reality.\" — Plutarch"
-        default:
-            return "\"All we have to decide is what to do with the time that is given us.\" — Gandalf"
-        }
+        badge.shareQuote
     }
 
     private var timeComponents: (years: Int, months: Int, days: Int, hours: Int, minutes: Int, seconds: Int) {

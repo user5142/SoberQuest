@@ -33,8 +33,19 @@ Or use Xcode directly: open `SoberQuest.xcodeproj`, select the `SoberQuest` sche
 ### Data Models
 
 - **Addiction**: Tracked substance with `startDate`, computed `daysSober` and `timeComponents`
-- **BadgeDefinition**: 8 milestone badges (day 0, 1, 3, 7, 14, 30, 60, 90)
+- **BadgeDefinition**: Milestone badges with `id`, `name`, `milestoneDays`, `imageAssetName`, `rarityLevel`, `description`, and `shareQuote`
 - **UnlockedBadge**: Records which badges are unlocked per addiction
+
+### Adding New Badges
+
+When adding a new badge to `BadgeDefinition.defaultBadges`, you MUST include all required fields:
+1. `id`: Unique identifier (e.g., "day365")
+2. `name`: Display name (e.g., "Eternal Flame")
+3. `milestoneDays`: Number of days for this milestone
+4. `imageAssetName`: Asset catalog image name (e.g., "badge_day365")
+5. `rarityLevel`: One of: starter, common, uncommon, rare, epic, legendary, mythic
+6. `description`: Flavor text describing the badge's meaning
+7. `shareQuote`: **REQUIRED** - A unique inspirational quote for the share card (format: `"\"Quote text.\" — Author"`)
 
 ### Onboarding Flow
 

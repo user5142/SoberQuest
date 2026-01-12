@@ -96,13 +96,6 @@ struct ShareCardView: View {
             VStack(spacing: 0) {
                 Spacer()
 
-                // Badge name (only for main screen shares)
-                if !useMilestoneDays {
-                    Text(badge.name)
-                        .font(.system(size: 54, weight: .bold))
-                        .foregroundColor(AppTheme.textPrimary)
-                }
-
                 // Badge - central focus, large
                 if let uiImage = UIImage(named: badge.imageAssetName) {
                     Image(uiImage: uiImage)
@@ -130,9 +123,17 @@ struct ShareCardView: View {
                         .font(.system(size: 160, weight: .heavy))
                         .foregroundColor(AppTheme.textPrimary)
                 } else {
+                    // Badge name above addiction-free label for main screen shares
+                    Text(badge.name)
+                        .font(.system(size: 68, weight: .bold))
+                        .foregroundColor(AppTheme.textPrimary)
+
+                    Spacer()
+                        .frame(height: 40)
+
                     // Addiction-free label for main screen shares
                     Text("You've been \(addiction.name.lowercased())-free for:")
-                        .font(.system(size: 36, weight: .medium))
+                        .font(.system(size: 42, weight: .medium))
                         .tracking(2.5)
                         .foregroundColor(AppTheme.textSecondary)
 

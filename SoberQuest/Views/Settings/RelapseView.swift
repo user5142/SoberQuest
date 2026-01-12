@@ -31,7 +31,7 @@ struct RelapseView: View {
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(AppTheme.textPrimary)
                         
-                        Text("This will reset your streak and start date, but your unlocked badges will remain.")
+                        Text("This will reset your streak and start date. All badges will be locked except the starter Lantern badge.")
                             .font(.system(size: 15))
                             .foregroundColor(AppTheme.textSecondary)
                             .multilineTextAlignment(.center)
@@ -99,7 +99,7 @@ struct RelapseView: View {
                     resetProgress()
                 }
             } message: {
-                Text("Your streak will be reset to 0 and the start date will be updated to today. Your unlocked badges will be preserved.")
+                Text("Your streak will be reset to 0 and the start date will be updated to today. All badges will be locked except the starter Lantern badge.")
             }
         }
         .preferredColorScheme(.dark)
@@ -109,7 +109,16 @@ struct RelapseView: View {
         var updatedAddiction = addiction
         updatedAddiction.startDate = Date()
         updatedAddiction.currentStreak = 0
-        
+
+        // Delete all existing badges for this addiction
+        dataManager.deleteBadges(for: addiction.id)
+
+        // Unlock only the day 0 Lantern badge
+        if let lanternBadge = BadgeService.shared.getLanternBadge() {
+            let unlockedBadge = UnlockedBadge(badgeId: lanternBadge.id, addictionId: addiction.id)
+            dataManager.saveUnlockedBadge(unlockedBadge)
+        }
+
         dataManager.saveAddiction(updatedAddiction)
         appState.setCurrentAddiction(updatedAddiction)
         isPresented = false

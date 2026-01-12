@@ -31,6 +31,10 @@ struct SoberQuestApp: App {
                     // The Combine observer on $subscriptionStatus handles reactive updates
                     // This is a lightweight status read, not a restore (no alerts shown)
                     SuperwallService.shared.refreshEntitlement()
+
+                    // Ensure SDK is ready for purchases after returning from background
+                    // This helps with cold starts and long background periods
+                    SuperwallService.shared.ensureReadyForPurchases()
                 }
             }
         }

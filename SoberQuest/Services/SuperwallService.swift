@@ -1,33 +1,131 @@
 import Foundation
 import Combine
 import SuperwallKit
+import StoreKit
 
 class SuperwallService: ObservableObject {
     static let shared = SuperwallService()
-    
+
     @Published var hasActiveSubscription: Bool = false
     @Published private(set) var isConfigured: Bool = false
-    
+    /// Indicates whether the SDK is fully ready for purchases (configuration complete + StoreKit warmed up)
+    @Published private(set) var isReadyForPurchases: Bool = false
+
     private let apiKey: String = "pk_6ZItleafoqSsLP3gCE-xJ" // Replace with actual Superwall API key
     private let entitlement: String = "pro"
-    
+
     // Campaign placement identifiers
     // Onboarding campaign - shown to new users with trial offer
     private let onboardingPlacement = "onboarding_paywall"
     // Winback campaign - separate campaign for users who previously used a trial
     private let winbackPlacement = "winback_paywall"
-    
+
     private var cancellables = Set<AnyCancellable>()
-    
+    private var transactionListenerTask: Task<Void, Never>?
+
     private init() {
         configureSuperwall()
         observeSubscriptionStatus()
+        startTransactionListener()
     }
-    
+
     private func configureSuperwall() {
-        Superwall.configure(apiKey: apiKey)
-        isConfigured = true
-        checkEntitlement()
+        // Use completion handler to ensure SDK is fully ready before allowing purchases
+        Superwall.configure(apiKey: apiKey) { [weak self] in
+            guard let self = self else { return }
+
+            // SDK is now fully configured
+            DispatchQueue.main.async {
+                self.isConfigured = true
+                self.checkEntitlement()
+
+                // Warm up StoreKit by triggering a products fetch
+                // This ensures StoreKit is ready before presenting paywalls
+                self.warmUpStoreKit()
+            }
+        }
+    }
+
+    /// Warms up StoreKit to ensure it's ready for purchases
+    /// This is important on cold starts where StoreKit may not be initialized
+    private func warmUpStoreKit() {
+        Task {
+            // First, check for any pending transactions from previous sessions
+            await checkPendingTransactions()
+
+            // Small delay to allow StoreKit to fully initialize on cold start
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+
+            await MainActor.run {
+                self.isReadyForPurchases = true
+                print("SuperwallService: SDK ready for purchases")
+            }
+        }
+    }
+
+    /// Checks for and finishes any pending transactions from previous app sessions
+    /// This is critical for cold starts where purchases may have completed while app was closed
+    private func checkPendingTransactions() async {
+        // Get all current entitlements/transactions
+        for await result in Transaction.currentEntitlements {
+            switch result {
+            case .verified(let transaction):
+                // Ensure transaction is finished
+                if transaction.revocationDate == nil {
+                    print("SuperwallService: Found active entitlement: \(transaction.productID)")
+                    // Refresh entitlement status since we found an active subscription
+                    await MainActor.run {
+                        self.hasActiveSubscription = true
+                    }
+                }
+            case .unverified(let transaction, _):
+                print("SuperwallService: Unverified entitlement: \(transaction.productID)")
+            }
+        }
+
+        // Also check for any unfinished transactions
+        for await result in Transaction.unfinished {
+            switch result {
+            case .verified(let transaction):
+                print("SuperwallService: Finishing unfinished transaction: \(transaction.productID)")
+                await transaction.finish()
+            case .unverified(let transaction, _):
+                print("SuperwallService: Finishing unverified transaction: \(transaction.productID)")
+                await transaction.finish()
+            }
+        }
+    }
+
+    /// Listens for StoreKit 2 transaction updates to handle pending/stuck transactions
+    /// This is critical for cold starts where transactions may have completed while app was closed
+    private func startTransactionListener() {
+        transactionListenerTask = Task.detached { [weak self] in
+            // Handle any pending transactions on app launch
+            for await result in Transaction.updates {
+                guard let self = self else { return }
+
+                switch result {
+                case .verified(let transaction):
+                    // Transaction is valid - finish it and update subscription status
+                    await transaction.finish()
+                    print("SuperwallService: Finished pending transaction: \(transaction.productID)")
+
+                    // Refresh entitlement status
+                    await MainActor.run {
+                        self.refreshEntitlement()
+                    }
+
+                case .unverified(let transaction, let error):
+                    // Transaction failed verification - still finish it to clear the queue
+                    print("SuperwallService: Unverified transaction \(transaction.productID): \(error)")
+                    await transaction.finish()
+                }
+            }
+        }
+    }
+
+    deinit {
+        transactionListenerTask?.cancel()
     }
     
     /// Observe Superwall's subscription status changes via Combine publisher
@@ -75,6 +173,21 @@ class SuperwallService: ObservableObject {
         default:
             hasActiveSubscription = false
         }
+    }
+
+    /// Ensures the SDK is ready for purchases after returning from background
+    /// This is called when the app becomes active to handle cold starts and long background periods
+    func ensureReadyForPurchases() {
+        guard isConfigured else {
+            // SDK not configured yet - configureSuperwall will handle this
+            return
+        }
+
+        // If already ready, nothing to do
+        guard !isReadyForPurchases else { return }
+
+        // Re-warm StoreKit after returning from background
+        warmUpStoreKit()
     }
     
     /// Presents the onboarding paywall using the appropriate placement based on trial history

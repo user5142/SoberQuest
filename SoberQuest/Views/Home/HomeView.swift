@@ -742,6 +742,7 @@ struct PaywallRequiredView: View {
     @EnvironmentObject private var superwallService: SuperwallService
     @State private var isLoading = false
     @State private var hasAutoPresented = false
+    @State private var isWaitingForSDK = true
 
     var body: some View {
         ZStack {
@@ -764,11 +765,11 @@ struct PaywallRequiredView: View {
                     presentPaywall()
                 }) {
                     Group {
-                        if isLoading {
+                        if isLoading || isWaitingForSDK {
                             HStack(spacing: 12) {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.buttonPrimaryText))
-                                Text("Loading...")
+                                Text(isWaitingForSDK ? "Preparing..." : "Loading...")
                                     .font(.system(size: 17, weight: .semibold))
                             }
                         } else {
@@ -782,16 +783,37 @@ struct PaywallRequiredView: View {
                     .background(AppTheme.buttonPrimary)
                     .cornerRadius(12)
                 }
-                .disabled(isLoading)
+                .disabled(isLoading || isWaitingForSDK)
                 .padding(.top, 8)
             }
         }
         .onAppear {
-            // Auto-present winback paywall immediately for cancelled users
-            // Guard against multiple presentations (e.g., tab switching)
-            guard !hasAutoPresented && !isLoading else { return }
+            // Wait for SDK to be ready before auto-presenting paywall
+            waitForSDKAndPresent()
+        }
+        .onChange(of: superwallService.isReadyForPurchases) { isReady in
+            // If SDK becomes ready after view appeared, try to present
+            if isReady && !hasAutoPresented && !isLoading {
+                isWaitingForSDK = false
+                hasAutoPresented = true
+                presentPaywall()
+            }
+        }
+    }
+
+    /// Waits for the Superwall SDK to be fully ready before presenting the paywall
+    /// This prevents the purchase sheet from failing to appear on cold start
+    private func waitForSDKAndPresent() {
+        guard !hasAutoPresented && !isLoading else { return }
+
+        // Check if SDK is already ready
+        if superwallService.isReadyForPurchases {
+            isWaitingForSDK = false
             hasAutoPresented = true
             presentPaywall()
+        } else {
+            // SDK not ready yet - the onChange handler will present when ready
+            isWaitingForSDK = true
         }
     }
 

@@ -122,9 +122,11 @@ struct BadgePreviewView: View {
     private func continueToApp() {
         // Save addiction data with motivation
         let trimmedMotivation = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
+        // If user selected "today", use current time so timer starts from now
+        let startDate = Calendar.current.isDateInToday(lastUsedDate) ? Date() : lastUsedDate
         let addiction = Addiction(
             name: addictionName,
-            startDate: lastUsedDate,
+            startDate: startDate,
             currentStreak: 0,
             isActive: true,
             motivation: trimmedMotivation.isEmpty ? nil : trimmedMotivation

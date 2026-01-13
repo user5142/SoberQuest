@@ -356,9 +356,11 @@ struct AddAddictionView: View {
     private func createAddictionAndDismiss() {
         // Create new addiction with motivation
         let trimmedMotivation = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
+        // If user selected "today", use current time so timer starts from now
+        let startDate = Calendar.current.isDateInToday(lastUsedDate) ? Date() : lastUsedDate
         let newAddiction = Addiction(
             name: selectedAddictionName,
-            startDate: lastUsedDate,
+            startDate: startDate,
             currentStreak: 0,
             isActive: true,
             motivation: trimmedMotivation.isEmpty ? nil : trimmedMotivation

@@ -177,7 +177,7 @@ class DataManager: ObservableObject {
     }
 
     // MARK: - Clear All Data
-    
+
     func clearAllData() {
         UserDefaults.standard.removeObject(forKey: addictionsKey)
         UserDefaults.standard.removeObject(forKey: unlockedBadgesKey)
@@ -185,6 +185,7 @@ class DataManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: lanternBadgeShownKey)
         UserDefaults.standard.removeObject(forKey: hasUsedTrialKey)
         UserDefaults.standard.removeObject(forKey: userMotivationKey)
+        UserDefaults.standard.removeObject(forKey: "TrialStartDate")
     }
 }
 

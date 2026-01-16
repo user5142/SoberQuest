@@ -41,6 +41,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CB29FE5F2F1AE148002D47B6 /* Exceptions for "SoberQuest" folder in "SoberQuest" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CBB20EBE2F06C07900F4C7BB /* SoberQuest */;
+		};
 		CBB20F572F06C2F900F4C7BB /* Exceptions for "SoberQuest" folder in "SoberQuest Dev" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -48,6 +55,7 @@
 				App/SoberQuestApp.swift,
 				Assets.xcassets,
 				ContentView.swift,
+				Info.plist,
 				Models/Addiction.swift,
 				Models/BadgeDefinition.swift,
 				Models/UnlockedBadge.swift,
@@ -74,6 +82,7 @@
 		CBB20EC12F06C07900F4C7BB /* SoberQuest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				CB29FE5F2F1AE148002D47B6 /* Exceptions for "SoberQuest" folder in "SoberQuest" target */,
 				CBB20F572F06C2F900F4C7BB /* Exceptions for "SoberQuest" folder in "SoberQuest Dev" target */,
 			);
 			path = SoberQuest;
@@ -492,6 +501,7 @@
 				DEVELOPMENT_TEAM = 2GT3BY74WS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoberQuest/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save your sobriety milestone badges to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -530,6 +540,7 @@
 				DEVELOPMENT_TEAM = 2GT3BY74WS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoberQuest/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Save your sobriety milestone badges to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

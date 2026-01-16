@@ -328,7 +328,7 @@ struct HomeView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 26, height: 26)
-                        .foregroundColor(AppTheme.textPrimary)
+                        .foregroundColor(AppTheme.textSecondary)
                         .frame(width: 48, height: 48, alignment: .bottom)
 
                     Text("Conquer Urge")
@@ -361,7 +361,7 @@ struct HomeView: View {
             VStack(spacing: 20) {
                 Image(systemName: icon)
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundColor(AppTheme.textPrimary)
+                    .foregroundColor(AppTheme.textSecondary)
                     .frame(width: 48, height: 48, alignment: .bottom)
 
                 Text(label)

@@ -39,6 +39,8 @@ class AppState: ObservableObject {
     func setCurrentAddiction(_ addiction: Addiction) {
         currentAddiction = addiction
         dataManager.setActiveAddiction(addiction)
+        // Sync badges to retroactively unlock any new milestones
+        dataManager.syncBadgesForAddiction(addiction)
     }
 
     func deleteAddiction(_ addiction: Addiction) {

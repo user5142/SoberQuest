@@ -1,5 +1,36 @@
 import SwiftUI
 
+// MARK: - Success Toast View
+struct SuccessToast: View {
+    let message: String
+    let icon: String
+
+    private let accentColor = Color(hex: "F0BE65")
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(accentColor)
+
+            Text(message)
+                .font(.system(size: 15, weight: .medium))
+                .foregroundColor(AppTheme.textPrimary)
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 14)
+        .background(
+            Capsule()
+                .fill(AppTheme.cardBackground)
+                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
+        )
+        .overlay(
+            Capsule()
+                .stroke(accentColor.opacity(0.3), lineWidth: 1)
+        )
+    }
+}
+
 struct ShareCardView: View {
     let badge: BadgeDefinition
     let addiction: Addiction
@@ -275,6 +306,9 @@ struct SharePreviewView: View {
 
     @State private var shareImage: UIImage?
     @State private var isGenerating = true
+    @State private var showSuccessToast = false
+    @State private var toastMessage = ""
+    @State private var toastIcon = "checkmark.circle.fill"
 
     var body: some View {
         ZStack {
@@ -390,6 +424,17 @@ struct SharePreviewView: View {
         .onAppear {
             generateShareImage()
         }
+        .overlay(
+            VStack {
+                if showSuccessToast {
+                    SuccessToast(message: toastMessage, icon: toastIcon)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .padding(.top, 60)
+                }
+                Spacer()
+            }
+            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showSuccessToast)
+        )
     }
 
     private func generateShareImage() {
@@ -441,6 +486,33 @@ struct SharePreviewView: View {
             popover.permittedArrowDirections = []
         }
 
+        // Completion handler to show success feedback
+        activityVC.completionWithItemsHandler = { [self] activityType, completed, _, _ in
+            guard completed, let activityType = activityType else { return }
+
+            DispatchQueue.main.async {
+                // Determine message based on activity type
+                if activityType == UIActivity.ActivityType.saveToCameraRoll {
+                    self.toastMessage = "Saved to Photos"
+                    self.toastIcon = "photo.badge.checkmark"
+                    self.showToast()
+                } else if activityType == UIActivity.ActivityType.copyToPasteboard {
+                    self.toastMessage = "Copied to Clipboard"
+                    self.toastIcon = "doc.on.clipboard"
+                    self.showToast()
+                }
+            }
+        }
+
         topController.present(activityVC, animated: true)
+    }
+
+    private func showToast() {
+        showSuccessToast = true
+
+        // Auto-hide after 2 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            showSuccessToast = false
+        }
     }
 }

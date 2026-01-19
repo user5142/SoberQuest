@@ -120,7 +120,7 @@ struct ShareCardView: View {
                         .frame(height: 20)
 
                     Text(badge.milestoneDays == 0 ? "The Start" : "Day \(badge.milestoneDays)")
-                        .font(.system(size: 160, weight: .heavy))
+                        .font(.system(size: 160, weight: .heavy, design: .rounded))
                         .foregroundColor(AppTheme.textPrimary)
                 } else {
                     // Badge name above addiction-free label for main screen shares
@@ -142,7 +142,7 @@ struct ShareCardView: View {
 
                     // Days sober - emphasized achievement
                     Text(daysLineText)
-                        .font(.system(size: 160, weight: .heavy))
+                        .font(.system(size: 160, weight: .heavy, design: .rounded))
                         .foregroundColor(AppTheme.textPrimary)
                 }
 
@@ -153,7 +153,7 @@ struct ShareCardView: View {
 
                     // Time display (hours:minutes:seconds)
                     Text(timeLineText)
-                        .font(.system(size: 72, weight: .semibold))
+                        .font(.system(size: 72, weight: .semibold, design: .rounded))
                         .foregroundColor(AppTheme.textSecondary)
                 }
 

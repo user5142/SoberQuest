@@ -12,6 +12,7 @@
 		CBB20F512F06C2F900F4C7BB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F472F06C22400F4C7BB /* README.md */; };
 		CBB20F522F06C2F900F4C7BB /* IMPLEMENTATION_CHECKLIST.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */; };
 		CBB20F5A2F06C4A200F4C7BB /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBB20F592F06C4A200F4C7BB /* SuperwallKit */; };
+		CBB20F5B2F06C4A300F4C7BB /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBB20F5C2F06C4A300F4C7BB /* SuperwallKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,28 +52,7 @@
 		CBB20F572F06C2F900F4C7BB /* Exceptions for "SoberQuest" folder in "SoberQuest Dev" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				App/AppState.swift,
-				App/SoberQuestApp.swift,
-				Assets.xcassets,
-				ContentView.swift,
 				Info.plist,
-				Models/Addiction.swift,
-				Models/BadgeDefinition.swift,
-				Models/UnlockedBadge.swift,
-				Services/BadgeService.swift,
-				Services/DataManager.swift,
-				Services/SuperwallService.swift,
-				Views/Badges/BadgeCollectionView.swift,
-				Views/Badges/BadgeImageView.swift,
-				Views/Badges/BadgeUnlockView.swift,
-				Views/Badges/ShareCardView.swift,
-				Views/Home/AddictionSelectorView.swift,
-				Views/Home/HomeView.swift,
-				Views/Onboarding/AddictionSetupView.swift,
-				Views/Onboarding/BadgePreviewView.swift,
-				Views/Onboarding/OnboardingFlow.swift,
-				Views/Onboarding/WelcomeView.swift,
-				Views/Settings/RelapseView.swift,
 			);
 			target = CBB20F4D2F06C2F900F4C7BB /* SoberQuest Dev */;
 		};
@@ -127,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBB20F5B2F06C4A300F4C7BB /* SuperwallKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +218,7 @@
 			);
 			name = "SoberQuest Dev";
 			packageProductDependencies = (
+				CBB20F5C2F06C4A300F4C7BB /* SuperwallKit */,
 			);
 			productName = SoberQuest;
 			productReference = CBCFAA852F0810CE00494C1B /* SoberQuest Dev.app */;
@@ -790,6 +772,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		CBB20F592F06C4A200F4C7BB /* SuperwallKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBB20F582F06C4A100F4C7BB /* XCRemoteSwiftPackageReference "Superwall-iOS" */;
+			productName = SuperwallKit;
+		};
+		CBB20F5C2F06C4A300F4C7BB /* SuperwallKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CBB20F582F06C4A100F4C7BB /* XCRemoteSwiftPackageReference "Superwall-iOS" */;
 			productName = SuperwallKit;

@@ -55,6 +55,13 @@ When adding a new badge to `BadgeDefinition.defaultBadges`, you MUST include all
 
 Dark mode only. Colors and modifiers defined in `Theme/AppTheme.swift`. Use `.darkBackground()`, `.cardStyle()` modifiers.
 
+## Writing Style
+
+**NEVER use em dashes (—) in any user-facing text.** This includes badge descriptions, UI labels, notifications, and all other content. Use alternative sentence structures instead:
+- Split sentences with periods
+- Use commas for appositives
+- Rephrase to avoid the need for dashes
+
 ## Testing Without Paywall
 
 To bypass Superwall during development, temporarily modify `SuperwallService.checkEntitlement()` to set `hasActiveSubscription = true`.

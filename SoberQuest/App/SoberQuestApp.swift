@@ -194,6 +194,8 @@ struct SettingsView: View {
                     }
 
                     HStack {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(AppTheme.textSecondary)
                         Text("Version")
                             .foregroundColor(AppTheme.textPrimary)
                         Spacer()

@@ -7,7 +7,7 @@ struct AddictionSetupView: View {
     @State private var customAddiction: String = ""
     @State private var showCustomInput: Bool = false
     
-    let presetAddictions = ["Alcohol", "Weed", "Nicotine", "Porn", "Social Media"]
+    let presetAddictions = ["Alcohol", "Weed", "Nicotine", "Porn", "Social Media", "Gambling", "Doomscrolling"]
     
     var body: some View {
         ZStack {

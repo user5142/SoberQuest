@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>NSUserNotificationsUsageDescription</key>
-	<string>We'll remind you before your free trial ends so you don't lose your progress.</string>
+	<string>For trial reminders, badge unlocks and motivational messages.</string>
 </dict>
 </plist>

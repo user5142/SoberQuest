@@ -98,6 +98,7 @@ struct FeatureRow: View {
                 Text(description)
                     .font(.system(size: 14))
                     .foregroundColor(AppTheme.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer()

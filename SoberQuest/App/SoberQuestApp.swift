@@ -208,11 +208,34 @@ struct SettingsView: View {
                 }
                 .listRowBackground(AppTheme.backgroundSecondary)
                 
+                // MARK: - Support Section
+                Section {
+                    Button(action: {
+                        if let url = URL(string: "https://www.studionoo.com/contact/") {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "envelope.fill")
+                                .foregroundColor(AppTheme.textSecondary)
+                            Text("Contact Support")
+                                .foregroundColor(AppTheme.textPrimary)
+                            Spacer()
+                            Image(systemName: "arrow.up.forward")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(AppTheme.textMuted)
+                        }
+                    }
+                } header: {
+                    Text("Support")
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+                .listRowBackground(AppTheme.backgroundSecondary)
+                
                 // MARK: - Legal Section
                 Section {
                     Button(action: {
-                        // TODO: Replace with your actual Privacy Policy URL
-                        if let url = URL(string: "https://yourwebsite.com/privacy-policy") {
+                        if let url = URL(string: "https://www.studionoo.com/soberquest/privacy/") {
                             UIApplication.shared.open(url)
                         }
                     }) {
@@ -229,8 +252,7 @@ struct SettingsView: View {
                     }
                     
                     Button(action: {
-                        // TODO: Replace with your actual Terms of Use URL
-                        if let url = URL(string: "https://yourwebsite.com/terms-of-use") {
+                        if let url = URL(string: "https://www.studionoo.com/soberquest/terms/") {
                             UIApplication.shared.open(url)
                         }
                     }) {

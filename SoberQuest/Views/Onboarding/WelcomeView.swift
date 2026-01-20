@@ -112,4 +112,5 @@ enum OnboardingStep: CaseIterable {
     case dateSelection
     case motivationSetup
     case badgePreview
+    case notificationPermission
 }

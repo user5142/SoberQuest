@@ -75,6 +75,17 @@ struct OnboardingFlow: View {
                             insertion: .move(edge: .trailing),
                             removal: .move(edge: .leading)
                         ))
+                    case .notificationPermission:
+                        NotificationPermissionView(
+                            currentStep: $currentStep,
+                            addictionName: selectedAddictionName,
+                            lastUsedDate: lastUsedDate,
+                            motivationText: motivationText
+                        )
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing),
+                            removal: .move(edge: .leading)
+                        ))
                     }
                 }
             }

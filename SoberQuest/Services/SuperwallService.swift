@@ -266,8 +266,8 @@ class SuperwallService: ObservableObject {
                         self.hasActiveSubscription = true
                         if !hasUsedTrial {
                             DataManager.shared.setHasUsedTrial(true)
-                            // Schedule trial ending reminder for new trial users
-                            NotificationService.shared.scheduleTrialEndingReminder()
+                            // Schedule trial ending reminder for new trial users (permission already requested during onboarding)
+                            NotificationService.shared.scheduleTrialReminderIfPermitted()
                         } else {
                             // User is returning/subscribing after trial - cancel any pending reminder
                             NotificationService.shared.cancelTrialEndingReminder()
@@ -286,8 +286,8 @@ class SuperwallService: ObservableObject {
                 print("SuperwallService: Subscription status not yet active, but trusting Superwall result")
                 if !hasUsedTrial {
                     DataManager.shared.setHasUsedTrial(true)
-                    // Schedule trial ending reminder for new trial users
-                    NotificationService.shared.scheduleTrialEndingReminder()
+                    // Schedule trial ending reminder for new trial users (permission already requested during onboarding)
+                    NotificationService.shared.scheduleTrialReminderIfPermitted()
                 } else {
                     // User is returning/subscribing after trial - cancel any pending reminder
                     NotificationService.shared.cancelTrialEndingReminder()

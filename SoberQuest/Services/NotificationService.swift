@@ -33,11 +33,25 @@ class NotificationService {
     // MARK: - Trial Reminder
 
     /// Requests permission and schedules a reminder notification for 1 day before the 7-day trial ends
+    /// NOTE: This method is deprecated. Use scheduleTrialReminderIfPermitted() instead.
+    /// Permission should now be requested during onboarding.
     func scheduleTrialEndingReminder() {
         // First request permission, then schedule if granted
         requestPermission { [weak self] granted in
             guard granted, let self = self else {
                 print("NotificationService: Permission not granted, skipping reminder")
+                return
+            }
+            self.scheduleReminderNotification()
+        }
+    }
+
+    /// Schedules a trial reminder notification without requesting permission.
+    /// Only works if permission was already granted (e.g., during onboarding).
+    func scheduleTrialReminderIfPermitted() {
+        checkPermissionStatus { [weak self] status in
+            guard let self = self, status == .authorized else {
+                print("NotificationService: Permission not authorized, skipping reminder")
                 return
             }
             self.scheduleReminderNotification()

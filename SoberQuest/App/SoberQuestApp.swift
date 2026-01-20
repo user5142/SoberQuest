@@ -1,4 +1,5 @@
 import SwiftUI
+import StoreKit
 
 @main
 struct SoberQuestApp: App {
@@ -217,6 +218,23 @@ struct SettingsView: View {
                 #endif
                 
                 Section {
+                    Button(action: {
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                            SKStoreReviewController.requestReview(in: windowScene)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(AppTheme.textSecondary)
+                            Text("Rate SoberQuest")
+                                .foregroundColor(AppTheme.textPrimary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(AppTheme.textMuted)
+                        }
+                    }
+
                     HStack {
                         Text("Version")
                             .foregroundColor(AppTheme.textPrimary)

@@ -11,7 +11,7 @@ struct BadgePreviewView: View {
     @State private var isLoading = false
     @State private var animatedBadges: [Bool] = [false, false, false]
     
-    let badges = Array(BadgeDefinition.defaultBadges.prefix(3))
+    let badges = BadgeDefinition.defaultBadges.filter { ["day7", "day100", "day365"].contains($0.id) }
     
     var body: some View {
         ZStack {

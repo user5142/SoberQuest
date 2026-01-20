@@ -106,7 +106,7 @@ struct FeatureRow: View {
     }
 }
 
-enum OnboardingStep {
+enum OnboardingStep: CaseIterable {
     case welcome
     case addictionSetup
     case dateSelection

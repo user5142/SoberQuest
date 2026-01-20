@@ -174,49 +174,7 @@ struct SettingsView: View {
             AppTheme.background.ignoresSafeArea()
             
             List {
-                Section {
-                    if let addiction = appState.currentAddiction {
-                        Button(action: {
-                            showRelapseView = true
-                        }) {
-                            HStack {
-                                Image(systemName: "arrow.counterclockwise")
-                                    .foregroundColor(.red)
-                                Text("Reset Progress")
-                                    .foregroundColor(.red)
-                                Spacer()
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Progress")
-                        .foregroundColor(AppTheme.textSecondary)
-                }
-                .listRowBackground(AppTheme.backgroundSecondary)
-                
-                #if DEBUG
-                Section {
-                    Button(action: {
-                        showClearSessionConfirmation = true
-                    }) {
-                        HStack {
-                            Image(systemName: "trash")
-                                .foregroundColor(.red)
-                            Text("Clear Session & Restart Onboarding")
-                                .foregroundColor(.red)
-                            Spacer()
-                        }
-                    }
-                } header: {
-                    Text("Development")
-                        .foregroundColor(AppTheme.textSecondary)
-                } footer: {
-                    Text("This will clear all data and return you to the onboarding flow.")
-                        .foregroundColor(AppTheme.textMuted)
-                }
-                .listRowBackground(AppTheme.backgroundSecondary)
-                #endif
-                
+                // MARK: - About Section
                 Section {
                     Button(action: {
                         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
@@ -247,6 +205,94 @@ struct SettingsView: View {
                         .foregroundColor(AppTheme.textSecondary)
                 }
                 .listRowBackground(AppTheme.backgroundSecondary)
+                
+                // MARK: - Legal Section
+                Section {
+                    Button(action: {
+                        // TODO: Replace with your actual Privacy Policy URL
+                        if let url = URL(string: "https://yourwebsite.com/privacy-policy") {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "hand.raised.fill")
+                                .foregroundColor(AppTheme.textSecondary)
+                            Text("Privacy Policy")
+                                .foregroundColor(AppTheme.textPrimary)
+                            Spacer()
+                            Image(systemName: "arrow.up.forward")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(AppTheme.textMuted)
+                        }
+                    }
+                    
+                    Button(action: {
+                        // TODO: Replace with your actual Terms of Use URL
+                        if let url = URL(string: "https://yourwebsite.com/terms-of-use") {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "doc.text.fill")
+                                .foregroundColor(AppTheme.textSecondary)
+                            Text("Terms of Use")
+                                .foregroundColor(AppTheme.textPrimary)
+                            Spacer()
+                            Image(systemName: "arrow.up.forward")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(AppTheme.textMuted)
+                        }
+                    }
+                } header: {
+                    Text("Legal")
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+                .listRowBackground(AppTheme.backgroundSecondary)
+                
+                // MARK: - Progress Section
+                Section {
+                    if let addiction = appState.currentAddiction {
+                        Button(action: {
+                            showRelapseView = true
+                        }) {
+                            HStack {
+                                Image(systemName: "arrow.counterclockwise")
+                                    .foregroundColor(.red)
+                                Text("Reset Progress")
+                                    .foregroundColor(.red)
+                                Spacer()
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Progress")
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+                .listRowBackground(AppTheme.backgroundSecondary)
+                
+                // MARK: - Development Section (DEBUG only)
+                #if DEBUG
+                Section {
+                    Button(action: {
+                        showClearSessionConfirmation = true
+                    }) {
+                        HStack {
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+                            Text("Clear Session & Restart Onboarding")
+                                .foregroundColor(.red)
+                            Spacer()
+                        }
+                    }
+                } header: {
+                    Text("Development")
+                        .foregroundColor(AppTheme.textSecondary)
+                } footer: {
+                    Text("This will clear all data and return you to the onboarding flow.")
+                        .foregroundColor(AppTheme.textMuted)
+                }
+                .listRowBackground(AppTheme.backgroundSecondary)
+                #endif
             }
             .scrollContentBackground(.hidden)
             .listStyle(.insetGrouped)

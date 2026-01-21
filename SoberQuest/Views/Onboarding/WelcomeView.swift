@@ -84,11 +84,9 @@ struct FeatureRow: View {
     var body: some View {
         HStack(spacing: 16) {
             Image(systemName: icon)
-                .font(.system(size: 22))
-                .foregroundColor(AppTheme.textPrimary)
+                .font(.system(size: 28))
+                .foregroundColor(Color(hex: "f0be65"))
                 .frame(width: 44, height: 44)
-                .background(AppTheme.backgroundSecondary)
-                .cornerRadius(12)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)

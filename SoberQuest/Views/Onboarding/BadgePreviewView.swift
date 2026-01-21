@@ -92,11 +92,9 @@ struct BadgePreviewView: View {
     private func featureCallout(icon: String, text: String) -> some View {
         HStack(spacing: 14) {
             Image(systemName: icon)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(AppTheme.textPrimary)
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(Color(hex: "f0be65"))
                 .frame(width: 32, height: 32)
-                .background(AppTheme.backgroundSecondary)
-                .cornerRadius(8)
 
             Text(text)
                 .font(.system(size: 14))

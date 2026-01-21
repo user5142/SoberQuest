@@ -272,7 +272,44 @@ struct SettingsView: View {
                         .foregroundColor(AppTheme.textSecondary)
                 }
                 .listRowBackground(AppTheme.backgroundSecondary)
-                
+
+                // MARK: - Other Apps Section
+                Section {
+                    Button(action: {
+                        if let url = URL(string: "https://apps.apple.com/us/app/rosemaryy-meal-planner/id6753137320") {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        HStack(alignment: .center, spacing: 12) {
+                            Image("rosemaryy_icon")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 42, height: 42)
+                                .cornerRadius(6)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Rosemaryy")
+                                    .foregroundColor(AppTheme.textPrimary)
+                                    .font(.system(size: 16, weight: .medium))
+                                Text("Meal Planner & Recipes")
+                                    .foregroundColor(AppTheme.textSecondary)
+                                    .font(.system(size: 13))
+                            }
+
+                            Spacer()
+
+                            Image(systemName: "arrow.up.forward")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(AppTheme.textMuted)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                } header: {
+                    Text("More from Us")
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+                .listRowBackground(AppTheme.backgroundSecondary)
+
                 // MARK: - Progress Section
                 Section {
                     if let addiction = appState.currentAddiction {

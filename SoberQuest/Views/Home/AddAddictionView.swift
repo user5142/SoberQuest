@@ -62,51 +62,67 @@ struct AddAddictionView: View {
         let presetAddictions = ["Alcohol", "Weed", "Nicotine", "Porn", "Social Media"]
 
         return ZStack {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 28) {
-                    // Header
-                    VStack(spacing: 12) {
-                        Text("What are you quitting?")
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(AppTheme.textPrimary)
-
-                        Text("Add another tracker")
-                            .font(.system(size: 15))
-                            .foregroundColor(AppTheme.textSecondary)
-                    }
-                    .padding(.top, 24)
-
-                    // Preset options
-                    VStack(spacing: 12) {
-                        ForEach(presetAddictions, id: \.self) { addiction in
-                            addictionOption(addiction, isCustom: false)
-                        }
-
-                        // Custom option
-                        addictionOption("Custom", isCustom: true)
-
-                        // Custom text input
-                        if showCustomInput {
-                            TextField("Enter addiction name", text: $customAddiction)
-                                .font(.system(size: 16))
+            ScrollViewReader { proxy in
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 28) {
+                        // Header
+                        VStack(spacing: 12) {
+                            Text("What are you quitting?")
+                                .font(.system(size: 28, weight: .bold))
                                 .foregroundColor(AppTheme.textPrimary)
-                                .padding()
-                                .background(AppTheme.backgroundSecondary)
-                                .cornerRadius(12)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(AppTheme.divider, lineWidth: 1)
-                                )
-                                .onChange(of: customAddiction) { newValue in
-                                    if !newValue.isEmpty {
-                                        selectedAddictionName = newValue
+
+                            Text("Add another tracker")
+                                .font(.system(size: 15))
+                                .foregroundColor(AppTheme.textSecondary)
+                        }
+                        .padding(.top, 24)
+
+                        // Preset options
+                        VStack(spacing: 12) {
+                            ForEach(presetAddictions, id: \.self) { addiction in
+                                addictionOption(addiction, isCustom: false)
+                            }
+
+                            // Custom option
+                            addictionOption("Custom", isCustom: true)
+
+                            // Custom text input
+                            if showCustomInput {
+                                TextField("Enter addiction name", text: $customAddiction)
+                                    .font(.system(size: 16))
+                                    .foregroundColor(AppTheme.textPrimary)
+                                    .padding()
+                                    .background(AppTheme.backgroundSecondary)
+                                    .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(AppTheme.divider, lineWidth: 1)
+                                    )
+                                    .focused($isCustomInputFocused)
+                                    .onChange(of: customAddiction) { newValue in
+                                        if !newValue.isEmpty {
+                                            selectedAddictionName = newValue
+                                        }
                                     }
+                                    .id("customInput")
+                            }
+                        }
+                        .padding(.horizontal, 24)
+
+                        // Extra bottom padding to ensure content is not hidden by button
+                        Spacer(minLength: 150)
+                    }
+                    .onChange(of: showCustomInput) { newValue in
+                        if newValue {
+                            // Scroll to custom input and focus it
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                withAnimation {
+                                    proxy.scrollTo("customInput", anchor: .center)
                                 }
+                                isCustomInputFocused = true
+                            }
                         }
                     }
-                    .padding(.horizontal, 24)
-
-                    Spacer(minLength: 100)
                 }
             }
 
@@ -149,6 +165,7 @@ struct AddAddictionView: View {
     @State private var selectedAddiction: String = ""
     @State private var customAddiction: String = ""
     @State private var showCustomInput: Bool = false
+    @FocusState private var isCustomInputFocused: Bool
 
     @ViewBuilder
     private func addictionOption(_ name: String, isCustom: Bool) -> some View {

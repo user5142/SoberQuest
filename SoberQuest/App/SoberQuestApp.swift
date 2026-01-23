@@ -1,5 +1,6 @@
 import SwiftUI
 import StoreKit
+import SuperwallKit
 
 @main
 struct SoberQuestApp: App {
@@ -168,6 +169,7 @@ struct SettingsView: View {
     @EnvironmentObject private var appState: AppState
     @State private var showRelapseView = false
     @State private var showClearSessionConfirmation = false
+    @State private var showCopiedToast = false
     
     var body: some View {
         ZStack {
@@ -201,6 +203,28 @@ struct SettingsView: View {
                         Spacer()
                         Text("1.0.0")
                             .foregroundColor(AppTheme.textSecondary)
+                    }
+
+                    Button(action: {
+                        UIPasteboard.general.string = Superwall.shared.userId
+                        showCopiedToast = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            showCopiedToast = false
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "person.circle.fill")
+                                .foregroundColor(AppTheme.textSecondary)
+                            Text("User ID")
+                                .foregroundColor(AppTheme.textPrimary)
+                            Spacer()
+                            Text(showCopiedToast ? "Copied!" : String(Superwall.shared.userId.prefix(8)) + "...")
+                                .foregroundColor(showCopiedToast ? .green : AppTheme.textSecondary)
+                                .font(.system(size: 14, design: .monospaced))
+                            Image(systemName: "doc.on.doc")
+                                .font(.system(size: 12))
+                                .foregroundColor(AppTheme.textMuted)
+                        }
                     }
                 } header: {
                     Text("About")

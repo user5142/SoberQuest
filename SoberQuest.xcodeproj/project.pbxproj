@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB11C4662F240D670026B588 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB11C4652F240D660026B588 /* StoreKit.framework */; };
+		CB11C4672F2411130026B588 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB11C4652F240D660026B588 /* StoreKit.framework */; };
 		CBB20F482F06C22400F4C7BB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F472F06C22400F4C7BB /* README.md */; };
 		CBB20F4A2F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */; };
 		CBB20F512F06C2F900F4C7BB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CBB20F472F06C22400F4C7BB /* README.md */; };
@@ -33,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CB11C4652F240D660026B588 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		CBB20F472F06C22400F4C7BB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		CBB20F492F06C22700F4C7BB /* IMPLEMENTATION_CHECKLIST.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = IMPLEMENTATION_CHECKLIST.md; sourceTree = "<group>"; };
 		CBCFAA852F0810CE00494C1B /* SoberQuest Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SoberQuest Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBB20F5A2F06C4A200F4C7BB /* SuperwallKit in Frameworks */,
+				CB11C4672F2411130026B588 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,12 +112,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBB20F5B2F06C4A300F4C7BB /* SuperwallKit in Frameworks */,
+				CB11C4662F240D670026B588 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CB11C4642F240D660026B588 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CB11C4652F240D660026B588 /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CBB20EB62F06C07900F4C7BB = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +139,7 @@
 				CBCFAA862F0810CE00494C1B /* SoberQuest.app */,
 				CBCFAA872F0810CE00494C1B /* SoberQuestTests.xctest */,
 				CBCFAA882F0810CE00494C1B /* SoberQuestUITests.xctest */,
+				CB11C4642F240D660026B588 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};

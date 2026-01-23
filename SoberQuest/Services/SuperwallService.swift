@@ -11,7 +11,14 @@ class SuperwallService: ObservableObject {
     /// Indicates whether the SDK is fully ready for purchases (configuration complete + StoreKit warmed up)
     @Published private(set) var isReadyForPurchases: Bool = false
 
-    private let apiKey: String = "pk_6ZItleafoqSsLP3gCE-xJ" // Replace with actual Superwall API key
+    private var apiKey: String {
+        // Use Dev API key for dev bundle, otherwise use production key
+        if Bundle.main.bundleIdentifier == "com.studionoo.SoberQuest.dev" {
+            return "pk_-gSdqDJ42h7eUIL4iYaCj" // Dev Superwall API key
+        } else {
+            return "pk_6ZItleafoqSsLP3gCE-xJ" // Production Superwall API key
+        }
+    }
     private let entitlement: String = "pro"
 
     // Campaign placement identifiers

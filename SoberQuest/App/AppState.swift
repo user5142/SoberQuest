@@ -7,6 +7,7 @@ class AppState: ObservableObject {
     @Published var currentAddiction: Addiction?
     @Published var isOnboardingCompleted: Bool = false
     @Published var hasProAccess: Bool = false
+    @Published var pendingCheckInType: CheckInType?
     
     private let dataManager = DataManager.shared
     private let superwallService = SuperwallService.shared
@@ -73,14 +74,24 @@ class AppState: ObservableObject {
     func resetToOnboarding() {
         // Clear all stored data
         dataManager.clearAllData()
-        
+
         // Reset app state
         currentAddiction = nil
         isOnboardingCompleted = false
         hasProAccess = false
-        
+
         // Reset Superwall subscription status
         superwallService.setSubscriptionActive(false)
+    }
+
+    func triggerCheckIn(_ type: CheckInType) {
+        DispatchQueue.main.async {
+            self.pendingCheckInType = type
+        }
+    }
+
+    func clearPendingCheckIn() {
+        pendingCheckInType = nil
     }
 }
 

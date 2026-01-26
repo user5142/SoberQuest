@@ -1,15 +1,51 @@
 import Foundation
 import UserNotifications
 
-class NotificationService {
+class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     static let shared = NotificationService()
 
     private let trialReminderIdentifier = "trial_ending_reminder"
-    private let dailyPledgeIdentifier = "daily_pledge_reminder"
-    private let dailyReviewIdentifier = "daily_review_reminder"
+    let dailyPledgeIdentifier = "daily_pledge_reminder"
+    let dailyReviewIdentifier = "daily_review_reminder"
     private let trialStartDateKey = "TrialStartDate"
 
-    private init() {}
+    private override init() {
+        super.init()
+    }
+
+    /// Sets up this service as the notification center delegate. Call this early in app lifecycle.
+    func setupNotificationDelegate() {
+        UNUserNotificationCenter.current().delegate = self
+    }
+
+    // MARK: - UNUserNotificationCenterDelegate
+
+    /// Called when user taps a notification to open the app
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let identifier = response.notification.request.identifier
+
+        if identifier == dailyPledgeIdentifier {
+            AppState.shared.triggerCheckIn(.pledge)
+        } else if identifier == dailyReviewIdentifier {
+            AppState.shared.triggerCheckIn(.review)
+        }
+
+        completionHandler()
+    }
+
+    /// Called when a notification arrives while app is in foreground
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        // Show the notification even when app is in foreground
+        completionHandler([.banner, .sound])
+    }
 
     // MARK: - Permission
 

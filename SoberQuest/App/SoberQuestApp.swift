@@ -10,7 +10,10 @@ struct SoberQuestApp: App {
     init() {
         // Ensure Superwall is configured at app launch
         _ = SuperwallService.shared
-        
+
+        // Set up notification delegate to handle notification taps
+        NotificationService.shared.setupNotificationDelegate()
+
         // Configure global appearance for dark mode
         configureAppearance()
     }

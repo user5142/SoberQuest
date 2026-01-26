@@ -44,9 +44,15 @@ struct HomeView: View {
             updateTimer()
             appState.refreshAddiction()
             checkForInitialBadge()
+            handlePendingCheckIn()
         }
         .onReceive(timer) { _ in
             updateTimer()
+        }
+        .onChange(of: appState.pendingCheckInType) { newType in
+            if newType != nil {
+                handlePendingCheckIn()
+            }
         }
         .sheet(isPresented: $showAddictionSelector) {
             AddictionSelectorView(isPresented: $showAddictionSelector)
@@ -658,6 +664,16 @@ struct HomeView: View {
             return motivation
         }
         return "Tap to add your motivation..."
+    }
+
+    private func handlePendingCheckIn() {
+        guard let type = appState.pendingCheckInType else { return }
+        checkInType = type
+        appState.clearPendingCheckIn()
+        // Small delay to ensure the view is ready
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            showDailyCheckIn = true
+        }
     }
 }
 

@@ -60,6 +60,7 @@ enum OnboardingStep: CaseIterable {
     case welcome
     case addictionSetup
     case dateSelection
+    case improvementGoals
     case motivationSetup
     case badgePreview
     case notificationPermission

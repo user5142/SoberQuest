@@ -1,18 +1,20 @@
 import SwiftUI
 
-struct SobrietyImportanceView: View {
+struct PersonalIdentityView: View {
     @Binding var currentStep: OnboardingStep
-    @Binding var selectedImportance: String?
+    @Binding var selectedIdentity: String?
 
-    private let importanceOptions = [
-        ("Critical", "I need to change now"),
-        ("Very", "It's a top focus for me"),
-        ("Somewhat", "I'd like to improve this"),
-        ("Nice to have", "I'm just exploring")
+    private let identityOptions = [
+        ("💪", "Making a healthy choice"),
+        ("🧠", "Curious about a different lifestyle"),
+        ("🙋", "Done feeling this way"),
+        ("🎯", "Taking back control"),
+        ("🎲", "Doing this for people I care about"),
+        ("✨", "Ready for positive change")
     ]
 
     private var canContinue: Bool {
-        selectedImportance != nil
+        selectedIdentity != nil
     }
 
     var body: some View {
@@ -24,7 +26,7 @@ struct SobrietyImportanceView: View {
                 HStack {
                     Button(action: {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .improvementGoals
+                            currentStep = .sobrietyImportance
                         }
                     }) {
                         Image(systemName: "chevron.left")
@@ -40,7 +42,7 @@ struct SobrietyImportanceView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 32) {
                         // Header
-                        Text("How important is sobriety to you right now?")
+                        Text("I see myself as someone who is...")
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(AppTheme.textPrimary)
                             .multilineTextAlignment(.leading)
@@ -50,13 +52,13 @@ struct SobrietyImportanceView: View {
 
                         // Options list
                         VStack(spacing: 0) {
-                            ForEach(importanceOptions, id: \.0) { option in
-                                SobrietyImportanceOptionRow(
-                                    title: option.0,
-                                    subtitle: option.1,
-                                    isSelected: selectedImportance == option.0,
+                            ForEach(identityOptions, id: \.1) { option in
+                                PersonalIdentityOptionRow(
+                                    emoji: option.0,
+                                    title: option.1,
+                                    isSelected: selectedIdentity == option.1,
                                     onTap: {
-                                        selectedImportance = option.0
+                                        selectedIdentity = option.1
                                     }
                                 )
                             }
@@ -74,7 +76,7 @@ struct SobrietyImportanceView: View {
 
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .personalIdentity
+                        currentStep = .motivationSetup
                     }
                 }) {
                     Text("Next")
@@ -104,24 +106,21 @@ struct SobrietyImportanceView: View {
 }
 
 // MARK: - Option Row Component
-struct SobrietyImportanceOptionRow: View {
+struct PersonalIdentityOptionRow: View {
+    let emoji: String
     let title: String
-    let subtitle: String
     let isSelected: Bool
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
             HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.system(size: 17, weight: .regular))
-                        .foregroundColor(AppTheme.textPrimary)
+                Text(emoji)
+                    .font(.system(size: 20))
 
-                    Text(subtitle)
-                        .font(.system(size: 15, weight: .regular))
-                        .foregroundColor(AppTheme.textSecondary)
-                }
+                Text(title)
+                    .font(.system(size: 17, weight: .regular))
+                    .foregroundColor(AppTheme.textPrimary)
 
                 Spacer()
 

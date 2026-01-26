@@ -23,6 +23,7 @@ struct NotificationPermissionView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 120, height: 120)
+                    .foregroundColor(.white)
                     .padding(.bottom, 8)
 
                 // Header
@@ -85,7 +86,7 @@ struct NotificationPermissionView: View {
         HStack(spacing: 14) {
             Image(systemName: icon)
                 .font(.system(size: 20, weight: .medium))
-                .foregroundColor(Color(hex: "f0be65"))
+                .foregroundColor(.white)
                 .frame(width: 32, height: 32)
 
             Text(text)

@@ -66,6 +66,6 @@ enum OnboardingStep: CaseIterable {
     case improvementAreas
     case milestoneLookingForward
     case motivationSetup
-    case badgePreview
+    // case badgePreview  // Disabled - not part of current flow
     case notificationPermission
 }

@@ -8,6 +8,7 @@ struct OnboardingFlow: View {
     @State private var selectedImprovementGoals: Set<String> = []
     @State private var selectedSobrietyImportance: String? = nil
     @State private var selectedPersonalIdentity: String? = nil
+    @State private var selectedImprovementAreas: Set<String> = []
     @State private var motivationText: String = ""
 
     private var stepIndex: Int {
@@ -79,6 +80,15 @@ struct OnboardingFlow: View {
                         PersonalIdentityView(
                             currentStep: $currentStep,
                             selectedIdentity: $selectedPersonalIdentity
+                        )
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing),
+                            removal: .move(edge: .leading)
+                        ))
+                    case .improvementAreas:
+                        ImprovementAreasView(
+                            currentStep: $currentStep,
+                            selectedAreas: $selectedImprovementAreas
                         )
                         .transition(.asymmetric(
                             insertion: .move(edge: .trailing),

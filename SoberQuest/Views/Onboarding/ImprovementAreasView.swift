@@ -1,20 +1,24 @@
 import SwiftUI
 
-struct PersonalIdentityView: View {
+struct ImprovementAreasView: View {
     @Binding var currentStep: OnboardingStep
-    @Binding var selectedIdentity: String?
+    @Binding var selectedAreas: Set<String>
 
-    private let identityOptions = [
-        ("💪", "Making a healthy choice"),
-        ("🧠", "Curious about a different lifestyle"),
-        ("🙋", "Done feeling this way"),
-        ("🎯", "Taking back control"),
-        ("🎲", "Doing this for people I care about"),
-        ("✨", "Ready for positive change")
+    private let improvementOptions = [
+        "Motivation",
+        "Self-awareness",
+        "Stress management",
+        "Support network",
+        "Handling triggers",
+        "Self-care habits",
+        "Difficult emotions",
+        "Clearer boundaries",
+        "Healthy alternatives",
+        "Social pressure"
     ]
 
     private var canContinue: Bool {
-        selectedIdentity != nil
+        !selectedAreas.isEmpty
     }
 
     var body: some View {
@@ -26,7 +30,7 @@ struct PersonalIdentityView: View {
                 HStack {
                     Button(action: {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .sobrietyImportance
+                            currentStep = .personalIdentity
                         }
                     }) {
                         Image(systemName: "chevron.left")
@@ -40,25 +44,31 @@ struct PersonalIdentityView: View {
                 .padding(.top, 8)
 
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 32) {
+                    VStack(spacing: 28) {
                         // Header
-                        Text("I see myself as someone who is...")
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(AppTheme.textPrimary)
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 32)
-                            .padding(.horizontal, 24)
+                        VStack(spacing: 12) {
+                            Text("Where do you have the most room for improvement?")
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundColor(AppTheme.textPrimary)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text("Choose up to 3")
+                                .font(.system(size: 15))
+                                .foregroundColor(AppTheme.textSecondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(.top, 32)
+                        .padding(.horizontal, 24)
 
                         // Options list
                         VStack(spacing: 0) {
-                            ForEach(identityOptions, id: \.1) { option in
-                                PersonalIdentityOptionRow(
-                                    emoji: option.0,
-                                    title: option.1,
-                                    isSelected: selectedIdentity == option.1,
+                            ForEach(improvementOptions, id: \.self) { option in
+                                ImprovementAreaOptionRow(
+                                    title: option,
+                                    isSelected: selectedAreas.contains(option),
                                     onTap: {
-                                        selectedIdentity = option.1
+                                        toggleSelection(option)
                                     }
                                 )
                             }
@@ -76,7 +86,7 @@ struct PersonalIdentityView: View {
 
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .improvementAreas
+                        currentStep = .motivationSetup
                     }
                 }) {
                     Text("Next")
@@ -103,21 +113,25 @@ struct PersonalIdentityView: View {
         }
         .preferredColorScheme(.dark)
     }
+
+    private func toggleSelection(_ option: String) {
+        if selectedAreas.contains(option) {
+            selectedAreas.remove(option)
+        } else if selectedAreas.count < 3 {
+            selectedAreas.insert(option)
+        }
+    }
 }
 
 // MARK: - Option Row Component
-struct PersonalIdentityOptionRow: View {
-    let emoji: String
+struct ImprovementAreaOptionRow: View {
     let title: String
     let isSelected: Bool
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
-            HStack(alignment: .top, spacing: 12) {
-                Text(emoji)
-                    .font(.system(size: 20))
-
+            HStack {
                 Text(title)
                     .font(.system(size: 17, weight: .regular))
                     .foregroundColor(AppTheme.textPrimary)
@@ -130,7 +144,7 @@ struct PersonalIdentityOptionRow: View {
                         .foregroundColor(AppTheme.buttonPrimary)
                 }
             }
-            .padding(.vertical, 20)
+            .padding(.vertical, 18)
             .padding(.horizontal, 0)
             .background(AppTheme.background)
         }

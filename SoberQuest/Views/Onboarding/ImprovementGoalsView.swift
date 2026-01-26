@@ -66,7 +66,7 @@ struct ImprovementGoalsView: View {
 
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .motivationSetup
+                        currentStep = .sobrietyImportance
                     }
                 }) {
                     Text("Next")

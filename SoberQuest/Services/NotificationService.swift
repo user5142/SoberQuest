@@ -5,6 +5,8 @@ class NotificationService {
     static let shared = NotificationService()
 
     private let trialReminderIdentifier = "trial_ending_reminder"
+    private let dailyPledgeIdentifier = "daily_pledge_reminder"
+    private let dailyReviewIdentifier = "daily_review_reminder"
     private let trialStartDateKey = "TrialStartDate"
 
     private init() {}
@@ -120,5 +122,92 @@ class NotificationService {
         guard let endDate = getTrialEndDate() else { return nil }
         let days = Calendar.current.dateComponents([.day], from: Date(), to: endDate).day
         return max(0, days ?? 0)
+    }
+
+    // MARK: - Daily Pledge Notifications
+
+    /// Schedules daily pledge and review notifications based on saved settings.
+    /// Only works if permission was already granted.
+    func scheduleDailyPledgeNotificationsIfPermitted() {
+        checkPermissionStatus { [weak self] status in
+            guard let self = self, status == .authorized else {
+                print("NotificationService: Permission not authorized, skipping daily pledge notifications")
+                return
+            }
+            self.scheduleDailyPledgeNotifications()
+        }
+    }
+
+    /// Internal method to schedule the daily pledge and review notifications
+    private func scheduleDailyPledgeNotifications() {
+        let settings = DataManager.shared.loadDailyPledgeSettings()
+
+        guard settings.isEnabled else {
+            print("NotificationService: Daily pledge is disabled, not scheduling notifications")
+            cancelDailyPledgeNotifications()
+            return
+        }
+
+        // Cancel existing notifications first
+        cancelDailyPledgeNotifications()
+
+        // Schedule daily pledge notification
+        scheduleDailyNotification(
+            identifier: dailyPledgeIdentifier,
+            title: "Time for your daily pledge",
+            body: "Start your day with intention. Take a moment to commit to your sobriety.",
+            hour: settings.pledgeHour,
+            minute: settings.pledgeMinute
+        )
+
+        // Schedule daily review notification
+        scheduleDailyNotification(
+            identifier: dailyReviewIdentifier,
+            title: "Time for your daily review",
+            body: "How did today go? Take a moment to reflect on your progress.",
+            hour: settings.reviewHour,
+            minute: settings.reviewMinute
+        )
+
+        print("NotificationService: Daily pledge notifications scheduled at \(settings.pledgeTimeFormatted) and \(settings.reviewTimeFormatted)")
+    }
+
+    /// Helper method to schedule a repeating daily notification
+    private func scheduleDailyNotification(identifier: String, title: String, body: String, hour: Int, minute: Int) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .default
+
+        var dateComponents = DateComponents()
+        dateComponents.hour = hour
+        dateComponents.minute = minute
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+
+        let request = UNNotificationRequest(
+            identifier: identifier,
+            content: content,
+            trigger: trigger
+        )
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("NotificationService: Failed to schedule \(identifier) - \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// Cancels all daily pledge notifications
+    func cancelDailyPledgeNotifications() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(
+            withIdentifiers: [dailyPledgeIdentifier, dailyReviewIdentifier]
+        )
+        print("NotificationService: Daily pledge notifications cancelled")
+    }
+
+    /// Updates daily pledge notifications with new settings
+    func updateDailyPledgeNotifications() {
+        scheduleDailyPledgeNotificationsIfPermitted()
     }
 }

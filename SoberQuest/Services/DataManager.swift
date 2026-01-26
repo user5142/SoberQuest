@@ -10,6 +10,7 @@ class DataManager: ObservableObject {
     private let lanternBadgeShownKey = "LanternBadgeShown"
     private let hasUsedTrialKey = "HasUsedTrial"
     private let userMotivationKey = "UserMotivation"
+    private let dailyPledgeSettingsKey = "DailyPledgeSettings"
     
     private init() {}
     
@@ -176,6 +177,22 @@ class DataManager: ObservableObject {
         return loadAddictions().first(where: { $0.id == addictionId })?.urgesDefeated ?? 0
     }
 
+    // MARK: - Daily Pledge Settings
+
+    func saveDailyPledgeSettings(_ settings: DailyPledgeSettings) {
+        if let data = try? JSONEncoder().encode(settings) {
+            UserDefaults.standard.set(data, forKey: dailyPledgeSettingsKey)
+        }
+    }
+
+    func loadDailyPledgeSettings() -> DailyPledgeSettings {
+        guard let data = UserDefaults.standard.data(forKey: dailyPledgeSettingsKey),
+              let settings = try? JSONDecoder().decode(DailyPledgeSettings.self, from: data) else {
+            return DailyPledgeSettings.default
+        }
+        return settings
+    }
+
     // MARK: - Clear All Data
 
     func clearAllData() {
@@ -185,6 +202,7 @@ class DataManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: lanternBadgeShownKey)
         UserDefaults.standard.removeObject(forKey: hasUsedTrialKey)
         UserDefaults.standard.removeObject(forKey: userMotivationKey)
+        UserDefaults.standard.removeObject(forKey: dailyPledgeSettingsKey)
         UserDefaults.standard.removeObject(forKey: "TrialStartDate")
     }
 }

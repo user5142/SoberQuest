@@ -65,7 +65,7 @@ struct MotivationSetupView: View {
                 Button(action: {
                     isTextFieldFocused = false
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .notificationPermission
+                        currentStep = .dailyPledgeTimes
                     }
                 }) {
                     Text(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Skip" : "Continue")

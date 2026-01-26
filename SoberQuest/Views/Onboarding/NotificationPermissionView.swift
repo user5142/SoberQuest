@@ -101,6 +101,10 @@ struct NotificationPermissionView: View {
         permissionRequested = true
         NotificationService.shared.requestPermission { granted in
             print("NotificationPermissionView: Permission \(granted ? "granted" : "denied")")
+            if granted {
+                // Schedule daily pledge notifications
+                NotificationService.shared.scheduleDailyPledgeNotificationsIfPermitted()
+            }
             continueToPaywall()
         }
     }

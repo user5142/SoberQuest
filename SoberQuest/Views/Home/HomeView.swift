@@ -24,6 +24,8 @@ struct HomeView: View {
     @State private var showSoberDate = false
     @State private var showBadgeDetail = false
     @State private var selectedBadgeForDetail: BadgeDefinition?
+    @State private var showDailyCheckIn = false
+    @State private var checkInType: CheckInType = .pledge
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -108,6 +110,12 @@ struct HomeView: View {
                     onDismiss: { showBadgeDetail = false }
                 )
             }
+        }
+        .sheet(isPresented: $showDailyCheckIn) {
+            DailyPledgeCheckInView(
+                checkInType: checkInType,
+                isPresented: $showDailyCheckIn
+            )
         }
     }
     

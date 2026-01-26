@@ -11,6 +11,7 @@ struct OnboardingFlow: View {
     @State private var selectedImprovementAreas: Set<String> = []
     @State private var selectedMilestone: String? = nil
     @State private var motivationText: String = ""
+    @State private var pledgeSettings: DailyPledgeSettings = .default
 
     private var stepIndex: Int {
         OnboardingStep.allCases.firstIndex(of: currentStep) ?? 0
@@ -109,6 +110,15 @@ struct OnboardingFlow: View {
                             currentStep: $currentStep,
                             motivationText: $motivationText,
                             addictionName: selectedAddictionName
+                        )
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing),
+                            removal: .move(edge: .leading)
+                        ))
+                    case .dailyPledgeTimes:
+                        DailyPledgeTimesView(
+                            currentStep: $currentStep,
+                            pledgeSettings: $pledgeSettings
                         )
                         .transition(.asymmetric(
                             insertion: .move(edge: .trailing),

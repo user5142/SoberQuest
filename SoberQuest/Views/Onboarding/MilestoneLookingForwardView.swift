@@ -1,24 +1,23 @@
 import SwiftUI
 
-struct ImprovementAreasView: View {
+struct MilestoneLookingForwardView: View {
     @Binding var currentStep: OnboardingStep
-    @Binding var selectedAreas: Set<String>
+    @Binding var selectedMilestone: String?
 
-    private let improvementOptions = [
-        "Motivation",
-        "Self-awareness",
-        "Stress management",
-        "Support network",
-        "Handling triggers",
-        "Self-care habits",
-        "Difficult emotions",
-        "Clearer boundaries",
-        "Healthy alternatives",
-        "Social pressure"
+    private let milestoneOptions = [
+        "24 hours complete",
+        "Weekend conquered",
+        "Reaching one week",
+        "First month milestone",
+        "Saying 'no' when tempted",
+        "First positive change",
+        "Breaking your previous record",
+        "First morning waking up proud",
+        "Other"
     ]
 
     private var canContinue: Bool {
-        !selectedAreas.isEmpty
+        selectedMilestone != nil
     }
 
     var body: some View {
@@ -30,7 +29,7 @@ struct ImprovementAreasView: View {
                 HStack {
                     Button(action: {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            currentStep = .personalIdentity
+                            currentStep = .improvementAreas
                         }
                     }) {
                         Image(systemName: "chevron.left")
@@ -47,15 +46,10 @@ struct ImprovementAreasView: View {
                     VStack(spacing: 28) {
                         // Header
                         VStack(spacing: 12) {
-                            Text("Where do you have the most room for improvement?")
+                            Text("Which milestone are you most looking forward to?")
                                 .font(.system(size: 28, weight: .bold))
                                 .foregroundColor(AppTheme.textPrimary)
                                 .multilineTextAlignment(.leading)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Text("Choose up to 3")
-                                .font(.system(size: 15))
-                                .foregroundColor(AppTheme.textSecondary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .padding(.top, 32)
@@ -63,12 +57,12 @@ struct ImprovementAreasView: View {
 
                         // Options list
                         VStack(spacing: 0) {
-                            ForEach(improvementOptions, id: \.self) { option in
-                                ImprovementAreaOptionRow(
+                            ForEach(milestoneOptions, id: \.self) { option in
+                                MilestoneOptionRow(
                                     title: option,
-                                    isSelected: selectedAreas.contains(option),
+                                    isSelected: selectedMilestone == option,
                                     onTap: {
-                                        toggleSelection(option)
+                                        selectedMilestone = option
                                     }
                                 )
                             }
@@ -86,7 +80,7 @@ struct ImprovementAreasView: View {
 
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStep = .milestoneLookingForward
+                        currentStep = .motivationSetup
                     }
                 }) {
                     Text("Next")
@@ -113,18 +107,10 @@ struct ImprovementAreasView: View {
         }
         .preferredColorScheme(.dark)
     }
-
-    private func toggleSelection(_ option: String) {
-        if selectedAreas.contains(option) {
-            selectedAreas.remove(option)
-        } else if selectedAreas.count < 3 {
-            selectedAreas.insert(option)
-        }
-    }
 }
 
 // MARK: - Option Row Component
-struct ImprovementAreaOptionRow: View {
+struct MilestoneOptionRow: View {
     let title: String
     let isSelected: Bool
     let onTap: () -> Void

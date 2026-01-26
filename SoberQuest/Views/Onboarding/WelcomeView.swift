@@ -10,48 +10,28 @@ struct WelcomeView: View {
             
             VStack(spacing: 32) {
                 Spacer()
-                
+
                 // App Icon/Logo
                 Image("badge_day3")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 200, height: 200)
-                    // .padding(.bottom, 20)
-                
-                // Title
-                VStack(spacing: 12) {
-                    Text("Welcome to")
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(AppTheme.textSecondary)
-                    
-                    Text("SoberQuest")
-                        .font(.system(size: 40, weight: .bold))
+
+                // Header and Subheader
+                VStack(spacing: 16) {
+                    Text("Congrats are in order!")
+                        .font(.system(size: 34, weight: .bold))
                         .foregroundColor(AppTheme.textPrimary)
+                        .multilineTextAlignment(.center)
+
+                    Text("You've taken the first step of your quest for sobriety.")
+                        .font(.system(size: 20, weight: .regular))
+                        .foregroundColor(AppTheme.textSecondary)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(4)
                 }
-                
-                // Description
-                VStack(spacing: 20) {
-                    FeatureRow(
-                        icon: "clock.arrow.circlepath",
-                        title: "Track Your Journey",
-                        description: "Monitor your sobriety progress in real-time"
-                    )
-                    
-                    FeatureRow(
-                        icon: "trophy.fill",
-                        title: "Unlock Badges",
-                        description: "Earn fantasy-themed milestone achievements"
-                    )
-                    
-                    FeatureRow(
-                        icon: "square.and.arrow.up",
-                        title: "Share Progress",
-                        description: "Celebrate milestones with beautiful share cards"
-                    )
-                }
-                .padding(.top, 20)
-                .padding(.horizontal, 32)
-                
+                .padding(.horizontal, 40)
+
                 Spacer()
                 
                 // Get Started Button
@@ -73,34 +53,6 @@ struct WelcomeView: View {
             }
         }
         .preferredColorScheme(.dark)
-    }
-}
-
-struct FeatureRow: View {
-    let icon: String
-    let title: String
-    let description: String
-
-    var body: some View {
-        HStack(spacing: 16) {
-            Image(systemName: icon)
-                .font(.system(size: 28))
-                .foregroundColor(Color(hex: "f0be65"))
-                .frame(width: 44, height: 44)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(AppTheme.textPrimary)
-
-                Text(description)
-                    .font(.system(size: 14))
-                    .foregroundColor(AppTheme.textSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Spacer()
-        }
     }
 }
 

@@ -524,15 +524,18 @@ struct DailyPledgeCheckInView: View {
         VStack(spacing: 24) {
             Spacer()
 
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 80))
-                .foregroundColor(.green)
-
-            Text(checkInType.confirmationMessage)
-                .font(.system(size: 18, weight: .medium))
-                .foregroundColor(AppTheme.textPrimary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+            VStack(spacing: 16) {
+                Text(checkInType == .pledge ? "You've made your pledge" : "Great job reflecting")
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundColor(AppTheme.textPrimary)
+                    .multilineTextAlignment(.center)
+                
+                Text(checkInType == .pledge ? "Stay strong today!" : "Keep it up!")
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundColor(AppTheme.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, 40)
 
             Spacer()
 

@@ -52,7 +52,7 @@ struct DailyPledgeTimesView: View {
                                     Spacer()
                                     Text(pledgeSettings.pledgeTimeFormatted)
                                         .font(.system(size: 17))
-                                        .foregroundColor(Color(hex: "4A90A4"))
+                                        .foregroundColor(.white)
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(AppTheme.textMuted)
@@ -77,7 +77,7 @@ struct DailyPledgeTimesView: View {
                                     Spacer()
                                     Text(pledgeSettings.reviewTimeFormatted)
                                         .font(.system(size: 17))
-                                        .foregroundColor(Color(hex: "4A90A4"))
+                                        .foregroundColor(.white)
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(AppTheme.textMuted)
@@ -168,7 +168,7 @@ struct TimePickerSheet: View {
                             Text("Cancel")
                                 .font(.system(size: 17))
                         }
-                        .foregroundColor(Color(hex: "4A90A4"))
+                        .foregroundColor(.white)
                     }
                     Spacer()
                 }
@@ -183,7 +183,7 @@ struct TimePickerSheet: View {
 
                     Text(subtitle)
                         .font(.system(size: 15))
-                        .foregroundColor(Color(hex: "4A90A4"))
+                        .foregroundColor(.white)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
@@ -205,10 +205,10 @@ struct TimePickerSheet: View {
                 }) {
                     Text("Save")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(Color(UIColor.systemBackground))
+                        .foregroundColor(AppTheme.buttonPrimaryText)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
-                        .background(Color(hex: "4A90A4"))
+                        .background(AppTheme.buttonPrimary)
                         .cornerRadius(14)
                 }
                 .padding(.horizontal, 24)

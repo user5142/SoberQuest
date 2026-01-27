@@ -29,7 +29,7 @@ struct AppTheme {
     static let forest = Color(hex: "22C55E")               // Forest green
     static let frost = Color(hex: "38BDF8")                // Ice blue
     static let phoenix = Color(hex: "EF4444")              // Phoenix red
-    static let ancientGold = Color(hex: "D4AF37")          // Ancient gold
+    static let ancientGold = Color(hex: "FAB12F")          // Ancient gold
     static let parchment = Color(hex: "C4A574")            // Leather/parchment tan
     static let obsidian = Color(hex: "4B0082")             // Obsidian indigo
 

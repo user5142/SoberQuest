@@ -313,7 +313,7 @@ struct SettingsView: View {
                                 .foregroundColor(AppTheme.textPrimary)
                         }
                     }
-                    .tint(Color(hex: "4A90A4"))
+                    .tint(AppTheme.ancientGold)
                     .onChange(of: pledgeSettings.isEnabled) { _ in
                         savePledgeSettings()
                     }
@@ -516,7 +516,7 @@ struct SettingsTimePickerSheet: View {
                             Text("Cancel")
                                 .font(.system(size: 17))
                         }
-                        .foregroundColor(Color(hex: "4A90A4"))
+                        .foregroundColor(.white)
                     }
                     Spacer()
                 }
@@ -531,7 +531,7 @@ struct SettingsTimePickerSheet: View {
 
                     Text(subtitle)
                         .font(.system(size: 15))
-                        .foregroundColor(Color(hex: "4A90A4"))
+                        .foregroundColor(.white)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
@@ -554,10 +554,10 @@ struct SettingsTimePickerSheet: View {
                 }) {
                     Text("Save")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(Color(UIColor.systemBackground))
+                        .foregroundColor(AppTheme.buttonPrimaryText)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
-                        .background(Color(hex: "4A90A4"))
+                        .background(AppTheme.buttonPrimary)
                         .cornerRadius(14)
                 }
                 .padding(.horizontal, 24)

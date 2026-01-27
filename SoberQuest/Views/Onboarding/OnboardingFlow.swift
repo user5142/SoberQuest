@@ -136,6 +136,21 @@ struct OnboardingFlow: View {
                             insertion: .move(edge: .trailing),
                             removal: .move(edge: .leading)
                         ))
+                    case .onboardingRecap:
+                        OnboardingRecapView(
+                            currentStep: $currentStep,
+                            addictionName: selectedAddictionName,
+                            lastUsedDate: lastUsedDate,
+                            selectedPersonalIdentity: selectedPersonalIdentity,
+                            selectedMilestone: selectedMilestone,
+                            selectedImprovementAreas: selectedImprovementAreas,
+                            pledgeSettings: pledgeSettings,
+                            motivationText: motivationText
+                        )
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing),
+                            removal: .move(edge: .leading)
+                        ))
                     }
                 }
             }

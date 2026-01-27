@@ -9,7 +9,7 @@ struct PersonalIdentityView: View {
         ("🧠", "Curious about a different lifestyle"),
         ("🙋", "Done feeling this way"),
         ("🎯", "Taking back control"),
-        ("🎲", "Doing this for people I care about"),
+        ("❤️", "Doing this for people I care about"),
         ("✨", "Ready for positive change")
     ]
 

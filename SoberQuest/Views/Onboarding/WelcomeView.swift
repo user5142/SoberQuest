@@ -19,7 +19,7 @@ struct WelcomeView: View {
 
                 // Header and Subheader
                 VStack(spacing: 16) {
-                    Text("Congrats are in order!")
+                    Text("Congratulations are in order!")
                         .font(.system(size: 34, weight: .bold))
                         .foregroundColor(AppTheme.textPrimary)
                         .multilineTextAlignment(.center)
@@ -69,4 +69,5 @@ enum OnboardingStep: CaseIterable {
     case dailyPledgeTimes
     // case badgePreview  // Disabled - not part of current flow
     case notificationPermission
+    case onboardingRecap
 }

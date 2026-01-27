@@ -2,8 +2,6 @@ import SwiftUI
 
 struct NotificationPermissionView: View {
     @Binding var currentStep: OnboardingStep
-    @EnvironmentObject private var appState: AppState
-    @EnvironmentObject private var superwallService: SuperwallService
     let addictionName: String
     let lastUsedDate: Date
     let motivationText: String
@@ -68,7 +66,7 @@ struct NotificationPermissionView: View {
 
                 // Skip button
                 Button(action: {
-                    continueToPaywall()
+                    continueToRecap()
                 }) {
                     Text("Skip for Now")
                         .font(.system(size: 16, weight: .medium))
@@ -105,49 +103,13 @@ struct NotificationPermissionView: View {
                 // Schedule daily pledge notifications
                 NotificationService.shared.scheduleDailyPledgeNotificationsIfPermitted()
             }
-            continueToPaywall()
+            continueToRecap()
         }
     }
 
-    private func continueToPaywall() {
-        // Save addiction data with motivation
-        let trimmedMotivation = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
-        // If user selected "today", use current time so timer starts from now
-        let startDate = Calendar.current.isDateInToday(lastUsedDate) ? Date() : lastUsedDate
-        let addiction = Addiction(
-            name: addictionName,
-            startDate: startDate,
-            currentStreak: 0,
-            isActive: true,
-            motivation: trimmedMotivation.isEmpty ? nil : trimmedMotivation
-        )
-        DataManager.shared.saveAddiction(addiction)
-        appState.setCurrentAddiction(addiction)
-
-        // Grant all badges earned based on days sober
-        let daysSober = addiction.daysSober
-        for badge in BadgeDefinition.defaultBadges {
-            if daysSober >= badge.milestoneDays {
-                let unlockedBadge = UnlockedBadge(badgeId: badge.id, addictionId: addiction.id)
-                DataManager.shared.saveUnlockedBadge(unlockedBadge)
-            }
-        }
-
-        // Present Superwall paywall directly
-        isLoading = true
-        superwallService.presentOnboardingPaywall { result in
-            isLoading = false
-
-            switch result {
-            case .purchased, .restored:
-                appState.hasProAccess = true
-                appState.completeOnboarding()
-            case .declined:
-                appState.completeOnboarding()
-            case .skipped:
-                appState.hasProAccess = superwallService.hasActiveSubscription
-                appState.completeOnboarding()
-            }
+    private func continueToRecap() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            currentStep = .onboardingRecap
         }
     }
 }

@@ -24,7 +24,7 @@ struct WelcomeView: View {
                         .foregroundColor(AppTheme.textPrimary)
                         .multilineTextAlignment(.center)
 
-                    Text("You've taken the first step on your quest for sobriety.")
+                    Text("You've taken the first step on your sobriety journey.")
                         .font(.system(size: 20, weight: .regular))
                         .foregroundColor(AppTheme.textSecondary)
                         .multilineTextAlignment(.center)

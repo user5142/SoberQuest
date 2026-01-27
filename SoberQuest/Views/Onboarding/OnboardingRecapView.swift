@@ -135,9 +135,9 @@ struct OnboardingRecapView: View {
     private func accomplishmentRow(title: String, subtitle: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
             // Checkmark icon
-            Image(systemName: "checkmark.circle.fill")
+            Image(systemName: "checkmark")
                 .font(.system(size: 24, weight: .medium))
-                .foregroundColor(.green)
+                .foregroundColor(.white)
                 .frame(width: 24, height: 24)
                 .padding(.top, 2)
 

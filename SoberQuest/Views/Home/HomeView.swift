@@ -122,6 +122,7 @@ struct HomeView: View {
                 checkInType: checkInType,
                 isPresented: $showDailyCheckIn
             )
+            .environmentObject(appState)
         }
     }
     

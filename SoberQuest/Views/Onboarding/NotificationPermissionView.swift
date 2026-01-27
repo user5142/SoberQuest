@@ -40,7 +40,7 @@ struct NotificationPermissionView: View {
 
                 // Benefits
                 VStack(spacing: 16) {
-                    benefitRow(icon: "calendar.badge.clock", text: "Daily motivation")
+                    benefitRow(icon: "calendar.badge.clock", text: "Daily pledge reminders")
                     benefitRow(icon: "trophy.fill", text: "Milestone achievements")
                     benefitRow(icon: "heart.fill", text: "Encouragement when you need it")
                 }

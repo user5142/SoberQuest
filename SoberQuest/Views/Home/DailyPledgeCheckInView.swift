@@ -73,13 +73,39 @@ struct DailyPledgeCheckInView: View {
     @State private var selectedActivities: Set<ActivityOption> = []
     @State private var notes: String = ""
 
+    // Random inspirational quote for confirmation
+    @State private var selectedQuote: String = ""
+
+    // Inspirational quotes
+    private let inspirationalQuotes = [
+        "One day at a time.",
+        "Progress, not perfection.",
+        "You are stronger than your cravings.",
+        "Every day sober is a victory.",
+        "Your future is created by what you do today.",
+        "Recovery is a journey, not a destination.",
+        "You didn't come this far to only come this far.",
+        "Strength grows in the moments when you think you can't go on.",
+        "The only way out is through.",
+        "Today is a new beginning.",
+        "You are worthy of a healthy life.",
+        "Small steps lead to big changes.",
+        "Believe in yourself and all that you are.",
+        "The best time for a new beginning is now.",
+        "You have the power to change your story."
+    ]
+
     var body: some View {
         ZStack {
             AppTheme.background.ignoresSafeArea()
 
             if checkInType == .pledge {
-                // Simple pledge flow (unchanged)
-                pledgeView
+                // Simple pledge flow
+                if showConfirmation {
+                    confirmationView
+                } else {
+                    pledgeView
+                }
             } else {
                 // Multi-step review flow
                 if showConfirmation {
@@ -97,7 +123,6 @@ struct DailyPledgeCheckInView: View {
         VStack(spacing: 0) {
             // Close button
             HStack {
-                Spacer()
                 Button(action: {
                     isPresented = false
                 }) {
@@ -106,40 +131,73 @@ struct DailyPledgeCheckInView: View {
                         .foregroundColor(AppTheme.textSecondary)
                         .frame(width: 32, height: 32)
                 }
+                Spacer()
             }
             .padding(.horizontal, 24)
             .padding(.top, 16)
 
-            Spacer()
-
-            // Icon
-            Image(systemName: checkInType.icon)
-                .font(.system(size: 60))
-                .foregroundColor(Color(hex: "4A90A4"))
-                .padding(.bottom, 24)
-
-            // Title
-            Text(checkInType.title)
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(AppTheme.textPrimary)
-                .padding(.bottom, 8)
-
-            // Subtitle
-            Text(checkInType.subtitle)
-                .font(.system(size: 17))
+            // Day of week header
+            Text("PLEDGE FOR \(dayOfWeek.uppercased())")
+                .font(.system(size: 13, weight: .medium))
                 .foregroundColor(AppTheme.textSecondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                .tracking(1.5)
+                .padding(.top, 32)
+
+            // Main pledge text in dark box
+            Text("Today, I will stay sober")
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 24)
+                .background(Color(hex: "3D3D3D"))
+                .padding(.horizontal, 40)
+                .padding(.top, 32)
+
+            // Why I'm doing this section
+            VStack(spacing: 16) {
+                Text("Why I'm doing this")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(AppTheme.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 40)
+
+                // Motivation card
+                if let motivation = appState.currentAddiction?.motivation, !motivation.isEmpty {
+                    Text(motivation)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(Color(hex: "3D3D3D"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
+                        .padding(.horizontal, 24)
+                        .background(Color(hex: "F0F0F0"))
+                        .cornerRadius(16)
+                        .padding(.horizontal, 40)
+                } else {
+                    Text("For my future")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(Color(hex: "3D3D3D"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
+                        .padding(.horizontal, 24)
+                        .background(Color(hex: "F0F0F0"))
+                        .cornerRadius(16)
+                        .padding(.horizontal, 40)
+                }
+            }
+            .padding(.top, 48)
 
             Spacer()
 
-            // Pledge button
+            // Pledge button (white background, dark text)
             Button(action: {
+                // Select random quote for confirmation screen
+                selectedQuote = inspirationalQuotes.randomElement() ?? inspirationalQuotes[0]
+
                 withAnimation(.easeInOut(duration: 0.3)) {
                     showConfirmation = true
                 }
             }) {
-                Text(checkInType.buttonText)
+                Text("I Will Stay Sober Today!")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(AppTheme.buttonPrimaryText)
                     .frame(maxWidth: .infinity)
@@ -148,17 +206,7 @@ struct DailyPledgeCheckInView: View {
                     .cornerRadius(14)
             }
             .padding(.horizontal, 24)
-
-            // Skip button
-            Button(action: {
-                isPresented = false
-            }) {
-                Text("Skip for now")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(AppTheme.textSecondary)
-                    .padding(.vertical, 16)
-            }
-            .padding(.bottom, 32)
+            .padding(.bottom, 48)
         }
     }
 
@@ -521,38 +569,76 @@ struct DailyPledgeCheckInView: View {
 
     // MARK: - Confirmation View
     private var confirmationView: some View {
-        VStack(spacing: 24) {
-            Spacer()
+        ZStack {
+            // Dark theme gradient background
+            LinearGradient(
+                colors: [
+                    Color(hex: "2A2A2A"),
+                    Color(hex: "1A1A1A"),
+                    Color(hex: "0D0D0D")
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
 
-            VStack(spacing: 16) {
-                Text(checkInType == .pledge ? "You've made your pledge" : "Great job reflecting")
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundColor(AppTheme.textPrimary)
-                    .multilineTextAlignment(.center)
-                
-                Text(checkInType == .pledge ? "Stay strong today!" : "Keep it up!")
-                    .font(.system(size: 20, weight: .regular))
-                    .foregroundColor(AppTheme.textSecondary)
-                    .multilineTextAlignment(.center)
+            VStack(spacing: 0) {
+                // Header bar with close button only
+                HStack {
+                    Button(action: {
+                        isPresented = false
+                    }) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.white)
+                            .frame(width: 32, height: 32)
+                    }
+
+                    Spacer()
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+
+                Spacer()
+
+                // Date and quote
+                VStack(spacing: 16) {
+                    Text("Today, \(formattedDate)")
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundColor(.white.opacity(0.9))
+
+                    Text(selectedQuote)
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(4)
+                        .padding(.horizontal, 40)
+                }
+
+                Spacer()
+
+                // Swipe indicator
+                VStack(spacing: 8) {
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(.white.opacity(0.7))
+                }
+                .padding(.bottom, 48)
             }
-            .padding(.horizontal, 40)
-
-            Spacer()
-
-            Button(action: {
-                isPresented = false
-            }) {
-                Text("Done")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(AppTheme.buttonPrimaryText)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
-                    .background(AppTheme.buttonPrimary)
-                    .cornerRadius(14)
-            }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 48)
         }
+    }
+
+    // MARK: - Helper Properties
+    private var dayOfWeek: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        return formatter.string(from: Date())
+    }
+
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d"
+        return formatter.string(from: Date())
     }
 
     // MARK: - Helper Functions

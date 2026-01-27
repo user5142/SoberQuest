@@ -68,14 +68,15 @@ struct MotivationSetupView: View {
                         currentStep = .dailyPledgeTimes
                     }
                 }) {
-                    Text(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Skip" : "Continue")
+                    Text("Continue")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(AppTheme.buttonPrimaryText)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
-                        .background(AppTheme.buttonPrimary)
+                        .background(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? AppTheme.buttonPrimary.opacity(0.4) : AppTheme.buttonPrimary)
                         .cornerRadius(14)
                 }
+                .disabled(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 .padding(.horizontal, 24)
                 .padding(.bottom, 48)
                 .background(

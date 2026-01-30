@@ -455,14 +455,14 @@ struct DailyPledgeCheckInView: View {
                                 .font(.system(size: 32))
 
                             Text(mood.rawValue)
-                                .font(.system(size: 13))
+                                .font(.system(size: 10, weight: .medium))
                                 .foregroundColor(AppTheme.textPrimary)
                                 .multilineTextAlignment(.center)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.8)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
+                        .padding(.horizontal, 4)
                         .background(selectedMoods.contains(mood) ? Color.white.opacity(0.1) : Color.gray.opacity(0.1))
                         .cornerRadius(12)
                         .overlay(

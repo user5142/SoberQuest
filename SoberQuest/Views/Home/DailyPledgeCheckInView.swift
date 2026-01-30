@@ -76,7 +76,7 @@ struct DailyPledgeCheckInView: View {
     // Random inspirational quote for confirmation
     @State private var selectedQuote: String = ""
 
-    // Inspirational quotes
+    // Inspirational quotes for pledge
     private let inspirationalQuotes = [
         "One day at a time.",
         "Progress, not perfection.",
@@ -93,6 +93,25 @@ struct DailyPledgeCheckInView: View {
         "Believe in yourself and all that you are.",
         "The best time for a new beginning is now.",
         "You have the power to change your story."
+    ]
+
+    // Inspirational quotes for review
+    private let reviewQuotes = [
+        "Another day won.",
+        "Your commitment is your strength.",
+        "Each sober day is a gift to yourself.",
+        "You showed up for yourself today.",
+        "Consistency builds character.",
+        "Your choices today shape tomorrow.",
+        "You're building a better future.",
+        "Reflection is the path to growth.",
+        "You're proving your strength daily.",
+        "Every day clean is a step forward.",
+        "Your perseverance is powerful.",
+        "You're writing a new story.",
+        "This is what courage looks like.",
+        "You're becoming who you're meant to be.",
+        "Your dedication inspires change."
     ]
 
     var body: some View {
@@ -691,6 +710,9 @@ struct DailyPledgeCheckInView: View {
             // TODO: Save review to DataManager
             // For now, just show confirmation
         }
+
+        // Select random quote for confirmation screen
+        selectedQuote = reviewQuotes.randomElement() ?? reviewQuotes[0]
 
         withAnimation(.easeInOut(duration: 0.3)) {
             showConfirmation = true

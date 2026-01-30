@@ -351,20 +351,20 @@ struct DailyPledgeCheckInView: View {
                 }) {
                     HStack {
                         if stayedSober == false {
-                            Image(systemName: "xmark")
-                                .foregroundColor(AppTheme.textSecondary)
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.white)
                         }
                         Text("Yes")
                             .font(.system(size: 18, weight: .medium))
                     }
-                    .foregroundColor(AppTheme.textSecondary)
+                    .foregroundColor(stayedSober == false ? .white : AppTheme.textSecondary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(stayedSober == false ? Color.gray.opacity(0.1) : Color.clear)
+                    .background(stayedSober == false ? Color.white.opacity(0.1) : Color.clear)
                     .cornerRadius(12)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(stayedSober == false ? Color.gray.opacity(0.5) : Color.gray.opacity(0.3), lineWidth: 1)
+                            .stroke(stayedSober == false ? Color.white : Color.gray.opacity(0.3), lineWidth: 1)
                     )
                 }
             }

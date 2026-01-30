@@ -542,11 +542,16 @@ struct DailyPledgeCheckInView: View {
 
             TextEditor(text: $notes)
                 .frame(minHeight: 200)
+                .scrollContentBackground(.hidden)
                 .padding(16)
-                .background(Color.gray.opacity(0.1))
+                .background(AppTheme.backgroundSecondary)
                 .cornerRadius(12)
                 .foregroundColor(AppTheme.textPrimary)
                 .font(.system(size: 17))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                )
                 .overlay(
                     Group {
                         if notes.isEmpty {

@@ -261,47 +261,6 @@ struct SettingsView: View {
                         .foregroundColor(AppTheme.textSecondary)
                 }
                 .listRowBackground(AppTheme.backgroundSecondary)
-                
-                // MARK: - Legal Section
-                Section {
-                    Button(action: {
-                        if let url = URL(string: "https://www.studionoo.com/soberquest/privacy/") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: "hand.raised.fill")
-                                .foregroundColor(AppTheme.textSecondary)
-                            Text("Privacy Policy")
-                                .foregroundColor(AppTheme.textPrimary)
-                            Spacer()
-                            Image(systemName: "arrow.up.forward")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(AppTheme.textMuted)
-                        }
-                    }
-                    
-                    Button(action: {
-                        if let url = URL(string: "https://www.studionoo.com/soberquest/terms/") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: "doc.text.fill")
-                                .foregroundColor(AppTheme.textSecondary)
-                            Text("Terms of Use")
-                                .foregroundColor(AppTheme.textPrimary)
-                            Spacer()
-                            Image(systemName: "arrow.up.forward")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(AppTheme.textMuted)
-                        }
-                    }
-                } header: {
-                    Text("Legal")
-                        .foregroundColor(AppTheme.textSecondary)
-                }
-                .listRowBackground(AppTheme.backgroundSecondary)
 
                 // MARK: - Daily Check-in Section
                 Section {
@@ -362,6 +321,68 @@ struct SettingsView: View {
                 }
                 .listRowBackground(AppTheme.backgroundSecondary)
 
+                // MARK: - Legal Section
+                Section {
+                    Button(action: {
+                        if let url = URL(string: "https://www.studionoo.com/soberquest/privacy/") {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "hand.raised.fill")
+                                .foregroundColor(AppTheme.textSecondary)
+                            Text("Privacy Policy")
+                                .foregroundColor(AppTheme.textPrimary)
+                            Spacer()
+                            Image(systemName: "arrow.up.forward")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(AppTheme.textMuted)
+                        }
+                    }
+
+                    Button(action: {
+                        if let url = URL(string: "https://www.studionoo.com/soberquest/terms/") {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "doc.text.fill")
+                                .foregroundColor(AppTheme.textSecondary)
+                            Text("Terms of Use")
+                                .foregroundColor(AppTheme.textPrimary)
+                            Spacer()
+                            Image(systemName: "arrow.up.forward")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(AppTheme.textMuted)
+                        }
+                    }
+                } header: {
+                    Text("Legal")
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+                .listRowBackground(AppTheme.backgroundSecondary)
+
+                // MARK: - Progress Section
+                Section {
+                    if let addiction = appState.currentAddiction {
+                        Button(action: {
+                            showRelapseView = true
+                        }) {
+                            HStack {
+                                Image(systemName: "arrow.counterclockwise")
+                                    .foregroundColor(.red)
+                                Text("Reset Progress")
+                                    .foregroundColor(.red)
+                                Spacer()
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Progress")
+                        .foregroundColor(AppTheme.textSecondary)
+                }
+                .listRowBackground(AppTheme.backgroundSecondary)
+
                 // MARK: - Other Apps Section
                 Section {
                     Button(action: {
@@ -395,27 +416,6 @@ struct SettingsView: View {
                     }
                 } header: {
                     Text("More from Us")
-                        .foregroundColor(AppTheme.textSecondary)
-                }
-                .listRowBackground(AppTheme.backgroundSecondary)
-
-                // MARK: - Progress Section
-                Section {
-                    if let addiction = appState.currentAddiction {
-                        Button(action: {
-                            showRelapseView = true
-                        }) {
-                            HStack {
-                                Image(systemName: "arrow.counterclockwise")
-                                    .foregroundColor(.red)
-                                Text("Reset Progress")
-                                    .foregroundColor(.red)
-                                Spacer()
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Progress")
                         .foregroundColor(AppTheme.textSecondary)
                 }
                 .listRowBackground(AppTheme.backgroundSecondary)

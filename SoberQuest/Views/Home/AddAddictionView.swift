@@ -16,6 +16,68 @@ struct AddAddictionView: View {
         case motivationSetup
     }
 
+    let addictionSections: [AddictionSection] = [
+        AddictionSection(title: "Alcoholic drinks", addictions: [
+            "Alcohol", "Beer", "Binge Drinking", "Booze", "Bourbon", "Gin", "Rum", "Tequila", "Vodka", "Whiskey", "Wine"
+        ]),
+        AddictionSection(title: "Nicotine & tobacco", addictions: [
+            "Chewing Tobacco", "Cigarettes", "Nicotine", "Snus", "Tobacco", "Vaping", "Zyn"
+        ]),
+        AddictionSection(title: "Cannabis products", addictions: [
+            "Cannabis", "Cannabis (Synthetic)", "Marijuana", "Marijuana (Synthetic)", "Vaping (THC)"
+        ]),
+        AddictionSection(title: "Stimulants", addictions: [
+            "3-MMC", "4-MMC", "Adderall", "Alpha-PVP (Flakka)", "Amphetamines", "Bath Salts", "Cocaine", "Crack Cocaine", "Crystal Meth", "Mephedrone", "Methamphetamine", "Methcathinone (CAT)", "Methylphenidate", "Mixed Amphetamine Salts", "Ritalin", "Synthetic Cathinones"
+        ]),
+        AddictionSection(title: "Depressants", addictions: [
+            "Alprazolam", "Barbiturates", "Benzodiazepines", "Buprenorphine", "Codeine", "Fentanyl", "Heroin", "Kratom", "Lean (Codeine Mixture)", "Methadone", "Opiates", "Suboxone", "Xanax"
+        ]),
+        AddictionSection(title: "Other drugs", addictions: [
+            "Antidepressants", "Benadryl", "Dextromethorphan (DXM)", "Diphenhydramine", "Ecstasy", "Gamma-Hydroxybutyrate (GHB)", "Inhalants", "Ketamine", "Lisdexamfetamine", "LSD", "Lyrica", "Mescaline", "Muscle Relaxants", "Nasal Spray", "Nitrous Oxide", "Pregabalin", "Salvia", "Sleeping Aids", "Solvents", "Tramadol", "Vyvanse"
+        ]),
+        AddictionSection(title: "Food & caffeine", addictions: [
+            "Bread", "Caffeine", "Carbohydrates", "Cookies", "Dairy Products", "Energy Drinks", "Fast Food", "Gluten", "Junk Food", "Meat & Dairy", "Soft Drinks", "Sugar", "Sweets"
+        ]),
+        AddictionSection(title: "Eating disorders", addictions: [
+            "Binge Eating", "Binging & Purging", "Chewing & Spitting", "Eating Disorder", "Eating Disorder (undereating)", "Food Restricting", "Laxatives", "Purging"
+        ]),
+        AddictionSection(title: "Sexual behaviors", addictions: [
+            "Chemsex", "Masturbation", "Pornography", "Sex"
+        ]),
+        AddictionSection(title: "Body-focused behaviors", addictions: [
+            "Cheek Biting", "Hair Pulling", "Knuckle Cracking", "Lip Biting", "Nail Biting", "Pica (Non-food Eating)", "Self-harm", "Skin Picking"
+        ]),
+        AddictionSection(title: "Impulsive behaviors", addictions: [
+            "Compulsive Spending", "Excessive Exercising", "Gambling", "Online Shopping", "Shoplifting", "Stealing"
+        ]),
+        AddictionSection(title: "Social behaviors", addictions: [
+            "Anger", "Attention Seeking", "Bad Language (Swearing)", "Codependency", "Gossiping", "Lying", "Stalking", "Toxic Relationships"
+        ]),
+        AddictionSection(title: "Technology", addictions: [
+            "Chatbots (AI)", "Dating Apps", "Doomscrolling", "Instagram", "Internet", "Online Videos", "Short-Form Videos", "Social Media", "TikTok", "Video Games", "Virtual Reality"
+        ])
+    ]
+
+    // Filtered sections based on search text
+    var filteredSections: [AddictionSection] {
+        if searchText.isEmpty {
+            return addictionSections
+        }
+
+        let lowercasedSearch = searchText.lowercased()
+        return addictionSections.compactMap { section in
+            let filteredAddictions = section.addictions.filter { addiction in
+                addiction.lowercased().contains(lowercasedSearch)
+            }
+
+            if filteredAddictions.isEmpty {
+                return nil
+            }
+
+            return AddictionSection(title: section.title, addictions: filteredAddictions)
+        }
+    }
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -59,12 +121,10 @@ struct AddAddictionView: View {
 
     // MARK: - Name Selection View
     private var nameSelectionView: some View {
-        let presetAddictions = ["Alcohol", "Weed", "Nicotine", "Porn", "Social Media"]
-
-        return ZStack {
+        ZStack {
             ScrollViewReader { proxy in
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 28) {
+                    VStack(spacing: 24) {
                         // Header
                         VStack(spacing: 12) {
                             Text("What are you quitting?")
@@ -75,39 +135,113 @@ struct AddAddictionView: View {
                                 .font(.system(size: 15))
                                 .foregroundColor(AppTheme.textSecondary)
                         }
-                        .padding(.top, 24)
+                        .padding(.top, 32)
 
-                        // Preset options
-                        VStack(spacing: 12) {
-                            ForEach(presetAddictions, id: \.self) { addiction in
-                                addictionOption(addiction, isCustom: false)
-                            }
+                        // Search bar
+                        HStack(spacing: 12) {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(AppTheme.textMuted)
+                                .font(.system(size: 16))
 
-                            // Custom option
-                            addictionOption("Custom", isCustom: true)
+                            TextField("Search addictions", text: $searchText)
+                                .font(.system(size: 16))
+                                .foregroundColor(AppTheme.textPrimary)
+                                .focused($isSearchFocused)
+                                .autocorrectionDisabled()
 
-                            // Custom text input
-                            if showCustomInput {
-                                TextField("Enter addiction name", text: $customAddiction)
-                                    .font(.system(size: 16))
-                                    .foregroundColor(AppTheme.textPrimary)
-                                    .padding()
-                                    .background(AppTheme.backgroundSecondary)
-                                    .cornerRadius(12)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(AppTheme.divider, lineWidth: 1)
-                                    )
-                                    .focused($isCustomInputFocused)
-                                    .onChange(of: customAddiction) { newValue in
-                                        if !newValue.isEmpty {
-                                            selectedAddictionName = newValue
-                                        }
-                                    }
-                                    .id("customInput")
+                            if !searchText.isEmpty {
+                                Button(action: {
+                                    searchText = ""
+                                }) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(AppTheme.textMuted)
+                                        .font(.system(size: 16))
+                                }
                             }
                         }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(AppTheme.backgroundSecondary)
+                        .cornerRadius(12)
                         .padding(.horizontal, 24)
+
+                        // Sectioned addiction list
+                        VStack(spacing: 20) {
+                            if filteredSections.isEmpty && !searchText.isEmpty {
+                                // No results
+                                VStack(spacing: 12) {
+                                    Image(systemName: "magnifyingglass")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(AppTheme.textMuted)
+
+                                    Text("No addictions found")
+                                        .font(.system(size: 17, weight: .medium))
+                                        .foregroundColor(AppTheme.textSecondary)
+
+                                    Text("Try searching for something else or use the custom option below")
+                                        .font(.system(size: 15))
+                                        .foregroundColor(AppTheme.textMuted)
+                                        .multilineTextAlignment(.center)
+                                        .padding(.horizontal, 32)
+                                }
+                                .padding(.vertical, 40)
+                            } else {
+                                ForEach(filteredSections) { section in
+                                    VStack(alignment: .leading, spacing: 12) {
+                                        // Section header
+                                        Text(section.title)
+                                            .font(.system(size: 13, weight: .semibold))
+                                            .foregroundColor(AppTheme.textMuted)
+                                            .textCase(.uppercase)
+                                            .padding(.horizontal, 24)
+
+                                        // Section items
+                                        VStack(spacing: 8) {
+                                            ForEach(section.addictions, id: \.self) { addiction in
+                                                addictionOption(addiction, isCustom: false)
+                                            }
+                                        }
+                                        .padding(.horizontal, 24)
+                                    }
+                                }
+                            }
+
+                            // Custom option (always visible at the bottom)
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Add a custom addiction")
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .foregroundColor(AppTheme.textMuted)
+                                    .textCase(.uppercase)
+                                    .padding(.horizontal, 24)
+
+                                VStack(spacing: 12) {
+                                    addictionOption("Custom", isCustom: true)
+
+                                    // Custom text input
+                                    if showCustomInput {
+                                        TextField("Enter addiction name", text: $customAddiction)
+                                            .font(.system(size: 16))
+                                            .foregroundColor(AppTheme.textPrimary)
+                                            .padding()
+                                            .background(AppTheme.backgroundSecondary)
+                                            .cornerRadius(12)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(AppTheme.divider, lineWidth: 1)
+                                            )
+                                            .focused($isCustomInputFocused)
+                                            .onChange(of: customAddiction) { newValue in
+                                                if !newValue.isEmpty {
+                                                    selectedAddictionName = newValue
+                                                }
+                                            }
+                                            .id("customInput")
+                                    }
+                                }
+                                .padding(.horizontal, 24)
+                            }
+                            .padding(.top, 8)
+                        }
 
                         // Extra bottom padding to ensure content is not hidden by button
                         Spacer(minLength: 150)
@@ -165,7 +299,9 @@ struct AddAddictionView: View {
     @State private var selectedAddiction: String = ""
     @State private var customAddiction: String = ""
     @State private var showCustomInput: Bool = false
+    @State private var searchText: String = ""
     @FocusState private var isCustomInputFocused: Bool
+    @FocusState private var isSearchFocused: Bool
 
     @ViewBuilder
     private func addictionOption(_ name: String, isCustom: Bool) -> some View {
@@ -346,14 +482,15 @@ struct AddAddictionView: View {
                     isMotivationFocused = false
                     createAddictionAndDismiss()
                 }) {
-                    Text(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Skip" : "Add Tracker")
+                    Text("Add Tracker")
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(AppTheme.buttonPrimaryText)
+                        .foregroundColor(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? AppTheme.textMuted : AppTheme.buttonPrimaryText)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
-                        .background(AppTheme.buttonPrimary)
+                        .background(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? AppTheme.backgroundSecondary : AppTheme.buttonPrimary)
                         .cornerRadius(14)
                 }
+                .disabled(motivationText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 .padding(.horizontal, 24)
                 .padding(.bottom, 48)
                 .background(
@@ -371,7 +508,7 @@ struct AddAddictionView: View {
 
     // MARK: - Create Addiction
     private func createAddictionAndDismiss() {
-        // Create new addiction with motivation
+        // Create new addiction with motivation (now required)
         let trimmedMotivation = motivationText.trimmingCharacters(in: .whitespacesAndNewlines)
         // If user selected "today", use current time so timer starts from now
         let startDate = Calendar.current.isDateInToday(lastUsedDate) ? Date() : lastUsedDate
@@ -380,7 +517,7 @@ struct AddAddictionView: View {
             startDate: startDate,
             currentStreak: 0,
             isActive: true,
-            motivation: trimmedMotivation.isEmpty ? nil : trimmedMotivation
+            motivation: trimmedMotivation
         )
 
         // Save and set as active

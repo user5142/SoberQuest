@@ -129,23 +129,26 @@ struct AddictionSetupView: View {
                         // Sectioned addiction list
                         VStack(spacing: 20) {
                             if filteredSections.isEmpty && !searchText.isEmpty {
-                                // No results
-                                VStack(spacing: 12) {
-                                    Image(systemName: "magnifyingglass")
-                                        .font(.system(size: 40))
-                                        .foregroundColor(AppTheme.textMuted)
+                                // No results - show custom option prominently
+                                VStack(spacing: 20) {
+                                    // Custom option shown first
+                                    VStack(spacing: 12) {
+                                        addictionOption(searchText, isCustom: false, useSearchAsCustom: true)
+                                    }
+                                    .padding(.horizontal, 24)
 
-                                    Text("No addictions found")
-                                        .font(.system(size: 17, weight: .medium))
-                                        .foregroundColor(AppTheme.textSecondary)
+                                    // Info message below
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "magnifyingglass")
+                                            .font(.system(size: 32))
+                                            .foregroundColor(AppTheme.textMuted)
 
-                                    Text("Try searching for something else or use the custom option below")
-                                        .font(.system(size: 15))
-                                        .foregroundColor(AppTheme.textMuted)
-                                        .multilineTextAlignment(.center)
-                                        .padding(.horizontal, 32)
+                                        Text("No addictions found")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(AppTheme.textMuted)
+                                    }
+                                    .padding(.top, 8)
                                 }
-                                .padding(.vertical, 40)
                             } else {
                                 ForEach(filteredSections) { section in
                                     VStack(alignment: .leading, spacing: 12) {
@@ -167,41 +170,43 @@ struct AddictionSetupView: View {
                                 }
                             }
 
-                            // Custom option (always visible at the bottom)
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Add a custom addiction")
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .foregroundColor(AppTheme.textMuted)
-                                    .textCase(.uppercase)
-                                    .padding(.horizontal, 24)
+                            // Custom option (hidden when showing inline custom option for empty search)
+                            if !filteredSections.isEmpty || searchText.isEmpty {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("Add a custom addiction")
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundColor(AppTheme.textMuted)
+                                        .textCase(.uppercase)
+                                        .padding(.horizontal, 24)
 
-                                VStack(spacing: 12) {
-                                    addictionOption("Custom", isCustom: true)
+                                    VStack(spacing: 12) {
+                                        addictionOption("Custom", isCustom: true)
 
-                                    // Custom text input
-                                    if showCustomInput {
-                                        TextField("Enter addiction name", text: $customAddiction)
-                                            .font(.system(size: 16))
-                                            .foregroundColor(AppTheme.textPrimary)
-                                            .padding()
-                                            .background(AppTheme.backgroundSecondary)
-                                            .cornerRadius(12)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 12)
-                                                    .stroke(AppTheme.divider, lineWidth: 1)
-                                            )
-                                            .focused($isCustomInputFocused)
-                                            .onChange(of: customAddiction) { newValue in
-                                                if !newValue.isEmpty {
-                                                    selectedAddictionName = newValue
+                                        // Custom text input
+                                        if showCustomInput {
+                                            TextField("Enter addiction name", text: $customAddiction)
+                                                .font(.system(size: 16))
+                                                .foregroundColor(AppTheme.textPrimary)
+                                                .padding()
+                                                .background(AppTheme.backgroundSecondary)
+                                                .cornerRadius(12)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 12)
+                                                        .stroke(AppTheme.divider, lineWidth: 1)
+                                                )
+                                                .focused($isCustomInputFocused)
+                                                .onChange(of: customAddiction) { newValue in
+                                                    if !newValue.isEmpty {
+                                                        selectedAddictionName = newValue
+                                                    }
                                                 }
-                                            }
-                                            .id("customInput")
+                                                .id("customInput")
+                                        }
                                     }
+                                    .padding(.horizontal, 24)
                                 }
-                                .padding(.horizontal, 24)
+                                .padding(.top, 8)
                             }
-                            .padding(.top, 8)
                         }
 
                         // Extra bottom padding to ensure content is not hidden by button
@@ -258,7 +263,7 @@ struct AddictionSetupView: View {
     }
     
     @ViewBuilder
-    private func addictionOption(_ name: String, isCustom: Bool) -> some View {
+    private func addictionOption(_ name: String, isCustom: Bool, useSearchAsCustom: Bool = false) -> some View {
         let isSelected = isCustom ? selectedAddiction == "custom" : selectedAddiction == name
 
         Button(action: {
@@ -270,6 +275,11 @@ struct AddictionSetupView: View {
                 } else {
                     selectedAddictionName = ""
                 }
+            } else if useSearchAsCustom {
+                // Treat search text as custom entry
+                selectedAddiction = name
+                selectedAddictionName = name
+                showCustomInput = false
             } else {
                 selectedAddiction = name
                 selectedAddictionName = name

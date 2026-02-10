@@ -11,7 +11,8 @@ class DataManager: ObservableObject {
     private let hasUsedTrialKey = "HasUsedTrial"
     private let userMotivationKey = "UserMotivation"
     private let dailyPledgeSettingsKey = "DailyPledgeSettings"
-    
+    private let showTotalDaysKey = "ShowTotalDays"
+
     private init() {}
     
     // MARK: - Addictions
@@ -191,6 +192,16 @@ class DataManager: ObservableObject {
             return DailyPledgeSettings.default
         }
         return settings
+    }
+
+    // MARK: - Timer Display Preference
+
+    func setShowTotalDays(_ show: Bool) {
+        UserDefaults.standard.set(show, forKey: showTotalDaysKey)
+    }
+
+    func getShowTotalDays() -> Bool {
+        return UserDefaults.standard.bool(forKey: showTotalDaysKey)
     }
 
     // MARK: - Clear All Data

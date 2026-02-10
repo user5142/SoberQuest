@@ -26,6 +26,7 @@ struct HomeView: View {
     @State private var selectedBadgeForDetail: BadgeDefinition?
     @State private var showDailyCheckIn = false
     @State private var checkInType: CheckInType = .pledge
+    @State private var showTotalDays = false
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -45,6 +46,7 @@ struct HomeView: View {
             appState.refreshAddiction()
             checkForInitialBadge()
             handlePendingCheckIn()
+            showTotalDays = dataManager.getShowTotalDays()
         }
         .onReceive(timer) { _ in
             updateTimer()
@@ -285,15 +287,33 @@ struct HomeView: View {
                 }
                 .padding(.top, 8)
                 
-                // Large Days Counter
+                // Large Days Counter (tap to toggle when 1+ year)
                 Text(formatDaysDisplay())
                     .font(.system(size: 56, weight: .bold, design: .rounded))
                     .foregroundColor(AppTheme.textPrimary)
                     .tracking(-2)
-                
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if timeComponents.years >= 1 {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                showTotalDays.toggle()
+                                dataManager.setShowTotalDays(showTotalDays)
+                            }
+                        }
+                    }
+
                 // Timer Pill
                 timerPill
                     .padding(.top, -8)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if timeComponents.years >= 1 {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                showTotalDays.toggle()
+                                dataManager.setShowTotalDays(showTotalDays)
+                            }
+                        }
+                    }
                 
                 // Action Buttons Row
                 actionButtonsRow(addiction: addiction)
@@ -496,6 +516,12 @@ struct HomeView: View {
     }
     
     private func formatDaysDisplay() -> String {
+        // If user toggled to show total days (only available when 1+ year)
+        if showTotalDays && timeComponents.years >= 1 {
+            let totalDays = appState.currentAddiction?.daysSober ?? 0
+            return "\(totalDays) days"
+        }
+
         // Hierarchical display: years > months > days > hours > minutes > seconds
         if timeComponents.years >= 1 {
             // Just show years in header, rest goes in pill
@@ -534,6 +560,11 @@ struct HomeView: View {
     }
 
     private func formatTimerDisplay() -> String {
+        // If showing total days, just show hours:minutes:seconds in pill
+        if showTotalDays && timeComponents.years >= 1 {
+            return String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
+        }
+
         // Secondary display based on primary tier
         if timeComponents.years >= 1 {
             // Primary is years, show months/days/hrs/mins/secs in pill

@@ -8,6 +8,7 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     let dailyPledgeIdentifier = "daily_pledge_reminder"
     let dailyReviewIdentifier = "daily_review_reminder"
     private let trialStartDateKey = "TrialStartDate"
+    private let trialDurationKey = "TrialDurationDays"
 
     private override init() {
         super.init()
@@ -70,40 +71,45 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate {
 
     // MARK: - Trial Reminder
 
-    /// Requests permission and schedules a reminder notification for 1 day before the 7-day trial ends
-    /// NOTE: This method is deprecated. Use scheduleTrialReminderIfPermitted() instead.
+    /// Requests permission and schedules a reminder notification for 1 day before the trial ends
+    /// NOTE: This method is deprecated. Use scheduleTrialReminderIfPermitted(trialDays:) instead.
     /// Permission should now be requested during onboarding.
-    func scheduleTrialEndingReminder() {
+    /// - Parameter trialDays: The length of the trial in days (default: 7)
+    func scheduleTrialEndingReminder(trialDays: Int = 7) {
         // First request permission, then schedule if granted
         requestPermission { [weak self] granted in
             guard granted, let self = self else {
                 print("NotificationService: Permission not granted, skipping reminder")
                 return
             }
-            self.scheduleReminderNotification()
+            self.scheduleReminderNotification(trialDays: trialDays)
         }
     }
 
     /// Schedules a trial reminder notification without requesting permission.
     /// Only works if permission was already granted (e.g., during onboarding).
-    func scheduleTrialReminderIfPermitted() {
+    /// - Parameter trialDays: The length of the trial in days (default: 7). Notification is sent 1 day before expiry.
+    func scheduleTrialReminderIfPermitted(trialDays: Int = 7) {
         checkPermissionStatus { [weak self] status in
             guard let self = self, status == .authorized else {
                 print("NotificationService: Permission not authorized, skipping reminder")
                 return
             }
-            self.scheduleReminderNotification()
+            self.scheduleReminderNotification(trialDays: trialDays)
         }
     }
 
     /// Internal method to schedule the actual notification (called after permission is granted)
-    private func scheduleReminderNotification() {
-        // Store trial start date
+    /// - Parameter trialDays: The length of the trial in days
+    private func scheduleReminderNotification(trialDays: Int) {
+        // Store trial start date and duration
         let trialStartDate = Date()
         UserDefaults.standard.set(trialStartDate, forKey: trialStartDateKey)
+        UserDefaults.standard.set(trialDays, forKey: trialDurationKey)
 
-        // Calculate reminder date: 6 days from now (1 day before trial ends)
-        guard let reminderDate = Calendar.current.date(byAdding: .day, value: 6, to: trialStartDate) else {
+        // Calculate reminder date: 1 day before trial ends
+        let reminderDay = trialDays - 1
+        guard let reminderDate = Calendar.current.date(byAdding: .day, value: reminderDay, to: trialStartDate) else {
             print("NotificationService: Failed to calculate reminder date")
             return
         }
@@ -149,9 +155,16 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         return UserDefaults.standard.object(forKey: trialStartDateKey) as? Date
     }
 
+    func getTrialDuration() -> Int {
+        let duration = UserDefaults.standard.integer(forKey: trialDurationKey)
+        return duration > 0 ? duration : 7  // Default to 7 for backwards compatibility
+    }
+
     func getTrialEndDate() -> Date? {
         guard let startDate = getTrialStartDate() else { return nil }
-        return Calendar.current.date(byAdding: .day, value: 7, to: startDate)
+        let trialDays = UserDefaults.standard.integer(forKey: trialDurationKey)
+        let duration = trialDays > 0 ? trialDays : 7  // Default to 7 for backwards compatibility
+        return Calendar.current.date(byAdding: .day, value: duration, to: startDate)
     }
 
     func getDaysRemainingInTrial() -> Int? {

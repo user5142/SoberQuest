@@ -200,27 +200,30 @@ class SuperwallService: ObservableObject {
     /// Presents the onboarding paywall using the appropriate placement based on trial history
     /// - Users who have previously used a trial see the win-back paywall
     /// - New users see the trial paywall
-    /// - Parameter completion: Called when the paywall is dismissed with the result
-    func presentOnboardingPaywall(completion: @escaping (AppPaywallResult) -> Void) {
+    /// - Parameters:
+    ///   - trialDays: The length of the trial in days (default: 7). Used for scheduling the trial ending notification.
+    ///   - completion: Called when the paywall is dismissed with the result
+    func presentOnboardingPaywall(trialDays: Int = 7, completion: @escaping (AppPaywallResult) -> Void) {
         let hasUsedTrial = DataManager.shared.hasUsedTrial()
         let placement = hasUsedTrial ? winbackPlacement : onboardingPlacement
-        
+
         let handler = PaywallPresentationHandler()
-        
+
         handler.onDismiss { [weak self] _, superwallResult in
             guard let self = self else {
                 DispatchQueue.main.async { completion(.declined) }
                 return
             }
-            
+
             // Map Superwall's result to our result type
             let mappedResult = self.mapSuperwallResult(superwallResult)
-            
+
             // After paywall dismissal, verify the subscription status
             Task {
                 await self.verifyAndCompletePaywallResult(
                     result: mappedResult,
                     hasUsedTrial: hasUsedTrial,
+                    trialDays: trialDays,
                     completion: completion
                 )
             }
@@ -253,6 +256,7 @@ class SuperwallService: ObservableObject {
     private func verifyAndCompletePaywallResult(
         result: AppPaywallResult,
         hasUsedTrial: Bool,
+        trialDays: Int = 7,
         completion: @escaping (AppPaywallResult) -> Void
     ) async {
         // For purchase/restore results, trust Superwall's result and wait for status to sync
@@ -274,7 +278,7 @@ class SuperwallService: ObservableObject {
                         if !hasUsedTrial {
                             DataManager.shared.setHasUsedTrial(true)
                             // Schedule trial ending reminder for new trial users (permission already requested during onboarding)
-                            NotificationService.shared.scheduleTrialReminderIfPermitted()
+                            NotificationService.shared.scheduleTrialReminderIfPermitted(trialDays: trialDays)
                         } else {
                             // User is returning/subscribing after trial - cancel any pending reminder
                             NotificationService.shared.cancelTrialEndingReminder()
@@ -294,7 +298,7 @@ class SuperwallService: ObservableObject {
                 if !hasUsedTrial {
                     DataManager.shared.setHasUsedTrial(true)
                     // Schedule trial ending reminder for new trial users (permission already requested during onboarding)
-                    NotificationService.shared.scheduleTrialReminderIfPermitted()
+                    NotificationService.shared.scheduleTrialReminderIfPermitted(trialDays: trialDays)
                 } else {
                     // User is returning/subscribing after trial - cancel any pending reminder
                     NotificationService.shared.cancelTrialEndingReminder()

@@ -169,6 +169,7 @@ struct ToolkitView: View {
 
 // MARK: - Settings View
 struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var appState: AppState
     @State private var showRelapseView = false
     @State private var showClearSessionConfirmation = false
@@ -449,6 +450,17 @@ struct SettingsView: View {
         }
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Text("Done")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(AppTheme.textPrimary)
+                }
+            }
+        }
         #if DEBUG
         .alert("Clear Session?", isPresented: $showClearSessionConfirmation) {
             Button("Cancel", role: .cancel) {}

@@ -308,14 +308,14 @@ struct HomeView: View {
                 }
                 .padding(.top, 8)
                 
-                // Large Days Counter (tap to toggle when 1+ year)
+                // Large Days Counter (tap to toggle when 1+ month)
                 Text(formatDaysDisplay())
                     .font(.system(size: 56, weight: .bold, design: .rounded))
                     .foregroundColor(AppTheme.textPrimary)
                     .tracking(-2)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        if timeComponents.years >= 1 {
+                        if timeComponents.months >= 1 {
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 showTotalDays.toggle()
                                 dataManager.setShowTotalDays(showTotalDays)
@@ -328,7 +328,7 @@ struct HomeView: View {
                     .padding(.top, -8)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        if timeComponents.years >= 1 {
+                        if timeComponents.months >= 1 {
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 showTotalDays.toggle()
                                 dataManager.setShowTotalDays(showTotalDays)
@@ -537,8 +537,8 @@ struct HomeView: View {
     }
     
     private func formatDaysDisplay() -> String {
-        // If user toggled to show total days (only available when 1+ year)
-        if showTotalDays && timeComponents.years >= 1 {
+        // If user toggled to show total days (only available when 1+ month)
+        if showTotalDays && timeComponents.months >= 1 {
             let totalDays = appState.currentAddiction?.daysSober ?? 0
             return "\(totalDays) days"
         }
@@ -582,7 +582,7 @@ struct HomeView: View {
 
     private func formatTimerDisplay() -> String {
         // If showing total days, just show hours:minutes:seconds in pill
-        if showTotalDays && timeComponents.years >= 1 {
+        if showTotalDays && timeComponents.months >= 1 {
             return String(format: "%dhr %02dm %02ds", timeComponents.hours, timeComponents.minutes, timeComponents.seconds)
         }
 

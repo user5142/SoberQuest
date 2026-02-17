@@ -6,8 +6,10 @@ struct HomeView: View {
     @EnvironmentObject private var superwallService: SuperwallService
     @ObservedObject private var dataManager = DataManager.shared
     @ObservedObject private var badgeService = BadgeService.shared
-    
+    @Environment(\.scenePhase) private var scenePhase
+
     @State private var timeComponents: (years: Int, months: Int, days: Int, hours: Int, minutes: Int, seconds: Int) = (0, 0, 0, 0, 0, 0)
+    @State private var lastCheckedDays: Int = -1
     @State private var showAddictionSelector = false
     @State private var showAddAddiction = false
     @State private var showBadgeUnlock = false
@@ -45,11 +47,30 @@ struct HomeView: View {
             updateTimer()
             appState.refreshAddiction()
             checkForInitialBadge()
+            checkAndUnlockNewBadges()
             handlePendingCheckIn()
             showTotalDays = dataManager.getShowTotalDays()
+            if let addiction = appState.currentAddiction {
+                lastCheckedDays = addiction.daysSober
+            }
         }
         .onReceive(timer) { _ in
             updateTimer()
+            // Check for badge unlock when day changes while app is open
+            if let addiction = appState.currentAddiction {
+                let currentDays = addiction.daysSober
+                if currentDays != lastCheckedDays {
+                    lastCheckedDays = currentDays
+                    checkAndUnlockNewBadges()
+                }
+            }
+        }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                // Re-check badges when app becomes active (returns from background)
+                appState.refreshAddiction()
+                checkAndUnlockNewBadges()
+            }
         }
         .onChange(of: appState.pendingCheckInType) { newType in
             if newType != nil {
@@ -687,6 +708,26 @@ struct HomeView: View {
         if let highestBadge = badgeService.getHighestUnlockedBadge(for: addiction.id, unlockedBadges: unlockedBadges) {
             dataManager.setInitialBadgeShown(true)
             self.unlockedBadge = highestBadge
+            showBadgeUnlock = true
+        }
+    }
+
+    /// Checks if any new badges should be unlocked based on current days sober.
+    /// Called on view appear, when app returns from background, and when day changes.
+    private func checkAndUnlockNewBadges() {
+        guard let addiction = appState.currentAddiction,
+              !showBadgeUnlock else { // Don't interrupt if already showing a badge
+            return
+        }
+
+        let unlockedBadges = dataManager.loadUnlockedBadges(for: addiction.id)
+        if let newBadge = badgeService.checkForNewBadges(addiction: addiction, unlockedBadges: unlockedBadges) {
+            // Unlock the badge
+            let unlockedBadge = UnlockedBadge(badgeId: newBadge.id, addictionId: addiction.id)
+            dataManager.saveUnlockedBadge(unlockedBadge)
+
+            // Show unlock view
+            self.unlockedBadge = newBadge
             showBadgeUnlock = true
         }
     }
